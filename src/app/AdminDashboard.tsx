@@ -5,13 +5,37 @@ import { Toaster }           from 'sonner';
 import { useOrchestrator }   from '../shells/DashboardShell/app/providers/OrchestratorProvider';
 
 export type MainSection =
-  | 'dashboard'
-  | 'logistica'
-  | 'envios'
-  | 'transportistas'
-  | 'sistema'
-  | 'checklist'
-  | 'ideas';
+  // Sistema
+  | 'dashboard' | 'sistema' | 'checklist' | 'ideas' | 'roadmap'
+  | 'constructor' | 'departamentos' | 'diseno' | 'config-vistas'
+  | 'documentacion' | 'dashboard-admin' | 'dashboard-usuario'
+  | 'auth-registro' | 'metamap-config'
+  // eCommerce
+  | 'ecommerce' | 'pedidos' | 'pagos' | 'metodos-pago' | 'metodos-envio'
+  | 'clientes' | 'personas' | 'organizaciones' | 'storefront' | 'secondhand' | 'pos'
+  // Logística
+  | 'logistica' | 'envios' | 'transportistas' | 'rutas' | 'vehiculos'
+  | 'depositos' | 'inventario' | 'entregas' | 'fulfillment' | 'produccion'
+  | 'abastecimiento' | 'mapa-envios' | 'tracking-publico'
+  // Marketing
+  | 'marketing' | 'google-ads' | 'mailing' | 'seo' | 'fidelizacion'
+  | 'rueda-sorteos' | 'etiqueta-emotiva'
+  // RRSS
+  | 'rrss' | 'redes-sociales' | 'migracion-rrss' | 'meta-business'
+  // Herramientas
+  | 'herramientas' | 'biblioteca' | 'editor-imagenes' | 'gen-documentos'
+  | 'gen-presupuestos' | 'ocr' | 'impresion' | 'qr-generator'
+  | 'ideas-board' | 'carga-masiva' | 'unified-workspace'
+  // Gestión
+  | 'gestion' | 'erp-inventario' | 'erp-facturacion' | 'erp-compras'
+  | 'erp-crm' | 'erp-contabilidad' | 'erp-rrhh' | 'proyectos'
+  | 'auditoria' | 'auditoria-health' | 'auditoria-logs'
+  // Integraciones
+  | 'integraciones' | 'integraciones-pagos' | 'integraciones-logistica'
+  | 'integraciones-tiendas' | 'integraciones-rrss' | 'integraciones-servicios'
+  | 'integraciones-marketplace' | 'integraciones-comunicacion'
+  | 'integraciones-identidad' | 'integraciones-api-keys'
+  | 'integraciones-webhooks' | 'integraciones-apis' | 'google-maps-test';
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState<MainSection>('dashboard');
