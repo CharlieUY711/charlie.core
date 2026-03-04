@@ -1,131 +1,161 @@
-import React, { useMemo } from 'react';
-import { HubView, HubCardDef, HubComingSoonItem } from '../HubView';
+/* =====================================================
+   LogisticaView — Hub de Logística
+   Módulos: Envíos · Transportistas · Organizaciones
+   ===================================================== */
+import React from 'react';
 import type { MainSection } from '../../../AdminDashboard';
-import { useOrchestrator } from '../../OrchestratorShell';
-import {
-  Truck, Map, Users, Package, ShoppingCart, Navigation,
-  CheckCircle, Layers, TrendingUp, Clock, MapPin, BarChart2,
-  Box, AlertCircle, Star, Car, Warehouse, Boxes, PackageCheck,
-} from 'lucide-react';
+import { Truck, Users, Building2, Package, Clock, CheckCircle, MapPin, BarChart2, ArrowRight } from 'lucide-react';
 
 interface Props { onNavigate: (s: MainSection) => void; }
 
+const ORANGE = '#FF6835';
+
+interface HubCard {
+  id: MainSection;
+  icon: React.ElementType;
+  label: string;
+  badge: string;
+  description: string;
+  color: string;
+  gradient: string;
+  stats: Array<{ icon: React.ElementType; value: string; label: string }>;
+}
+
+const CARDS: HubCard[] = [
+  {
+    id: 'envios',
+    icon: Truck,
+    label: 'Envíos',
+    badge: 'Operativo',
+    description: 'Tracking operativo árbol pedido madre → envíos hijos. Estados, timeline y panel de detalle por envío.',
+    color: '#FF6835',
+    gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)',
+    stats: [
+      { icon: Truck,        value: '—', label: 'Activos' },
+      { icon: Clock,        value: '—', label: 'En tránsito' },
+      { icon: CheckCircle,  value: '—', label: 'Entregados' },
+    ],
+  },
+  {
+    id: 'transportistas',
+    icon: Users,
+    label: 'Transportistas',
+    badge: 'Carriers',
+    description: 'Catálogo de carriers, tramos, tarifas multi-carrier local, intercity e internacional. Simulador de tarifas.',
+    color: '#0EA5E9',
+    gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)',
+    stats: [
+      { icon: Users,    value: '—', label: 'Carriers' },
+      { icon: MapPin,   value: '—', label: 'Tramos' },
+      { icon: BarChart2, value: '—', label: 'Zonas activas' },
+    ],
+  },
+  {
+    id: 'organizaciones',
+    icon: Building2,
+    label: 'Organizaciones',
+    badge: 'Empresas',
+    description: 'Empresas y organizaciones vinculadas al sistema logístico y transportistas.',
+    color: '#059669',
+    gradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+    stats: [
+      { icon: Building2,    value: '—', label: 'Organizaciones' },
+      { icon: CheckCircle,  value: '—', label: 'Activas' },
+      { icon: Package,      value: '—', label: 'Vinculadas' },
+    ],
+  },
+];
+
 export function LogisticaView({ onNavigate }: Props) {
-  const nav = (s: MainSection) => () => onNavigate(s);
-
-  const { config } = useOrchestrator();
-  const modulosConfig = config?.modulos ?? [];
-  const todosHabilitados = modulosConfig.includes('*');
-
-  const todasLasCards: HubCardDef[] = [
-    {
-      id: 'envios', icon: Truck, onClick: nav('envios'),
-      gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)', color: '#FF6835',
-      badge: 'Operativo', label: 'Envíos',
-      description: 'Tracking operativo árbol pedido madre → envíos hijos. Acuse de recibo por transportista o destinatario.',
-      stats: [{ icon: Truck, value: '—', label: 'Activos' }, { icon: Clock, value: '—', label: 'En tránsito' }, { icon: CheckCircle, value: '—', label: 'Entregados' }],
-    },
-    {
-      id: 'transportistas', icon: Users, onClick: nav('transportistas'),
-      gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)', color: '#0EA5E9',
-      badge: 'Carriers', label: 'Transportistas',
-      description: 'Catálogo de carriers, tramos, tarifas multi-carrier local, intercity e internacional. Simulador de tarifas.',
-      stats: [{ icon: Users, value: '—', label: 'Carriers' }, { icon: MapPin, value: '—', label: 'Tramos' }, { icon: BarChart2, value: '—', label: 'Zonas activas' }],
-    },
-    {
-      id: 'rutas', icon: Map, onClick: nav('rutas'),
-      gradient: 'linear-gradient(135deg, #6366F1 0%, #4338CA 100%)', color: '#6366F1',
-      badge: 'Planificación', label: 'Rutas',
-      description: 'Gestión de rutas standard y personalizadas por proyecto. Mapa de paradas y progreso de entrega.',
-      stats: [{ icon: Map, value: '—', label: 'Rutas activas' }, { icon: MapPin, value: '—', label: 'Paradas' }, { icon: TrendingUp, value: '—', label: 'Completadas' }],
-    },
-    {
-      id: 'vehiculos', icon: Car, onClick: nav('vehiculos'),
-      gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)', color: '#8B5CF6',
-      badge: 'Flota', label: 'Vehículos',
-      description: 'Flota de vehículos · asignación a rutas · estado y mantenimiento',
-      stats: [{ icon: Car, value: '—', label: 'Vehículos' }, { icon: CheckCircle, value: '—', label: 'Disponibles' }, { icon: AlertCircle, value: '—', label: 'En mantenimiento' }],
-    },
-    {
-      id: 'depositos', icon: Warehouse, onClick: nav('depositos'),
-      gradient: 'linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)', color: '#14B8A6',
-      badge: 'Almacenes', label: 'Depósitos',
-      description: 'Almacenes propios, terceros y cross-docking',
-      stats: [{ icon: Warehouse, value: '—', label: 'Depósitos' }, { icon: MapPin, value: '—', label: 'Ubicaciones' }, { icon: Box, value: '—', label: 'Capacidad' }],
-    },
-    {
-      id: 'inventario', icon: Boxes, onClick: nav('inventario'),
-      gradient: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)', color: '#F97316',
-      badge: 'Stock', label: 'Inventario',
-      description: 'Stock por depósito · alertas de mínimo · movimientos entrada/salida',
-      stats: [{ icon: Boxes, value: '—', label: 'Artículos' }, { icon: AlertCircle, value: '—', label: 'Alertas' }, { icon: TrendingUp, value: '—', label: 'Movimientos' }],
-    },
-    {
-      id: 'entregas', icon: PackageCheck, onClick: nav('entregas'),
-      gradient: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)', color: '#22C55E',
-      badge: 'Confirmación', label: 'Entregas',
-      description: 'Confirmaciones de entrega · firma · fotos · motivos de no entrega',
-      stats: [{ icon: PackageCheck, value: '—', label: 'Entregadas' }, { icon: CheckCircle, value: '—', label: 'Confirmadas' }, { icon: AlertCircle, value: '—', label: 'Pendientes' }],
-    },
-    {
-      id: 'fulfillment', icon: Layers, onClick: nav('fulfillment'),
-      gradient: 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%)', color: '#7C3AED',
-      badge: 'Depósito', label: 'Fulfillment / Picking',
-      description: 'Wave picking, lotes de pedidos, empaque y procesamiento de órdenes en el depósito.',
-      stats: [{ icon: Layers, value: '—', label: 'Waves' }, { icon: Box, value: '—', label: 'En picking' }, { icon: Package, value: '—', label: 'Empacados' }],
-    },
-    {
-      id: 'produccion', icon: Package, onClick: nav('produccion'),
-      gradient: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: '#10B981',
-      badge: 'Armado · BOM', label: 'Producción / Armado',
-      description: 'Órdenes de armado orientadas a ruta. BOM (Bill of Materials) para kits, canastas y combos.',
-      stats: [{ icon: Package, value: '—', label: 'OA activas' }, { icon: AlertCircle, value: '—', label: 'Sin stock' }, { icon: CheckCircle, value: '—', label: 'Completadas' }],
-    },
-    {
-      id: 'abastecimiento', icon: ShoppingCart, onClick: nav('abastecimiento'),
-      gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: '#F59E0B',
-      badge: 'MRP · OC', label: 'Abastecimiento',
-      description: 'OC automáticas por faltantes de stock. MRP para cálculo de componentes necesarios por proyecto.',
-      stats: [{ icon: AlertCircle, value: '—', label: 'Alertas críticas' }, { icon: ShoppingCart, value: '—', label: 'OC sugeridas' }, { icon: TrendingUp, value: '—', label: 'Valor a reponer' }],
-    },
-    {
-      id: 'mapa-envios', icon: Navigation, onClick: nav('mapa-envios'),
-      gradient: 'linear-gradient(135deg, #EC4899 0%, #BE185D 100%)', color: '#EC4899',
-      badge: 'Geográfico', label: 'Mapa de Envíos',
-      description: 'Vista geográfica de envíos activos por ruta y estado. Mapa interactivo con marcadores en tiempo real.',
-      stats: [{ icon: MapPin, value: '—', label: 'En mapa' }, { icon: Truck, value: '—', label: 'Por ruta' }, { icon: Navigation, value: '—', label: 'En camino' }],
-    },
-    {
-      id: 'tracking-publico', icon: CheckCircle, onClick: nav('tracking-publico'),
-      gradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#059669',
-      badge: 'Público', label: 'Tracking Público',
-      description: 'Página pública de seguimiento. Destinatarios rastrean su envío sin login, con timeline y notificaciones.',
-      stats: [{ icon: Users, value: '—', label: 'Consultas' }, { icon: Star, value: '—', label: 'Satisfacción' }, { icon: CheckCircle, value: '—', label: 'Entregados' }],
-    },
-  ];
-
-  const cards = useMemo(() => {
-    return todasLasCards.filter(card => {
-      if (todosHabilitados || modulosConfig.length === 0) return true;
-      return modulosConfig.includes(card.id);
-    });
-  }, [modulosConfig, todosHabilitados]);
-
-  const comingSoon: HubComingSoonItem[] = [
-    { icon: TrendingUp, label: 'Optimizador IA',     desc: 'Optimización de rutas con inteligencia artificial' },
-    { icon: BarChart2,  label: 'Predicción demanda', desc: 'Forecasting de pedidos por temporada'              },
-    { icon: MapPin,     label: 'GPS de flota',       desc: 'Integración con GPS de transportistas'            },
-    { icon: Clock,      label: 'Notif. push',        desc: 'Notificaciones push al destinatario en tiempo real'},
-  ];
-
   return (
-    <HubView
-      hubIcon={Truck}
-      title="Logística"
-      subtitle="Rutas · Envíos · Transportistas · Producción · Abastecimiento"
-      sections={[{ cards }]}
-      comingSoon={comingSoon}
-      comingSoonText="Optimizador de rutas con IA, predicción de demanda, integración con GPS de flota y notificaciones push al destinatario."
-    />
+    <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA', padding: '32px' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Truck size={20} color="#fff" />
+          </div>
+          <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#111', margin: 0 }}>Logística</h1>
+        </div>
+        <p style={{ fontSize: '14px', color: '#6B7280', margin: 0 }}>
+          Envíos · Transportistas · Organizaciones
+        </p>
+      </div>
+
+      {/* Cards de módulos */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        {CARDS.map(card => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={card.id}
+              onClick={() => onNavigate(card.id)}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: '16px',
+                border: '1px solid #E5E7EB',
+                overflow: 'hidden',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+              }}
+            >
+              {/* Banner */}
+              <div style={{ height: '8px', background: card.gradient }} />
+
+              <div style={{ padding: '20px' }}>
+                {/* Icon + título */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                  <div style={{
+                    width: '44px', height: '44px', borderRadius: '12px',
+                    background: card.gradient,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <Icon size={20} color="#fff" />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: card.color, backgroundColor: `${card.color}18`, padding: '2px 8px', borderRadius: '8px' }}>
+                      {card.badge}
+                    </span>
+                    <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#111', margin: '4px 0 0' }}>{card.label}</h3>
+                  </div>
+                </div>
+
+                <p style={{ fontSize: '13px', color: '#6B7280', margin: '0 0 16px', lineHeight: '1.5' }}>
+                  {card.description}
+                </p>
+
+                {/* Stats */}
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', padding: '12px', backgroundColor: '#F9FAFB', borderRadius: '10px' }}>
+                  {card.stats.map(stat => {
+                    const StatIcon = stat.icon;
+                    return (
+                      <div key={stat.label} style={{ flex: 1, textAlign: 'center' }}>
+                        <StatIcon size={14} color="#9CA3AF" style={{ margin: '0 auto 4px' }} />
+                        <div style={{ fontSize: '16px', fontWeight: 800, color: '#111' }}>{stat.value}</div>
+                        <div style={{ fontSize: '10px', color: '#9CA3AF' }}>{stat.label}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: card.color, fontSize: '13px', fontWeight: 700 }}>
+                  Ir al módulo <ArrowRight size={14} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

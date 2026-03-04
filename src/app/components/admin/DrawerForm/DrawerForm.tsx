@@ -5,9 +5,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { X, ChevronRight, Check, Loader2 } from 'lucide-react';
 import type { DrawerFormProps, FieldDef, SheetDef } from './DrawerForm.types';
-import { GoogleAddressAutocomplete } from '../../ui/GoogleAddressAutocomplete';
-import { GOOGLE_MAPS_API_KEY } from '../../../../utils/google/config';
-
 // Obtener color primario del tenant desde CSS variable
 function getPrimaryColor(): string {
   if (typeof window === 'undefined') return '#FF6835';
@@ -350,28 +347,13 @@ function FieldRenderer({
 
     case 'address': {
       const addressValue = String(value || '');
-      const hasApiKey = GOOGLE_MAPS_API_KEY && GOOGLE_MAPS_API_KEY !== 'YOUR_API_KEY';
       return (
         <div>
           <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '6px' }}>
             {field.label}
             {field.required && <span style={{ color: '#ef4444', marginLeft: '2px' }}>*</span>}
           </label>
-          {hasApiKey ? (
-            <GoogleAddressAutocomplete
-              value={addressValue}
-              placeholder={field.placeholder || 'Ingresá una dirección...'}
-              required={field.required}
-              onChange={(val) => handleChange(val)}
-              onSelect={(result) => {
-                handleChange(result.address);
-                onMultiChange?.({
-                  [`${field.id}_data`]: result,
-                });
-              }}
-            />
-          ) : (
-            <input
+          <input
               type="text"
               value={addressValue}
               onChange={(e) => handleChange(e.target.value)}
@@ -381,7 +363,6 @@ function FieldRenderer({
               required={field.required}
               style={inputStyle}
             />
-          )}
           {/* Sub-campos de ubicación */}
           <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
             {[

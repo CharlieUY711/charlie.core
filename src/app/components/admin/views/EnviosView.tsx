@@ -237,7 +237,7 @@ export function EnviosView({ onNavigate }: Props) {
 
       if (ids.length > 0) {
         const { data: eventosData } = await supabase
-          .from('eventos_tracking')
+          .from('envios_eventos')
           .select('*')
           .in('envio_id', ids)
           .order('fecha', { ascending: false });
@@ -327,7 +327,7 @@ export function EnviosView({ onNavigate }: Props) {
         .eq('id', envioId);
       if (updateError) throw updateError;
 
-      await supabase.from('eventos_tracking').insert({
+      await supabase.from('envios_eventos').insert({
         envio_id:    envioId,
         estado:      nuevoEstado,
         descripcion: descripcion || `Estado cambiado a ${nuevoEstado}`,

@@ -5,8 +5,6 @@
  */
 import React from 'react';
 import { Lightbulb, MapPin } from 'lucide-react';
-import { ConnectionStatusIcon } from './ConnectionStatusIcon';
-
 const ORANGE = '#FF6835';
 
 export interface HeaderAction {
@@ -163,8 +161,6 @@ export function OrangeHeader({ title, subtitle, actions, rightSlot, icon: Icon, 
         </button>
         
         {/* Estado de conexión con backend */}
-        <ConnectionStatusIcon size={17} />
-
         {actions && actions.map((action, i) => (
           <button
             key={i}

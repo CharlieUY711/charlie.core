@@ -1,40 +1,27 @@
 ﻿/* =====================================================
-   AdminSidebar — navegación plana, sin sub-menús, sin scroll
+   AdminSidebar — Logística · Transportistas · Envíos
    ===================================================== */
 import React from 'react';
-import {
-  LayoutDashboard, ShoppingCart, Megaphone, Wrench, Database,
-  Monitor, Sparkles, Package, Truck, Rss, ExternalLink, Plug,
-  Search, Blocks,
-} from 'lucide-react';
+import { Truck, Sparkles, ExternalLink } from 'lucide-react';
 import type { MainSection } from '../../AdminDashboard';
 import { useOrchestrator } from '../../../shells/DashboardShell/app/providers/OrchestratorProvider';
 
-const ORANGE    = '#FF6835';
 const ACTIVE_BG = 'rgba(255,255,255,0.22)';
 const HOVER_BG  = 'rgba(255,255,255,0.12)';
 
-interface NavArea {
-  id: string;
+interface NavItem {
+  id: MainSection;
   label: string;
-  items: [];
+  emoji?: string;
 }
 
-const AREAS: NavArea[] = [
-  { id: 'logistica',   label: 'Logística',   items: [] },
-  { id: 'ecommerce',   label: 'eCommerce',   items: [] },
-  { id: 'marketing',   label: 'Marketing',   items: [] },
-  { id: 'sistema',     label: 'Sistema',     items: [] },
-  { id: 'constructor', label: 'Constructor', items: [] },
+const NAV_ITEMS: NavItem[] = [
+  { id: 'dashboard',      label: 'Dashboard',       emoji: '🏠' },
+  { id: 'logistica',      label: 'Logística',       emoji: '🚚' },
+  { id: 'envios',         label: 'Envíos',          emoji: '📦' },
+  { id: 'transportistas', label: 'Transportistas',  emoji: '🏢' },
+  { id: 'organizaciones', label: 'Organizaciones',  emoji: '🏗️' },
 ];
-
-const MODULOS_POR_AREA: Record<string, string[]> = {
-  logistica:   ['transportistas', 'conductores', 'tramos', 'tarifas', 'logistica'],
-  ecommerce:   ['ecommerce', 'productos', 'pedidos'],
-  marketing:   ['marketing', 'rrss'],
-  sistema:     ['herramientas', 'gestion', 'sistema', 'integraciones', 'auditoria'],
-  constructor: ['constructor'],
-};
 
 interface Props {
   activeSection: MainSection;
@@ -43,18 +30,9 @@ interface Props {
 
 export function AdminSidebar({ activeSection, onNavigate }: Props) {
   const { config } = useOrchestrator();
-  
-  // Obtener valores de la configuración con fallbacks
+
   const clienteNombre = config?.theme?.nombre ?? 'Charlie';
   const colorPrimario = config?.theme?.primary ?? '#FF6B35';
-  const modulosConfig = config?.modulos ?? [];
-  
-  const todosHabilitados = modulosConfig.includes('*');
-  const areasVisibles = AREAS.filter(area => {
-    if (todosHabilitados || modulosConfig.length === 0) return true;
-    const modulosDelArea = MODULOS_POR_AREA[area.id] ?? [];
-    return modulosDelArea.some(m => modulosConfig.includes(m));
-  });
 
   return (
     <aside
@@ -67,7 +45,7 @@ export function AdminSidebar({ activeSection, onNavigate }: Props) {
         flexShrink: 0,
         position: 'sticky',
         top: 0,
-        overflow: 'hidden',          /* sin scroll */
+        overflow: 'hidden',
       }}
     >
       {/* ── Logo ── */}
@@ -114,40 +92,40 @@ export function AdminSidebar({ activeSection, onNavigate }: Props) {
 
       {/* ── Nav ── */}
       <nav style={{ flex: 1, padding: '6px 0', overflowY: 'auto' }}>
-          {areasVisibles.map((area) => {
-            const isActive = activeSection === area.id ||
-              (MODULOS_POR_AREA[area.id] ?? []).includes(activeSection);
-            return (
-              <button
-                key={area.id}
-                onClick={() => onNavigate(area.id as MainSection)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  width: '100%',
-                  padding: '9px 16px',
-                  border: 'none',
-                  backgroundColor: isActive ? ACTIVE_BG : 'transparent',
-                  color: '#fff',
-                  fontSize: '13px',
-                  fontWeight: isActive ? 700 : 400,
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  borderRadius: '6px',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={e => {
-                  if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = HOVER_BG;
-                }}
-                onMouseLeave={e => {
-                  if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
-                }}
-              >
-                <span style={{ fontSize: '13px' }}>{area.label}</span>
-              </button>
-            );
-          })}
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeSection === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => onNavigate(item.id)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                width: '100%',
+                padding: '9px 16px',
+                border: 'none',
+                backgroundColor: isActive ? ACTIVE_BG : 'transparent',
+                color: '#fff',
+                fontSize: '13px',
+                fontWeight: isActive ? 700 : 400,
+                cursor: 'pointer',
+                textAlign: 'left',
+                borderRadius: '6px',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={e => {
+                if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = HOVER_BG;
+              }}
+              onMouseLeave={e => {
+                if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+              }}
+            >
+              {item.emoji && <span style={{ fontSize: '14px' }}>{item.emoji}</span>}
+              <span style={{ fontSize: '13px' }}>{item.label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       {/* ── Tip ── */}
@@ -160,10 +138,10 @@ export function AdminSidebar({ activeSection, onNavigate }: Props) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '5px' }}>
           <Sparkles size={12} color="#fff" />
-          <span style={{ color: '#fff', fontWeight: '700', fontSize: '0.72rem' }}>Tip del día</span>
+          <span style={{ color: '#fff', fontWeight: '700', fontSize: '0.72rem' }}>Logística</span>
         </div>
         <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '0.67rem', margin: 0, lineHeight: '1.4' }}>
-          Usá la IA para optimizar descripciones de productos automáticamente
+          Gestioná envíos y transportistas desde un solo lugar
         </p>
       </div>
 

@@ -1,114 +1,26 @@
 /* =====================================================
-   Charlie Marketplace Builder — AdminDashboard v2.0
+   Charlie Marketplace Builder — AdminDashboard
    Shell principal — Orquestador dinámico
+   Módulos activos: Logística · Transportistas · Envíos
    ===================================================== */
 
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar }      from './components/admin/AdminSidebar';
 import { OrchestratorShell } from './components/OrchestratorShell';
 import { Toaster }           from 'sonner';
-import type { MainSection }  from './AdminDashboard';
-import { syncManifestToRoadmap } from './services/syncManifest';
 import { useOrchestrator } from '../shells/DashboardShell/app/providers/OrchestratorProvider';
 
 export type MainSection =
   | 'dashboard'
-  | 'ecommerce'
-  | 'marketing'
-  | 'herramientas'
-  | 'qr-generator'
-  | 'gestion'
-  | 'pos'
-  | 'sistema'
-  | 'diseno'
-  | 'checklist'
-  | 'integraciones'
-  | 'migracion-rrss'
-  | 'mailing'
-  | 'google-ads'
-  | 'rueda-sorteos'
-  | 'fidelizacion'
-  | 'redes-sociales'
-  | 'rrss'
-  | 'departamentos'
-  | 'secondhand'
-  | 'erp-inventario'
-  | 'erp-facturacion'
-  | 'erp-compras'
-  | 'erp-crm'
-  | 'erp-contabilidad'
-  | 'erp-rrhh'
-  | 'proyectos'
-  | 'personas'
-  | 'organizaciones'
-  | 'clientes'
-  | 'pedidos'
-  | 'metodos-pago'
-  | 'metodos-envio'
-  | 'pagos'
-  | 'envios'
   | 'logistica'
+  | 'envios'
   | 'transportistas'
-  | 'rutas'
-  | 'vehiculos'
-  | 'depositos'
-  | 'inventario'
-  | 'entregas'
-  | 'produccion'
-  | 'abastecimiento'
-  | 'mapa-envios'
-  | 'tracking-publico'
-  | 'fulfillment'
-  | 'seo'
-  | 'etiqueta-emotiva'
-  | 'roadmap'
-  | 'ideas-board'
-  | 'integraciones-pagos'
-  | 'integraciones-logistica'
-  | 'integraciones-tiendas'
-  | 'integraciones-rrss'
-  | 'integraciones-servicios'
-  | 'integraciones-marketplace'
-  | 'integraciones-comunicacion'
-  | 'integraciones-identidad'
-  | 'integraciones-api-keys'
-  | 'integraciones-webhooks'
-  // ── Workspace Suite ──────────────────────────────────────────────────────────
-  | 'biblioteca'
-  | 'editor-imagenes'
-  | 'gen-documentos'
-  | 'gen-presupuestos'
-  | 'ocr'
-  | 'impresion'
-  // ── Auditoría & Diagnóstico ───────────────────────────────────────────────────
-  | 'auditoria'
-  | 'auditoria-health'
-  | 'auditoria-logs'
-  // ── Repositorio de APIs ───────────────────────────────────────────────────────
-  | 'integraciones-apis'
-  // ── Constructor ───────────────────────────────────────────────────────────────
-  | 'constructor'
-  // ── Nuevos módulos v2 ─────────────────────────────────────────────────────────
-  | 'auth-registro'
-  | 'carga-masiva'
-  | 'meta-business'
-  | 'unified-workspace'
-  // ── Sistema: Dashboards + Config + Docs ───────────────────────────────────────
-  | 'dashboard-admin'
-  | 'dashboard-usuario'
-  | 'config-vistas'
-  | 'documentacion'
-  | 'metamap-config'
-  | 'google-maps-test';
+  | 'organizaciones';
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState<MainSection>('dashboard');
   const nav = (s: MainSection) => setActiveSection(s);
   const { clienteNombre } = useOrchestrator();
-
-  useEffect(() => {
-    syncManifestToRoadmap();
-  }, []);
 
   useEffect(() => {
     if (clienteNombre) {
