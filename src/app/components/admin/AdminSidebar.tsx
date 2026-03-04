@@ -1,8 +1,8 @@
-﻿/* =====================================================
-   AdminSidebar — Logística · Transportistas · Envíos
+/* =====================================================
+   AdminSidebar — Charlie Platform
+   Entradas: Dashboard · Logística · Envíos · Transportistas
    ===================================================== */
 import React from 'react';
-import { Truck, Sparkles, ExternalLink } from 'lucide-react';
 import type { MainSection } from '../../AdminDashboard';
 import { useOrchestrator } from '../../../shells/DashboardShell/app/providers/OrchestratorProvider';
 
@@ -12,15 +12,13 @@ const HOVER_BG  = 'rgba(255,255,255,0.12)';
 interface NavItem {
   id: MainSection;
   label: string;
-  emoji?: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard',      label: 'Dashboard',       emoji: '🏠' },
-  { id: 'logistica',      label: 'Logística',       emoji: '🚚' },
-  { id: 'envios',         label: 'Envíos',          emoji: '📦' },
-  { id: 'transportistas', label: 'Transportistas',  emoji: '🏢' },
-  { id: 'organizaciones', label: 'Organizaciones',  emoji: '🏗️' },
+  { id: 'dashboard',      label: 'Dashboard'      },
+  { id: 'logistica',      label: 'Logística'      },
+  { id: 'envios',         label: 'Envíos'         },
+  { id: 'transportistas', label: 'Transportistas' },
 ];
 
 interface Props {
@@ -50,48 +48,25 @@ export function AdminSidebar({ activeSection, onNavigate }: Props) {
     >
       {/* ── Logo ── */}
       <div style={{
-        height: '88px',
+        height: '64px',
         display: 'flex',
         alignItems: 'center',
         padding: '0 16px',
         borderBottom: '1px solid rgba(255,255,255,0.18)',
         flexShrink: 0,
       }}>
-        <div style={{ display: 'inline-flex', flexDirection: 'column' }}>
-          <span style={{
-            color: '#000',
-            fontWeight: '600',
-            fontSize: '1.7rem',
-            lineHeight: 1,
-            textAlign: 'justify',
-            textAlignLast: 'justify',
-          }}>
-            {clienteNombre}
-          </span>
-        </div>
-      </div>
-
-      {/* ── User ── */}
-      <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.18)', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-          <div style={{
-            width: '34px', height: '34px', borderRadius: '50%',
-            backgroundColor: 'rgba(255,255,255,0.28)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: '800', fontSize: '0.78rem',
-            flexShrink: 0, border: '2px solid rgba(255,255,255,0.4)',
-          }}>
-            CV
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <p style={{ color: '#fff', fontWeight: '700', fontSize: '0.82rem', margin: 0, whiteSpace: 'nowrap' }}>Carlos Varalla</p>
-            <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: '0.68rem', margin: 0 }}>Administrador</p>
-          </div>
-        </div>
+        <span style={{
+          color: '#fff',
+          fontWeight: '700',
+          fontSize: '1.2rem',
+          letterSpacing: '-0.02em',
+        }}>
+          {clienteNombre}
+        </span>
       </div>
 
       {/* ── Nav ── */}
-      <nav style={{ flex: 1, padding: '6px 0', overflowY: 'auto' }}>
+      <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
         {NAV_ITEMS.map((item) => {
           const isActive = activeSection === item.id;
           return (
@@ -101,9 +76,8 @@ export function AdminSidebar({ activeSection, onNavigate }: Props) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
                 width: '100%',
-                padding: '9px 16px',
+                padding: '10px 16px',
                 border: 'none',
                 backgroundColor: isActive ? ACTIVE_BG : 'transparent',
                 color: '#fff',
@@ -121,57 +95,11 @@ export function AdminSidebar({ activeSection, onNavigate }: Props) {
                 if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
               }}
             >
-              {item.emoji && <span style={{ fontSize: '14px' }}>{item.emoji}</span>}
-              <span style={{ fontSize: '13px' }}>{item.label}</span>
+              {item.label}
             </button>
           );
         })}
       </nav>
-
-      {/* ── Tip ── */}
-      <div style={{
-        margin: '0 10px 10px',
-        padding: '10px',
-        backgroundColor: 'rgba(255,255,255,0.15)',
-        borderRadius: '10px',
-        flexShrink: 0,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '5px' }}>
-          <Sparkles size={12} color="#fff" />
-          <span style={{ color: '#fff', fontWeight: '700', fontSize: '0.72rem' }}>Logística</span>
-        </div>
-        <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '0.67rem', margin: 0, lineHeight: '1.4' }}>
-          Gestioná envíos y transportistas desde un solo lugar
-        </p>
-      </div>
-
-      {/* ── Ver Tienda ── */}
-      <a
-        href="/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          margin: '0 10px 12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '7px',
-          padding: '9px 0',
-          backgroundColor: '#fff',
-          color: colorPrimario,
-          borderRadius: '10px',
-          textDecoration: 'none',
-          fontSize: '0.8rem',
-          fontWeight: '700',
-          flexShrink: 0,
-          transition: 'opacity 0.15s',
-        }}
-        onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.88'}
-        onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-      >
-        <ExternalLink size={13} />
-        Ver tienda
-      </a>
     </aside>
   );
 }

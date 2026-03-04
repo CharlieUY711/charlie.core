@@ -1,7 +1,18 @@
 /**
  * MODULE MANIFEST — Charlie Marketplace Builder
  * ═══════════════════════════════════════════════════
- * Módulos validados: Orquestador · Transportistas · Envios
+ * Módulos validados en Charlie:
+ *   - dashboard
+ *   - logistica   (hub de navegación)
+ *   - envios      (conectado a Supabase)
+ *   - transportistas (conectado a Supabase)
+ *
+ * REGLA: Solo entran aquí módulos 100% OK en Testing.
+ * Para agregar un módulo nuevo:
+ *   1. Validar en Testing
+ *   2. Agregar entrada aquí
+ *   3. Agregar en MainSection (AdminDashboard.tsx)
+ *   4. Agregar en NAV_ITEMS (AdminSidebar.tsx)
  */
 
 import React from 'react';
@@ -29,11 +40,11 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     viewFile: 'DashboardView.tsx',
     component: React.lazy(() => import('../components/admin/views/DashboardView').then(m => ({ default: m.DashboardView }))),
     isReal: true,
-    notes: 'Dashboard principal — acceso a Logística',
+    notes: 'Dashboard principal',
   },
 
   // ══════════════════════════════════════════════════════
-  // LOGÍSTICA — Hub
+  // LOGÍSTICA — Hub de navegación
   // ══════════════════════════════════════════════════════
   {
     checklistIds: ['logistics-hub'],
@@ -41,11 +52,11 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     viewFile: 'LogisticaView.tsx',
     component: React.lazy(() => import('../components/admin/views/LogisticaView').then(m => ({ default: m.LogisticaView }))),
     isReal: false,
-    notes: 'Hub de navegación logística — Envíos y Transportistas',
+    notes: 'Hub de navegación logística',
   },
 
   // ══════════════════════════════════════════════════════
-  // ENVÍOS
+  // ENVÍOS — Validado en Testing ✅
   // ══════════════════════════════════════════════════════
   {
     checklistIds: ['logistics-shipping'],
@@ -54,11 +65,11 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     component: React.lazy(() => import('../components/admin/views/EnviosView').then(m => ({ default: m.EnviosView }))),
     isReal: true,
     hasSupabase: true,
-    notes: 'Vista árbol PedidoMadre→EnvíosHijos · estados · multi-tramo · panel detalle + timeline (tabla: envios + envios_eventos)',
+    notes: 'Vista árbol PedidoMadre→EnvíosHijos · estados · multi-tramo · panel detalle + timeline',
   },
 
   // ══════════════════════════════════════════════════════
-  // TRANSPORTISTAS
+  // TRANSPORTISTAS — Validado en Testing ✅
   // ══════════════════════════════════════════════════════
   {
     checklistIds: ['logistics-carriers'],
@@ -67,17 +78,9 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     component: React.lazy(() => import('../components/admin/views/TransportistasView').then(m => ({ default: m.TransportistasView }))),
     isReal: true,
     hasSupabase: true,
-    notes: 'Catálogo carriers · tramos y zonas · simulador de tarifas (tabla: transportistas + tramos)',
+    notes: 'Catálogo carriers · tramos y zonas · simulador de tarifas',
   },
-  {
-    checklistIds: ['logistics-carriers'],
-    section: 'organizaciones',
-    viewFile: 'OrganizacionesView.tsx',
-    component: React.lazy(() => import('../components/admin/views/OrganizacionesView').then(m => ({ default: m.OrganizacionesView }))),
-    isReal: true,
-    hasSupabase: true,
-    notes: 'CRUD completo de organizaciones — vinculadas a transportistas (tabla: organizaciones)',
-  },
+
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
