@@ -1,7 +1,6 @@
 /* =====================================================
    Charlie Marketplace Builder — AdminDashboard
-   Shell principal — Orquestador dinámico
-   Módulos activos: Logística · Transportistas · Envíos
+   Módulos activos: Logística · Sistema
    ===================================================== */
 
 import React, { useState, useEffect } from 'react';
@@ -14,7 +13,9 @@ export type MainSection =
   | 'dashboard'
   | 'logistica'
   | 'envios'
-  | 'transportistas';
+  | 'transportistas'
+  | 'sistema'
+  | 'checklist';
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState<MainSection>('dashboard');
@@ -22,18 +23,14 @@ export default function AdminDashboard() {
   const { clienteNombre } = useOrchestrator();
 
   useEffect(() => {
-    if (clienteNombre) {
-      document.title = clienteNombre;
-    }
+    if (clienteNombre) document.title = clienteNombre;
   }, [clienteNombre]);
 
   return (
     <>
       <Toaster position="top-right" richColors />
       <div style={{
-        display: 'flex',
-        height: '100vh',
-        overflow: 'hidden',
+        display: 'flex', height: '100vh', overflow: 'hidden',
         backgroundColor: '#F8F9FA',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
       }}>
