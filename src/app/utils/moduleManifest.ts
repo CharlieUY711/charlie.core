@@ -2,39 +2,30 @@
  * MODULE MANIFEST — Charlie Marketplace Builder
  * ═══════════════════════════════════════════════════
  * REGLA: Solo entran módulos 100% OK en Testing.
- *
- * Campos nuevos:
- *   group    — agrupa módulos en el Checklist (árbol colapsable)
- *   serviceFile — nombre del archivo en /services/ para detección C3
- *   viewFile    — nombre del archivo en /views/ para detección C1/C5/C8
  */
 
 import React from 'react';
 import type { MainSection } from '../AdminDashboard';
 
-export type ModuleGroup =
-  | 'Logística'
-  | 'Sistema';
+export type ModuleGroup = 'Logística' | 'Sistema';
 
 export interface ManifestEntry {
-  checklistIds:    string[];
-  section:         MainSection;
-  group:           ModuleGroup;
-  label:           string;
-  viewFile:        string;
-  serviceFile?:    string;       // para detección C3
-  component:       React.ComponentType<{ onNavigate: (s: MainSection) => void }> | React.ComponentType<{}> | null;
-  isReal:          boolean;      // C1 — tiene UI
-  hasSupabase?:    boolean;      // C2 — tiene backend
+  checklistIds:       string[];
+  section:            MainSection;
+  group:              ModuleGroup;
+  label:              string;
+  viewFile:           string;
+  serviceFile?:       string;
+  component:          React.ComponentType<{ onNavigate: (s: MainSection) => void }> | React.ComponentType<{}> | null;
+  isReal:             boolean;
+  hasSupabase?:       boolean;
   acceptsOnNavigate?: boolean;
-  notes?:          string;
+  notes?:             string;
 }
 
 export const MODULE_MANIFEST: ManifestEntry[] = [
 
-  // ══════════════════════════════════════════════════════
-  // DASHBOARD
-  // ══════════════════════════════════════════════════════
+  // ── DASHBOARD ─────────────────────────────────────────
   {
     checklistIds: [],
     section:      'dashboard',
@@ -43,12 +34,9 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     viewFile:     'DashboardView.tsx',
     component:    React.lazy(() => import('../components/admin/views/DashboardView').then(m => ({ default: m.DashboardView }))),
     isReal:       true,
-    notes:        'Dashboard principal',
   },
 
-  // ══════════════════════════════════════════════════════
-  // LOGÍSTICA — Hub
-  // ══════════════════════════════════════════════════════
+  // ── LOGÍSTICA ─────────────────────────────────────────
   {
     checklistIds: ['logistics-hub'],
     section:      'logistica',
@@ -57,12 +45,7 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     viewFile:     'LogisticaView.tsx',
     component:    React.lazy(() => import('../components/admin/views/LogisticaView').then(m => ({ default: m.LogisticaView }))),
     isReal:       false,
-    notes:        'Hub de navegación logística',
   },
-
-  // ══════════════════════════════════════════════════════
-  // ENVÍOS ✅
-  // ══════════════════════════════════════════════════════
   {
     checklistIds: ['logistics-shipping'],
     section:      'envios',
@@ -73,12 +56,7 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     component:    React.lazy(() => import('../components/admin/views/EnviosView').then(m => ({ default: m.EnviosView }))),
     isReal:       true,
     hasSupabase:  true,
-    notes:        'Vista árbol PedidoMadre→EnvíosHijos · estados · multi-tramo · panel detalle + timeline',
   },
-
-  // ══════════════════════════════════════════════════════
-  // TRANSPORTISTAS ✅
-  // ══════════════════════════════════════════════════════
   {
     checklistIds: ['logistics-carriers'],
     section:      'transportistas',
@@ -89,23 +67,18 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     component:    React.lazy(() => import('../components/admin/views/TransportistasView').then(m => ({ default: m.TransportistasView }))),
     isReal:       true,
     hasSupabase:  true,
-    notes:        'Catálogo carriers · tramos y zonas · simulador de tarifas',
   },
 
-  // ══════════════════════════════════════════════════════
-  // SISTEMA — Checklist ✅
-  // ══════════════════════════════════════════════════════
+  // ── SISTEMA ───────────────────────────────────────────
   {
-    checklistIds: ['system-checklist'],
+    checklistIds: ['system-hub'],
     section:      'sistema',
     group:        'Sistema',
     label:        'Sistema',
     viewFile:     'SistemaView.tsx',
     component:    React.lazy(() => import('../components/admin/views/SistemaView').then(m => ({ default: m.SistemaView }))),
     isReal:       true,
-    notes:        'Hub de sistema — Checklist & Roadmap',
   },
-
   {
     checklistIds: ['system-checklist'],
     section:      'checklist',
@@ -114,14 +87,22 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     viewFile:     'ChecklistView.tsx',
     component:    React.lazy(() => import('../components/admin/views/ChecklistView').then(m => ({ default: m.ChecklistView }))),
     isReal:       true,
-    notes:        'Árbol de módulos con criterios C1-C8 automáticos',
+    notes:        'Árbol C1-C8 automático + toggles manuales con timestamps',
+  },
+  {
+    checklistIds: ['system-ideas'],
+    section:      'ideas',
+    group:        'Sistema',
+    label:        'Ideas',
+    viewFile:     'IdeasView.tsx',
+    component:    React.lazy(() => import('../components/admin/views/IdeasView').then(m => ({ default: m.IdeasView }))),
+    isReal:       true,
+    notes:        'Lista de ideas con evaluación y score de viabilidad',
   },
 
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 export const REAL_CHECKLIST_IDS = new Set<string>(
   MODULE_MANIFEST.filter(e => e.isReal).flatMap(e => e.checklistIds)
@@ -131,12 +112,7 @@ export const MANIFEST_BY_SECTION = new Map<MainSection, ManifestEntry>(
   MODULE_MANIFEST.map(e => [e.section, e])
 );
 
-/** Módulos agrupados para el árbol del Checklist */
 export const MANIFEST_BY_GROUP = MODULE_MANIFEST.reduce<Record<ModuleGroup, ManifestEntry[]>>(
-  (acc, e) => {
-    if (!acc[e.group]) acc[e.group] = [];
-    acc[e.group].push(e);
-    return acc;
-  },
+  (acc, e) => { if (!acc[e.group]) acc[e.group] = []; acc[e.group].push(e); return acc; },
   {} as Record<ModuleGroup, ManifestEntry[]>
 );

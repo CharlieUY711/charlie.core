@@ -1,8 +1,3 @@
-/* =====================================================
-   Charlie Marketplace Builder — AdminDashboard
-   Módulos activos: Logística · Sistema
-   ===================================================== */
-
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar }      from './components/admin/AdminSidebar';
 import { OrchestratorShell } from './components/OrchestratorShell';
@@ -15,23 +10,21 @@ export type MainSection =
   | 'envios'
   | 'transportistas'
   | 'sistema'
-  | 'checklist';
+  | 'checklist'
+  | 'ideas';
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState<MainSection>('dashboard');
   const nav = (s: MainSection) => setActiveSection(s);
   const { clienteNombre } = useOrchestrator();
 
-  useEffect(() => {
-    if (clienteNombre) document.title = clienteNombre;
-  }, [clienteNombre]);
+  useEffect(() => { if (clienteNombre) document.title = clienteNombre; }, [clienteNombre]);
 
   return (
     <>
       <Toaster position="top-right" richColors />
       <div style={{
-        display: 'flex', height: '100vh', overflow: 'hidden',
-        backgroundColor: '#F8F9FA',
+        display: 'flex', height: '100vh', overflow: 'hidden', backgroundColor: '#F8F9FA',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
       }}>
         <AdminSidebar activeSection={activeSection} onNavigate={nav} />
