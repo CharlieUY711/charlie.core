@@ -1,14 +1,12 @@
 /* =====================================================
    LogisticaView — Hub de Logística
-   Módulos: Envíos · Transportistas · Organizaciones
+   Módulos: Envíos · Transportistas
    ===================================================== */
 import React from 'react';
 import type { MainSection } from '../../../AdminDashboard';
-import { Truck, Users, Building2, Package, Clock, CheckCircle, MapPin, BarChart2, ArrowRight } from 'lucide-react';
+import { Truck, Users, Clock, CheckCircle, MapPin, BarChart2, ArrowRight } from 'lucide-react';
 
 interface Props { onNavigate: (s: MainSection) => void; }
-
-const ORANGE = '#FF6835';
 
 interface HubCard {
   id: MainSection;
@@ -31,9 +29,9 @@ const CARDS: HubCard[] = [
     color: '#FF6835',
     gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)',
     stats: [
-      { icon: Truck,        value: '—', label: 'Activos' },
-      { icon: Clock,        value: '—', label: 'En tránsito' },
-      { icon: CheckCircle,  value: '—', label: 'Entregados' },
+      { icon: Truck,       value: '—', label: 'Activos'     },
+      { icon: Clock,       value: '—', label: 'En tránsito' },
+      { icon: CheckCircle, value: '—', label: 'Entregados'  },
     ],
   },
   {
@@ -45,23 +43,9 @@ const CARDS: HubCard[] = [
     color: '#0EA5E9',
     gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)',
     stats: [
-      { icon: Users,    value: '—', label: 'Carriers' },
-      { icon: MapPin,   value: '—', label: 'Tramos' },
+      { icon: Users,     value: '—', label: 'Carriers'      },
+      { icon: MapPin,    value: '—', label: 'Tramos'        },
       { icon: BarChart2, value: '—', label: 'Zonas activas' },
-    ],
-  },
-  {
-    id: 'organizaciones',
-    icon: Building2,
-    label: 'Organizaciones',
-    badge: 'Empresas',
-    description: 'Empresas y organizaciones vinculadas al sistema logístico y transportistas.',
-    color: '#059669',
-    gradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-    stats: [
-      { icon: Building2,    value: '—', label: 'Organizaciones' },
-      { icon: CheckCircle,  value: '—', label: 'Activas' },
-      { icon: Package,      value: '—', label: 'Vinculadas' },
     ],
   },
 ];
@@ -72,17 +56,19 @@ export function LogisticaView({ onNavigate }: Props) {
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+            width: '40px', height: '40px', borderRadius: '12px',
+            background: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
             <Truck size={20} color="#fff" />
           </div>
           <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#111', margin: 0 }}>Logística</h1>
         </div>
-        <p style={{ fontSize: '14px', color: '#6B7280', margin: 0 }}>
-          Envíos · Transportistas · Organizaciones
-        </p>
+        <p style={{ fontSize: '14px', color: '#6B7280', margin: 0 }}>Envíos · Transportistas</p>
       </div>
 
-      {/* Cards de módulos */}
+      {/* Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
         {CARDS.map(card => {
           const Icon = card.icon;
@@ -108,11 +94,8 @@ export function LogisticaView({ onNavigate }: Props) {
                 (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
               }}
             >
-              {/* Banner */}
               <div style={{ height: '8px', background: card.gradient }} />
-
               <div style={{ padding: '20px' }}>
-                {/* Icon + título */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                   <div style={{
                     width: '44px', height: '44px', borderRadius: '12px',
@@ -129,12 +112,9 @@ export function LogisticaView({ onNavigate }: Props) {
                     <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#111', margin: '4px 0 0' }}>{card.label}</h3>
                   </div>
                 </div>
-
                 <p style={{ fontSize: '13px', color: '#6B7280', margin: '0 0 16px', lineHeight: '1.5' }}>
                   {card.description}
                 </p>
-
-                {/* Stats */}
                 <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', padding: '12px', backgroundColor: '#F9FAFB', borderRadius: '10px' }}>
                   {card.stats.map(stat => {
                     const StatIcon = stat.icon;
@@ -147,7 +127,6 @@ export function LogisticaView({ onNavigate }: Props) {
                     );
                   })}
                 </div>
-
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: card.color, fontSize: '13px', fontWeight: 700 }}>
                   Ir al módulo <ArrowRight size={14} />
                 </div>
