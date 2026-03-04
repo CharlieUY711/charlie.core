@@ -1,8 +1,11 @@
 /* =====================================================
-   ChecklistView — Árbol de módulos C1-C8
+   ChecklistView — Árbol de módulos C1-C8 con timestamps
    ===================================================== */
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronDown, CheckCircle2, XCircle, ToggleLeft, ToggleRight, RefreshCw } from 'lucide-react';
+import {
+  ChevronRight, ChevronDown, CheckCircle2, XCircle,
+  ToggleLeft, ToggleRight, RefreshCw, Clock,
+} from 'lucide-react';
 import type { MainSection } from '../../../AdminDashboard';
 import { MODULE_MANIFEST, MANIFEST_BY_GROUP, type ManifestEntry, type ModuleGroup } from '../../../utils/moduleManifest';
 
@@ -14,7 +17,7 @@ interface Criterion {
   id: 'C1' | 'C2' | 'C3' | 'C4' | 'C5' | 'C6' | 'C7' | 'C8';
   label: string;
   description: string;
-  auto: boolean; // true = se detecta del manifest, false = toggle manual
+  auto: boolean;
 }
 
 const CRITERIA: Criterion[] = [
@@ -28,32 +31,53 @@ const CRITERIA: Criterion[] = [
   { id: 'C8', label: 'Data0',   description: 'Usa Data Zero (useTable, no .from)',     auto: false },
 ];
 
-// ─── Detección automática desde el manifest ───────────────────────────────────
+// ─── Detección automática ─────────────────────────────────────────────────────
 
 function detectAuto(entry: ManifestEntry): Record<string, boolean> {
-  // C3: existe serviceFile en el manifest
-  const hasService = !!entry.serviceFile;
-
   return {
     C1: entry.isReal,
     C2: !!entry.hasSupabase,
-    C3: hasService,
+    C3: !!entry.serviceFile,
   };
 }
 
-// ─── Storage key para toggles manuales ───────────────────────────────────────
+// ─── Storage ──────────────────────────────────────────────────────────────────
 
 const STORAGE_KEY = 'charlie_checklist_manual_v1';
 
-function loadManual(): Record<string, Record<string, boolean>> {
+interface StoredModule {
+  values: Record<string, boolean>;
+  updatedAt: string; // ISO
+}
+
+function loadManual(): Record<string, StoredModule> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : {};
   } catch { return {}; }
 }
 
-function saveManual(data: Record<string, Record<string, boolean>>) {
+function saveManual(data: Record<string, StoredModule>) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// ─── Helpers de fecha ─────────────────────────────────────────────────────────
+
+function fmtDateTime(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-UY', { day: '2-digit', month: '2-digit', year: '2-digit' })
+    + ' ' + d.toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit' });
+}
+
+function fmtRelative(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1)   return 'ahora';
+  if (mins < 60)  return `hace ${mins}m`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24)   return `hace ${hrs}h`;
+  const days = Math.floor(hrs / 24);
+  return `hace ${days}d`;
 }
 
 // ─── Colores de grupo ─────────────────────────────────────────────────────────
@@ -66,9 +90,8 @@ const GROUP_COLORS: Record<ModuleGroup, string> = {
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 export function ChecklistView(_props: Props) {
-  const [expanded, setExpanded]   = useState<Set<string>>(new Set(Object.keys(MANIFEST_BY_GROUP)));
-  const [manual, setManual]       = useState<Record<string, Record<string, boolean>>>(loadManual);
-  const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [expanded, setExpanded] = useState<Set<string>>(new Set(Object.keys(MANIFEST_BY_GROUP)));
+  const [manual, setManual]     = useState<Record<string, StoredModule>>(loadManual);
 
   useEffect(() => { saveManual(manual); }, [manual]);
 
@@ -81,26 +104,32 @@ export function ChecklistView(_props: Props) {
   };
 
   const toggleManual = (section: string, cid: string) => {
-    setManual(prev => ({
-      ...prev,
-      [section]: { ...(prev[section] ?? {}), [cid]: !(prev[section]?.[cid] ?? false) },
-    }));
+    const now = new Date().toISOString();
+    setManual(prev => {
+      const current = prev[section] ?? { values: {}, updatedAt: now };
+      return {
+        ...prev,
+        [section]: {
+          values:    { ...current.values, [cid]: !(current.values[cid] ?? false) },
+          updatedAt: now,
+        },
+      };
+    });
   };
 
   const getCriteria = (entry: ManifestEntry): Record<string, boolean> => {
     const auto = detectAuto(entry);
-    const man  = manual[entry.section] ?? {};
+    const man  = manual[entry.section]?.values ?? {};
     const result: Record<string, boolean> = {};
-    CRITERIA.forEach(c => {
-      result[c.id] = c.auto ? (auto[c.id] ?? false) : (man[c.id] ?? false);
-    });
+    CRITERIA.forEach(c => { result[c.id] = c.auto ? (auto[c.id] ?? false) : (man[c.id] ?? false); });
     return result;
   };
 
-  const getScore = (entry: ManifestEntry) => {
-    const vals = Object.values(getCriteria(entry));
-    return vals.filter(Boolean).length;
-  };
+  const getScore = (entry: ManifestEntry) =>
+    Object.values(getCriteria(entry)).filter(Boolean).length;
+
+  const getUpdatedAt = (entry: ManifestEntry): string | null =>
+    manual[entry.section]?.updatedAt ?? null;
 
   // Totales globales
   const allEntries = MODULE_MANIFEST;
@@ -124,7 +153,7 @@ export function ChecklistView(_props: Props) {
           </p>
         </div>
         <button
-          onClick={() => setLastUpdate(new Date())}
+          onClick={() => setManual(loadManual())}
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             padding: '8px 14px', borderRadius: '8px', border: '1px solid #E5E7EB',
@@ -172,11 +201,22 @@ export function ChecklistView(_props: Props) {
       {/* ── Árbol de grupos ── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         {groups.map(([group, entries]) => {
-          const isOpen    = expanded.has(group);
-          const color     = GROUP_COLORS[group] ?? '#6B7280';
+          const isOpen     = expanded.has(group);
+          const color      = GROUP_COLORS[group] ?? '#6B7280';
           const groupScore = entries.reduce((s, e) => s + getScore(e), 0);
           const groupMax   = entries.length * 8;
           const groupPct   = groupMax > 0 ? Math.round((groupScore / groupMax) * 100) : 0;
+
+          // Timestamps del grupo
+          const timestamps = entries
+            .map(e => getUpdatedAt(e))
+            .filter(Boolean) as string[];
+          const newest = timestamps.length > 0
+            ? timestamps.reduce((a, b) => a > b ? a : b)
+            : null;
+          const oldest = timestamps.length > 0
+            ? timestamps.reduce((a, b) => a < b ? a : b)
+            : null;
 
           return (
             <div key={group}>
@@ -196,19 +236,34 @@ export function ChecklistView(_props: Props) {
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'}
               >
                 {isOpen
-                  ? <ChevronDown size={15} color="#9CA3AF" />
+                  ? <ChevronDown  size={15} color="#9CA3AF" />
                   : <ChevronRight size={15} color="#9CA3AF" />
                 }
                 <span style={{ fontWeight: 700, fontSize: '14px', color: '#111', flex: 1 }}>{group}</span>
-                <span style={{ fontSize: '12px', color: '#9CA3AF' }}>
-                  {entries.length} módulos · {groupScore}/{groupMax}
+
+                {/* Timestamps del grupo */}
+                {newest && (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginRight: '12px' }}>
+                    <span style={{ fontSize: '10px', color: '#10B981', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                      <Clock size={9} /> nuevo: {fmtRelative(newest)}
+                    </span>
+                    {oldest !== newest && (
+                      <span style={{ fontSize: '10px', color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                        <Clock size={9} /> viejo: {fmtRelative(oldest!)}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <span style={{ fontSize: '12px', color: '#9CA3AF', marginRight: '8px' }}>
+                  {entries.length} · {groupScore}/{groupMax}
                 </span>
+
                 {/* mini barra */}
                 <div style={{ width: '80px', height: '6px', backgroundColor: '#F3F4F6', borderRadius: '99px', overflow: 'hidden' }}>
                   <div style={{
                     height: '100%', borderRadius: '99px',
-                    width: `${groupPct}%`,
-                    backgroundColor: color,
+                    width: `${groupPct}%`, backgroundColor: color,
                     transition: 'width 0.3s ease',
                   }} />
                 </div>
@@ -222,9 +277,10 @@ export function ChecklistView(_props: Props) {
                   borderRadius: '0 0 12px 12px', overflow: 'hidden',
                 }}>
                   {entries.map((entry, idx) => {
-                    const criteria = getCriteria(entry);
-                    const score    = Object.values(criteria).filter(Boolean).length;
-                    const isLast   = idx === entries.length - 1;
+                    const criteria   = getCriteria(entry);
+                    const score      = Object.values(criteria).filter(Boolean).length;
+                    const updatedAt  = getUpdatedAt(entry);
+                    const isLast     = idx === entries.length - 1;
 
                     return (
                       <div
@@ -236,14 +292,17 @@ export function ChecklistView(_props: Props) {
                           borderBottom: isLast ? 'none' : '1px solid #F3F4F6',
                         }}
                       >
-                        {/* Nombre */}
-                        <div style={{ minWidth: '160px' }}>
+                        {/* Nombre + timestamp */}
+                        <div style={{ minWidth: '180px' }}>
                           <span style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>
                             {entry.label}
                           </span>
-                          <span style={{ fontSize: '11px', color: '#9CA3AF', marginLeft: '6px' }}>
-                            {score}/8
-                          </span>
+                          {updatedAt && (
+                            <div style={{ fontSize: '10px', color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '3px', marginTop: '2px' }}>
+                              <Clock size={9} />
+                              <span title={fmtDateTime(updatedAt)}>{fmtRelative(updatedAt)}</span>
+                            </div>
+                          )}
                         </div>
 
                         {/* C1-C8 */}
@@ -252,7 +311,8 @@ export function ChecklistView(_props: Props) {
                             const ok = criteria[c.id];
                             if (c.auto) {
                               return (
-                                <div key={c.id} title={c.description} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                                <div key={c.id} title={c.description}
+                                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
                                   <span style={{ fontSize: '9px', fontWeight: 700, color: '#9CA3AF' }}>{c.id}</span>
                                   {ok
                                     ? <CheckCircle2 size={16} color="#10B981" />
@@ -261,10 +321,8 @@ export function ChecklistView(_props: Props) {
                                 </div>
                               );
                             }
-                            // toggle manual
                             return (
-                              <div
-                                key={c.id}
+                              <div key={c.id}
                                 title={`${c.description} — clic para cambiar`}
                                 onClick={() => toggleManual(entry.section, c.id)}
                                 style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', cursor: 'pointer' }}
@@ -279,7 +337,7 @@ export function ChecklistView(_props: Props) {
                           })}
                         </div>
 
-                        {/* Mini barra del módulo */}
+                        {/* Barra del módulo */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '80px' }}>
                           <div style={{ flex: 1, height: '4px', backgroundColor: '#F3F4F6', borderRadius: '99px', overflow: 'hidden' }}>
                             <div style={{
@@ -302,7 +360,7 @@ export function ChecklistView(_props: Props) {
       </div>
 
       <p style={{ fontSize: '11px', color: '#D1D5DB', marginTop: '24px', textAlign: 'center' }}>
-        Última actualización: {lastUpdate.toLocaleTimeString()} · C1-C3 automáticos del manifest · C4-C8 toggles manuales
+        C1–C3 automáticos del manifest · C4–C8 toggles manuales · timestamps por módulo y grupo
       </p>
     </div>
   );
