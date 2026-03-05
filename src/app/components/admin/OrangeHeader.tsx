@@ -1,10 +1,10 @@
 /**
  * OrangeHeader — Header estándar de módulo
- * v3.0 — Estilo blanco con badge naranja gradiente
+ * v4.0 — Agrega botones Home y Volver al mismo estilo que Lamparita y MapPin
  * Compatible hacia atrás: misma API, cero cambios en las vistas.
  */
 import React from 'react';
-import { Lightbulb, MapPin } from 'lucide-react';
+import { Lightbulb, MapPin, Home, ArrowLeft } from 'lucide-react';
 const ORANGE = '#FF6835';
 
 export interface HeaderAction {
@@ -24,11 +24,15 @@ interface Props {
   onIdeaClick?: () => void;
   /** Callback para el icono de geolocalización (mapas) */
   onMapClick?: () => void;
+  /** Callback para el icono de Home */
+  onHomeClick?: () => void;
+  /** Callback para el botón Volver */
+  onBackClick?: () => void;
   /** Función de navegación - si está disponible, los iconos siempre aparecen */
   onNavigate?: (section: string) => void;
 }
 
-export function OrangeHeader({ title, subtitle, actions, rightSlot, icon: Icon, onIdeaClick, onMapClick, onNavigate }: Props) {
+export function OrangeHeader({ title, subtitle, actions, rightSlot, icon: Icon, onIdeaClick, onMapClick, onHomeClick, onBackClick, onNavigate }: Props) {
   return (
     <header
       style={{
@@ -63,7 +67,7 @@ export function OrangeHeader({ title, subtitle, actions, rightSlot, icon: Icon, 
             <Icon size={18} color="#fff" strokeWidth={2.4} />
           ) : (
             <span style={{ fontSize: '0.85rem', fontWeight: '800', color: '#fff', lineHeight: 1 }}>
-              {typeof title === 'string' ? title.replace(/[^a-zA-ZÀ-ÿ]/g, '').charAt(0).toUpperCase() : '●'}
+              {typeof title === 'string' ? title.replace(/[^a-zA-ZÀ-ÿ]/g, '').charAt(0).toUpperCase() : '◆'}
             </span>
           )}
         </div>
@@ -100,15 +104,71 @@ export function OrangeHeader({ title, subtitle, actions, rightSlot, icon: Icon, 
         </div>
       </div>
 
-      {/* ── Derecha: slot libre + iconos de estado + botones ── */}
+      {/* ── Derecha: slot libre + iconos + botones ── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
         {rightSlot}
-        
+
+        {/* Botón Home */}
+        <button
+          onClick={onHomeClick || (onNavigate ? () => onNavigate('dashboard') : undefined)}
+          disabled={!onNavigate && !onHomeClick}
+          title={onNavigate || onHomeClick ? 'Ir al Dashboard' : 'Dashboard (no disponible)'}
+          style={{
+            width: 38, height: 38, borderRadius: '50%',
+            border: '2px solid #6366F140',
+            backgroundColor: (onNavigate || onHomeClick) ? '#6366F108' : '#6366F104',
+            opacity: (onNavigate || onHomeClick) ? 1 : 0.5,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: (onNavigate || onHomeClick) ? 'pointer' : 'not-allowed',
+            transition: 'all 0.15s', flexShrink: 0,
+          }}
+          onMouseEnter={e => {
+            if (onNavigate || onHomeClick) {
+              e.currentTarget.style.backgroundColor = '#6366F120';
+            }
+          }}
+          onMouseLeave={e => {
+            if (onNavigate || onHomeClick) {
+              e.currentTarget.style.backgroundColor = '#6366F108';
+            }
+          }}
+        >
+          <Home size={17} color="#6366F1" strokeWidth={2.2} />
+        </button>
+
+        {/* Botón Volver */}
+        <button
+          onClick={onBackClick}
+          disabled={!onBackClick}
+          title={onBackClick ? 'Volver' : 'Volver (no disponible)'}
+          style={{
+            width: 38, height: 38, borderRadius: '50%',
+            border: '2px solid #64748B40',
+            backgroundColor: onBackClick ? '#64748B08' : '#64748B04',
+            opacity: onBackClick ? 1 : 0.5,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: onBackClick ? 'pointer' : 'not-allowed',
+            transition: 'all 0.15s', flexShrink: 0,
+          }}
+          onMouseEnter={e => {
+            if (onBackClick) {
+              e.currentTarget.style.backgroundColor = '#64748B20';
+            }
+          }}
+          onMouseLeave={e => {
+            if (onBackClick) {
+              e.currentTarget.style.backgroundColor = '#64748B08';
+            }
+          }}
+        >
+          <ArrowLeft size={17} color="#64748B" strokeWidth={2.2} />
+        </button>
+
         {/* Botón Ideas - siempre visible */}
         <button
           onClick={onIdeaClick || (onNavigate ? () => onNavigate('ideas-board') : undefined)}
           disabled={!onNavigate && !onIdeaClick}
-          title={onNavigate || onIdeaClick ? "Nueva Idea / Ideas Board" : "Ideas Board (no disponible)"}
+          title={onNavigate || onIdeaClick ? 'Nueva Idea / Ideas Board' : 'Ideas Board (no disponible)'}
           style={{
             width: 38, height: 38, borderRadius: '50%',
             border: `2px solid ${ORANGE}40`,
@@ -131,12 +191,12 @@ export function OrangeHeader({ title, subtitle, actions, rightSlot, icon: Icon, 
         >
           <Lightbulb size={17} color={ORANGE} strokeWidth={2.2} />
         </button>
-        
+
         {/* Botón Google Maps - siempre visible */}
         <button
           onClick={onMapClick || (onNavigate ? () => onNavigate('google-maps-test') : undefined)}
           disabled={!onNavigate && !onMapClick}
-          title={onNavigate || onMapClick ? "Prueba Google Maps" : "Google Maps (no disponible)"}
+          title={onNavigate || onMapClick ? 'Prueba Google Maps' : 'Google Maps (no disponible)'}
           style={{
             width: 38, height: 38, borderRadius: '50%',
             border: '2px solid #10B98140',
@@ -159,8 +219,8 @@ export function OrangeHeader({ title, subtitle, actions, rightSlot, icon: Icon, 
         >
           <MapPin size={17} color="#10B981" strokeWidth={2.2} />
         </button>
-        
-        {/* Estado de conexión con backend */}
+
+        {/* Acciones genéricas opcionales */}
         {actions && actions.map((action, i) => (
           <button
             key={i}

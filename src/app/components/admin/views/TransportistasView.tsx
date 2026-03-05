@@ -1,4 +1,4 @@
-﻿/* =====================================================
+/* =====================================================
    TransportistasView — Catálogo de Carriers
    Transportistas · Tramos · Tarifas
    ===================================================== */
@@ -180,15 +180,12 @@ export function TransportistasView({ onNavigate }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [saving, setSaving]     = useState(false);
 
-  // ── Datos vía useTable ────────────────────────────────────────────────────
   const { data: transportistas, loading: loadingT, error: errorT, insert: insertTransportista, refresh: refreshTransportistas } = useTable<Transportista>('transportistas');
-
   const { data: tramos, loading: loadingTr, error: errorTr } = useTable<Tramo>('tramos');
 
   const loading = loadingT || loadingTr;
   const error   = errorT || errorTr;
 
-  // ── Guardar nuevo carrier ─────────────────────────────────────────────────
   const handleSave = async (formData: Record<string, unknown>) => {
     setSaving(true);
     const { error: insertError } = await insertTransportista({
@@ -204,16 +201,13 @@ export function TransportistasView({ onNavigate }: Props) {
       metadata:         { contacto: formData.contacto, cargo: formData.cargo, whatsapp: formData.whatsapp },
     });
     setSaving(false);
-
     if (insertError) {
       console.error('[TransportistasView] Error guardando carrier:', insertError);
-      // TODO: mostrar toast de error
     } else {
       setDrawerOpen(false);
     }
   };
 
-  // ── Adaptadores para la UI (compatibilidad con campos previos) ────────────
   const carriersAdaptados = transportistas.map(t => ({
     ...t,
     enviosActivos: t.envios_activos ?? 0,
@@ -250,7 +244,7 @@ export function TransportistasView({ onNavigate }: Props) {
     t.destino.toLowerCase().includes(search.toLowerCase())
   );
 
-  // ── Estados de carga / error ──────────────────────────────────────────────
+  // ── Estado: cargando ──────────────────────────────────────────────────────
   if (loading) {
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -258,7 +252,8 @@ export function TransportistasView({ onNavigate }: Props) {
           icon={Truck}
           title="Transportistas"
           subtitle="Cargando..."
-          actions={[{ label: '← Logística', onClick: () => onNavigate('logistica') }]}
+          onNavigate={onNavigate}
+          onBackClick={() => onNavigate('logistica')}
         />
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Loader2 size={32} color={ORANGE} style={{ animation: 'spin 1s linear infinite' }} />
@@ -267,6 +262,7 @@ export function TransportistasView({ onNavigate }: Props) {
     );
   }
 
+  // ── Estado: error ─────────────────────────────────────────────────────────
   if (error) {
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -274,8 +270,9 @@ export function TransportistasView({ onNavigate }: Props) {
           icon={Truck}
           title="Transportistas"
           subtitle={`Error: ${error}`}
+          onNavigate={onNavigate}
+          onBackClick={() => onNavigate('logistica')}
           actions={[
-            { label: '← Logística', onClick: () => onNavigate('logistica') },
             { label: '↻ Reintentar', primary: true, onClick: refreshTransportistas },
           ]}
         />
@@ -283,15 +280,16 @@ export function TransportistasView({ onNavigate }: Props) {
     );
   }
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // ── Render principal ──────────────────────────────────────────────────────
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <OrangeHeader
         icon={Truck}
         title="Transportistas"
         subtitle={`${activos} carriers activos · ${totalEnviosActivos} envíos en curso`}
+        onNavigate={onNavigate}
+        onBackClick={() => onNavigate('logistica')}
         actions={[
-          { label: '← Logística', onClick: () => onNavigate('logistica') },
           { label: '+ Nuevo Carrier', primary: true, onClick: () => setDrawerOpen(true) },
         ]}
       />
@@ -388,7 +386,6 @@ export function TransportistasView({ onNavigate }: Props) {
                   </div>
                 );
               })}
-              {/* Card agregar */}
               <div
                 onClick={() => setDrawerOpen(true)}
                 style={{ backgroundColor: '#FAFAFA', borderRadius: '12px', border: '2px dashed #E5E7EB', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', cursor: 'pointer', minHeight: '160px' }}>
@@ -485,7 +482,6 @@ export function TransportistasView({ onNavigate }: Props) {
         </div>
       </div>
 
-      {/* DrawerForm */}
       <DrawerForm
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}

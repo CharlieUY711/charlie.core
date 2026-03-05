@@ -1,67 +1,61 @@
-/**
- * OrchestratorShell — Charlie Platform v1.0
- * ──────────────────────────────────────────
- * Lee MODULE_MANIFEST y renderiza el componente correspondiente
- * a la sección activa. Zero hardcoding.
+﻿/**
+ * OrchestratorShell.tsx
+ * Charlie Platform -- Shell principal de renderizado de modulos.
  */
-
 import React from 'react';
-import { useOrchestrator } from '../../shells/DashboardShell/app/providers/OrchestratorProvider';
-export { useOrchestrator };
-import type { MainSection } from '../AdminDashboard';
-import { MODULE_MANIFEST } from '../utils/moduleManifest';
+import { OrangeHeader } from './admin/OrangeHeader';
+import { COMPONENT_REGISTRY } from '../utils/componentRegistry';
+import { useModules } from '../../shells/DashboardShell/app/hooks/useModules';
 
 interface OrchestratorShellProps {
-  activeSection: MainSection;
-  onNavigate: (s: MainSection) => void;
+  activeSection: string;
+  onNavigate: (s: string) => void;
 }
 
-export function OrchestratorShell({ activeSection, onNavigate }: OrchestratorShellProps) {
-  const entry = MODULE_MANIFEST.find(e => e.section === activeSection);
+const SuspenseFallback = (
+  <div style={{
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    height: '100%', color: '#888', fontSize: '14px',
+  }}>
+    Cargando...
+  </div>
+);
 
-  if (!entry || !entry.component) {
+export function OrchestratorShell({ activeSection, onNavigate }: OrchestratorShellProps) {
+  const { modulos } = useModules();
+
+  const modulo = modulos.find(m => m.slug === activeSection);
+  const Component = COMPONENT_REGISTRY[activeSection];
+
+  if (!Component) {
     return (
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        flexDirection: 'column',
-        gap: '12px',
-        color: '#888',
-        fontFamily: 'inherit',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        height: '100%', flexDirection: 'column', gap: '12px',
+        color: '#888', fontFamily: 'inherit',
       }}>
-        <span style={{ fontSize: '32px' }}>🔧</span>
         <p style={{ margin: 0, fontSize: '14px' }}>
-          Módulo <strong>{activeSection}</strong> no encontrado en el manifest.
+          Modulo <strong>{activeSection}</strong> no encontrado.
         </p>
       </div>
     );
   }
 
-  const Component = entry.component;
-  const acceptsOnNavigate = entry.acceptsOnNavigate !== false;
+  const ComponentWithProps = Component as React.ComponentType<{ onNavigate: (s: string) => void }>;
 
-  const SuspenseFallback = (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  height: '100%', color: '#888', fontSize: '14px' }}>
-      Cargando módulo...
-    </div>
-  );
-
-  if (acceptsOnNavigate) {
-    const ComponentWithProps = Component as React.ComponentType<{ onNavigate: (s: MainSection) => void }>;
-    return (
-      <React.Suspense fallback={SuspenseFallback}>
-        <ComponentWithProps onNavigate={onNavigate} />
-      </React.Suspense>
-    );
-  }
-
-  const ComponentNoProps = Component as React.ComponentType<{}>;
   return (
-    <React.Suspense fallback={SuspenseFallback}>
-      <ComponentNoProps />
-    </React.Suspense>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <OrangeHeader
+        title={modulo?.nombre ?? activeSection}
+        onNavigate={onNavigate}
+        onHomeClick={() => onNavigate('DashboardView')}
+        onBackClick={() => onNavigate('DashboardView')}
+      />
+      <div style={{ flex: 1, overflow: 'auto' }}>
+        <React.Suspense fallback={SuspenseFallback}>
+          <ComponentWithProps onNavigate={onNavigate} />
+        </React.Suspense>
+      </div>
+    </div>
   );
 }

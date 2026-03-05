@@ -1,7 +1,7 @@
 /**
- * MODULE MANIFEST — Charlie Marketplace Builder
- * ═══════════════════════════════════════════════════
- * Módulos validados: Orquestador · Transportistas · Envios
+ * MODULE MANIFEST — Charlie Platform
+ * ═══════════════════════════════════════════════════════════════
+ * Fuente única de verdad de módulos activos.
  */
 
 import React from 'react';
@@ -29,7 +29,8 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     viewFile: 'DashboardView.tsx',
     component: React.lazy(() => import('../components/admin/views/DashboardView').then(m => ({ default: m.DashboardView }))),
     isReal: true,
-    notes: 'Dashboard principal — acceso a Logística',
+    acceptsOnNavigate: true,
+    notes: 'Dashboard principal — acceso a Logística y Sistema',
   },
 
   // ══════════════════════════════════════════════════════
@@ -40,7 +41,8 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     section: 'logistica',
     viewFile: 'LogisticaView.tsx',
     component: React.lazy(() => import('../components/admin/views/LogisticaView').then(m => ({ default: m.LogisticaView }))),
-    isReal: false,
+    isReal: true,
+    acceptsOnNavigate: true,
     notes: 'Hub de navegación logística — Envíos y Transportistas',
   },
 
@@ -54,7 +56,8 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     component: React.lazy(() => import('../components/admin/views/EnviosView').then(m => ({ default: m.EnviosView }))),
     isReal: true,
     hasSupabase: true,
-    notes: 'Vista árbol PedidoMadre→EnvíosHijos · estados · multi-tramo · panel detalle + timeline (tabla: envios + envios_eventos)',
+    acceptsOnNavigate: true,
+    notes: 'Vista árbol PedidoMadre→EnvíosHijos · estados · multi-tramo · panel detalle + timeline',
   },
 
   // ══════════════════════════════════════════════════════
@@ -67,8 +70,13 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     component: React.lazy(() => import('../components/admin/views/TransportistasView').then(m => ({ default: m.TransportistasView }))),
     isReal: true,
     hasSupabase: true,
-    notes: 'Catálogo carriers · tramos y zonas · simulador de tarifas (tabla: transportistas + tramos)',
+    acceptsOnNavigate: true,
+    notes: 'Catálogo transportistas · tramos y zonas · simulador de tarifas',
   },
+
+  // ══════════════════════════════════════════════════════
+  // ORGANIZACIONES
+  // ══════════════════════════════════════════════════════
   {
     checklistIds: ['logistics-carriers'],
     section: 'organizaciones',
@@ -76,7 +84,64 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     component: React.lazy(() => import('../components/admin/views/OrganizacionesView').then(m => ({ default: m.OrganizacionesView }))),
     isReal: true,
     hasSupabase: true,
-    notes: 'CRUD completo de organizaciones — vinculadas a transportistas (tabla: organizaciones)',
+    acceptsOnNavigate: true,
+    notes: 'CRUD completo de organizaciones — vinculadas a transportistas',
+  },
+
+  // ══════════════════════════════════════════════════════
+  // SISTEMA — Hub
+  // ══════════════════════════════════════════════════════
+  {
+    checklistIds: ['sistema'],
+    section: 'sistema',
+    viewFile: 'SistemaView.tsx',
+    component: React.lazy(() => import('../components/admin/views/SistemaView').then(m => ({ default: m.SistemaView }))),
+    isReal: true,
+    hasSupabase: false,
+    acceptsOnNavigate: true,
+    notes: 'Hub de sistema — Checklist & Roadmap, Ideas',
+  },
+
+  // ══════════════════════════════════════════════════════
+  // CHECKLIST & ROADMAP
+  // ══════════════════════════════════════════════════════
+  {
+    checklistIds: ['checklist'],
+    section: 'checklist',
+    viewFile: 'ChecklistView.tsx',
+    component: React.lazy(() => import('../components/admin/views/ChecklistView').then(m => ({ default: m.ChecklistView }))),
+    isReal: true,
+    hasSupabase: false,
+    acceptsOnNavigate: false,
+    notes: 'Checklist C1–C8 por módulo · Roadmap de pendientes',
+  },
+
+  // ══════════════════════════════════════════════════════
+  // IDEAS
+  // ══════════════════════════════════════════════════════
+  {
+    checklistIds: ['ideas'],
+    section: 'ideas',
+    viewFile: 'IdeasView.tsx',
+    component: React.lazy(() => import('../components/admin/views/IdeasView').then(m => ({ default: m.IdeasView }))),
+    isReal: true,
+    hasSupabase: false,
+    acceptsOnNavigate: false,
+    notes: 'Captura y evaluación de ideas con score de viabilidad',
+  },
+
+  // ══════════════════════════════════════════════════════
+  // CONSTRUCCIÓN — Hub
+  // ══════════════════════════════════════════════════════
+  {
+    checklistIds: ['construccion'],
+    section: 'construccion',
+    viewFile: 'ConstruccionView.tsx',
+    component: React.lazy(() => import('../components/admin/views/ConstruccionView').then(m => ({ default: m.ConstruccionView }))),
+    isReal: true,
+    hasSupabase: false,
+    acceptsOnNavigate: true,
+    notes: 'Hub de construcción — Constructor de proyectos y Constructor de Módulos',
   },
 
   // ══════════════════════════════════════════════════════
@@ -90,7 +155,7 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     isReal: true,
     hasSupabase: false,
     acceptsOnNavigate: true,
-    notes: 'Generador de proyectos Charlie — selección de módulos, configuración, frontstore y output de archivos',
+    notes: 'Generador de proyectos Charlie — módulos, configuración, frontstore y output',
   },
 
   // ══════════════════════════════════════════════════════
@@ -104,7 +169,7 @@ export const MODULE_MANIFEST: ManifestEntry[] = [
     isReal: true,
     hasSupabase: false,
     acceptsOnNavigate: true,
-    notes: 'Constructor de módulos Charlie — crear nuevo, actualizar config, reparar criterios C4-C8, editar schema, regenerar tokens',
+    notes: 'Constructor de módulos Charlie — crear, actualizar, reparar criterios C1–C8',
   },
 
 ];

@@ -1,4 +1,4 @@
-﻿/* =====================================================
+/* =====================================================
    EnviosView — Módulo de Envíos Operativo
    Árbol Pedido Madre → Envíos Hijos · Multi-tramo
    ===================================================== */
@@ -40,7 +40,7 @@ interface Envio {
   destino: string;
   destinatario: string;
   remitente?: string;
-  carrier: string;
+  transportista: string;
   tramo: 'local' | 'intercity' | 'internacional' | 'last_mile';
   peso: number;
   bultos: number;
@@ -65,8 +65,8 @@ const ENVIO_SHEETS: SheetDef[] = [
     title: 'Origen',
     subtitle: 'Remitente y origen · ¿Desde dónde sale el envío?',
     fields: [
-      { id: 'remitente',   label: 'Remitente',        type: 'text',    required: true,  placeholder: 'Ej: Empresa SA' },
-      { id: 'origen',      label: 'Dirección de origen', type: 'address', required: true,  placeholder: 'Ej: Av. Italia 2500, Montevideo' },
+      { id: 'remitente', label: 'Remitente',           type: 'text',    required: true, placeholder: 'Ej: Empresa SA' },
+      { id: 'origen',    label: 'Dirección de origen', type: 'address', required: true, placeholder: 'Ej: Av. Italia 2500, Montevideo' },
     ],
   },
   {
@@ -74,17 +74,17 @@ const ENVIO_SHEETS: SheetDef[] = [
     title: 'Destino',
     subtitle: 'Destinatario y destino · ¿A dónde llega el envío?',
     fields: [
-      { id: 'destinatario', label: 'Destinatario',       type: 'text',    required: true,  placeholder: 'Ej: Juan Pérez' },
-      { id: 'destino',      label: 'Dirección de destino', type: 'address', required: true,  placeholder: 'Ej: Bvar. Artigas 1500, Montevideo' },
+      { id: 'destinatario', label: 'Destinatario',        type: 'text',    required: true, placeholder: 'Ej: Juan Pérez' },
+      { id: 'destino',      label: 'Dirección de destino', type: 'address', required: true, placeholder: 'Ej: Bvar. Artigas 1500, Montevideo' },
     ],
   },
   {
     id: 'detalle',
     title: 'Detalle',
-    subtitle: 'Detalles del envío · Carrier, peso y tramo',
+    subtitle: 'Detalles del envío · Transportista, peso y tramo',
     fields: [
-      { id: 'carrier', label: 'Carrier',  type: 'text',   placeholder: 'Ej: OCA', row: 'row1' },
-      { id: 'tramo',   label: 'Tramo',    type: 'select', required: true,
+      { id: 'transportista', label: 'Transportista', type: 'text',   placeholder: 'Ej: OCA', row: 'row1' },
+      { id: 'tramo',         label: 'Tramo',         type: 'select', required: true,
         options: [
           { value: 'local',         label: 'Local' },
           { value: 'intercity',     label: 'Intercity' },
@@ -93,15 +93,15 @@ const ENVIO_SHEETS: SheetDef[] = [
         ],
         row: 'row1',
       },
-      { id: 'peso',   label: 'Peso (kg)', type: 'number', placeholder: '0.00', row: 'row2' },
-      { id: 'bultos', label: 'Bultos',    type: 'number', placeholder: '1',    row: 'row2' },
+      { id: 'peso',           label: 'Peso (kg)', type: 'number', placeholder: '0.00', row: 'row2' },
+      { id: 'bultos',         label: 'Bultos',    type: 'number', placeholder: '1',    row: 'row2' },
       { id: 'fecha_estimada', label: 'Fecha estimada de entrega', type: 'date' },
       { id: 'tracking',       label: 'Número de tracking',        type: 'text', placeholder: 'Opcional' },
     ],
   },
 ];
 
-/* ── Helpers para transformar datos ─────────────────────────────────────── */
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
 function transformEnvioRaw(row: Record<string, unknown>, eventos: Record<string, unknown>[] = []): Envio {
   const fechaCreacion = row.fecha_creacion ? new Date(row.fecha_creacion as string) : new Date();
 
@@ -112,69 +112,58 @@ function transformEnvioRaw(row: Record<string, unknown>, eventos: Record<string,
       hora:        fechaEv.toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit' }),
       estado:      ev.estado as EstadoEnvio,
       descripcion: (ev.descripcion as string) || '',
-      ubicacion:   (ev.ubicacion as string)  || 'Sistema',
+      ubicacion:   (ev.ubicacion as string)   || 'Sistema',
     };
   });
 
   return {
-    id:           row.id as string,
-    numero:       (row.numero as string) || '',
-    pedidoMadre:  (row.numero_pedido as string) || (row.pedido_madre_id as string) || '',
-    estado:       (row.estado as EstadoEnvio) || 'creado',
-    origen:       (row.origen as string) || '',
-    destino:      (row.destino as string) || '',
-    destinatario: (row.destinatario as string) || '',
-    remitente:    (row.remitente as string) || '',
-    carrier:      (row.carrier as string) || '',
-    tramo:        (row.tramo as Envio['tramo']) || 'local',
-    peso:         Number(row.peso) || 0,
-    bultos:       Number(row.bultos) || 1,
-    fechaCreacion: fechaCreacion.toISOString().split('T')[0],
-    fechaEstimada: (row.fecha_estimada as string) || '',
-    tracking:     (row.tracking as string) || undefined,
-    eventos:      eventosUI,
+    id:             row.id as string,
+    numero:         (row.numero as string)          || '',
+    pedidoMadre:    (row.numero_pedido as string)   || (row.pedido_madre_id as string) || '',
+    estado:         (row.estado as EstadoEnvio)     || 'creado',
+    origen:         (row.origen as string)          || '',
+    destino:        (row.destino as string)         || '',
+    destinatario:   (row.destinatario as string)    || '',
+    remitente:      (row.remitente as string)       || '',
+    transportista:  (row.transportista as string)   || (row.carrier as string) || '',
+    tramo:          (row.tramo as Envio['tramo'])   || 'local',
+    peso:           Number(row.peso)                || 0,
+    bultos:         Number(row.bultos)              || 1,
+    fechaCreacion:  fechaCreacion.toISOString().split('T')[0],
+    fechaEstimada:  (row.fecha_estimada as string)  || '',
+    tracking:       (row.tracking as string)        || undefined,
+    eventos:        eventosUI,
   };
 }
 
-// Agrupa envíos por pedido madre
 function agruparPorPedido(envios: Envio[]): PedidoMadre[] {
   const grupos = new Map<string, { numero: string; cliente: string; envios: Envio[]; total: number }>();
-
   envios.forEach(envio => {
     const pedidoKey = envio.pedidoMadre || 'sin-pedido';
     if (!grupos.has(pedidoKey)) {
-      grupos.set(pedidoKey, {
-        numero: envio.pedidoMadre || 'Sin pedido',
-        cliente: envio.destinatario,
-        envios: [],
-        total: 0,
-      });
+      grupos.set(pedidoKey, { numero: envio.pedidoMadre || 'Sin pedido', cliente: envio.destinatario, envios: [], total: 0 });
     }
-    const grupo = grupos.get(pedidoKey)!;
-    grupo.envios.push(envio);
-    grupo.total += 0;
+    grupos.get(pedidoKey)!.envios.push(envio);
   });
-
   return Array.from(grupos.entries()).map(([id, data]) => ({ id, ...data }));
 }
 
-/* ── Estado config ─────────────────────────────────── */
 const ESTADO_CFG: Record<EstadoEnvio, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  creado:      { label: 'Creado',        color: '#6B7280', bg: '#F3F4F6', icon: Package      },
-  despachado:  { label: 'Despachado',    color: '#2563EB', bg: '#EFF6FF', icon: Truck        },
-  en_transito: { label: 'En tránsito',   color: '#7C3AED', bg: '#F5F3FF', icon: Navigation   },
-  en_deposito: { label: 'En depósito',   color: '#D97706', bg: '#FFFBEB', icon: Layers       },
-  en_reparto:  { label: 'En reparto',    color: '#FF6835', bg: '#FFF4EC', icon: MapPin       },
-  entregado:   { label: 'Entregado',     color: '#059669', bg: '#ECFDF5', icon: CheckCircle2 },
-  fallido:     { label: 'Fallido',       color: '#DC2626', bg: '#FEF2F2', icon: XCircle      },
-  devuelto:    { label: 'Devuelto',      color: '#9CA3AF', bg: '#F9FAFB', icon: RotateCcw    },
+  creado:      { label: 'Creado',      color: '#6B7280', bg: '#F3F4F6', icon: Package      },
+  despachado:  { label: 'Despachado',  color: '#2563EB', bg: '#EFF6FF', icon: Truck        },
+  en_transito: { label: 'En tránsito', color: '#7C3AED', bg: '#F5F3FF', icon: Navigation   },
+  en_deposito: { label: 'En depósito', color: '#D97706', bg: '#FFFBEB', icon: Layers       },
+  en_reparto:  { label: 'En reparto',  color: '#FF6835', bg: '#FFF4EC', icon: MapPin       },
+  entregado:   { label: 'Entregado',   color: '#059669', bg: '#ECFDF5', icon: CheckCircle2 },
+  fallido:     { label: 'Fallido',     color: '#DC2626', bg: '#FEF2F2', icon: XCircle      },
+  devuelto:    { label: 'Devuelto',    color: '#9CA3AF', bg: '#F9FAFB', icon: RotateCcw    },
 };
 
 const TRAMO_CFG: Record<string, { label: string; color: string }> = {
-  local:         { label: 'Local',          color: '#059669' },
-  intercity:     { label: 'Intercity',      color: '#2563EB' },
-  internacional: { label: 'Internacional',  color: '#7C3AED' },
-  last_mile:     { label: 'Last Mile',      color: '#D97706' },
+  local:         { label: 'Local',         color: '#059669' },
+  intercity:     { label: 'Intercity',     color: '#2563EB' },
+  internacional: { label: 'Internacional', color: '#7C3AED' },
+  last_mile:     { label: 'Last Mile',     color: '#D97706' },
 };
 
 function StatCard({ label, value, sub, color, icon: Icon }: { label: string; value: string | number; sub?: string; color: string; icon: React.ElementType }) {
@@ -186,7 +175,7 @@ function StatCard({ label, value, sub, color, icon: Icon }: { label: string; val
       <div>
         <div style={{ fontSize: '22px', fontWeight: 800, color: '#111', lineHeight: 1 }}>{value}</div>
         <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '3px' }}>{label}</div>
-        {sub && <div style={{ fontSize: '11px', color: color, marginTop: '2px', fontWeight: 600 }}>{sub}</div>}
+        {sub && <div style={{ fontSize: '11px', color, marginTop: '2px', fontWeight: 600 }}>{sub}</div>}
       </div>
     </div>
   );
@@ -205,23 +194,21 @@ function EstadoBadge({ estado }: { estado: EstadoEnvio }) {
 export function EnviosView({ onNavigate }: Props) {
   const supabase = useSupabaseClient();
 
-  const [pedidos,          setPedidos]          = useState<PedidoMadre[]>([]);
-  const [loading,          setLoading]          = useState(true);
-  const [expandedPedidos,  setExpandedPedidos]  = useState<Set<string>>(new Set());
-  const [selectedEnvio,    setSelectedEnvio]    = useState<Envio | null>(null);
-  const [search,           setSearch]           = useState('');
-  const [filterEstado,     setFilterEstado]     = useState<EstadoEnvio | 'todos'>('todos');
-  const [filterTramo,      setFilterTramo]      = useState<string>('todos');
-  const [refreshing,       setRefreshing]       = useState(false);
-  const [drawerOpen,       setDrawerOpen]       = useState(false);
-  const [saving,           setSaving]           = useState(false);
+  const [pedidos,         setPedidos]         = useState<PedidoMadre[]>([]);
+  const [loading,         setLoading]         = useState(true);
+  const [expandedPedidos, setExpandedPedidos] = useState<Set<string>>(new Set());
+  const [selectedEnvio,   setSelectedEnvio]   = useState<Envio | null>(null);
+  const [search,          setSearch]          = useState('');
+  const [filterEstado,    setFilterEstado]    = useState<EstadoEnvio | 'todos'>('todos');
+  const [filterTramo,     setFilterTramo]     = useState<string>('todos');
+  const [refreshing,      setRefreshing]      = useState(false);
+  const [drawerOpen,      setDrawerOpen]      = useState(false);
+  const [saving,          setSaving]          = useState(false);
 
-  // ── Cargar envíos desde Supabase ──────────────────────────────────────────
   const loadEnvios = useCallback(async () => {
     if (!supabase) return;
     try {
       setLoading(true);
-
       let query = supabase.from('envios').select('*').order('fecha_creacion', { ascending: false });
       if (filterEstado !== 'todos') query = query.eq('estado', filterEstado);
       if (filterTramo  !== 'todos') query = query.eq('tramo',  filterTramo);
@@ -230,10 +217,8 @@ export function EnviosView({ onNavigate }: Props) {
       if (enviosError) throw enviosError;
 
       const rows = (enviosData ?? []) as Record<string, unknown>[];
-
-      // Cargar eventos de tracking para estos envíos
-      const ids = rows.map(r => r.id as string).filter(Boolean);
-      let eventosMap = new Map<string, Record<string, unknown>[]>();
+      const ids  = rows.map(r => r.id as string).filter(Boolean);
+      const eventosMap = new Map<string, Record<string, unknown>[]>();
 
       if (ids.length > 0) {
         const { data: eventosData } = await supabase
@@ -252,14 +237,11 @@ export function EnviosView({ onNavigate }: Props) {
       const enviosTransformados = rows.map(row =>
         transformEnvioRaw(row, eventosMap.get(row.id as string) ?? [])
       );
-
       const pedidosAgrupados = agruparPorPedido(enviosTransformados);
       setPedidos(pedidosAgrupados);
 
       setExpandedPedidos(prev => {
-        if (prev.size === 0 && pedidosAgrupados.length > 0) {
-          return new Set([pedidosAgrupados[0].id]);
-        }
+        if (prev.size === 0 && pedidosAgrupados.length > 0) return new Set([pedidosAgrupados[0].id]);
         return prev;
       });
     } catch (err) {
@@ -271,31 +253,26 @@ export function EnviosView({ onNavigate }: Props) {
     }
   }, [supabase, filterEstado, filterTramo]);
 
-  useEffect(() => {
-    loadEnvios();
-  }, [loadEnvios]);
+  useEffect(() => { loadEnvios(); }, [loadEnvios]);
 
-  // ── Guardar nuevo envío ───────────────────────────────────────────────────
   const handleSaveEnvio = async (formData: Record<string, unknown>) => {
     if (!supabase) return;
     setSaving(true);
     try {
       const { error: insertError } = await supabase.from('envios').insert({
-        remitente:       formData.remitente      as string,
-        origen:          formData.origen         as string,
-        destino:         formData.destino        as string,
-        destinatario:    formData.destinatario   as string,
-        carrier:         formData.carrier        as string  ?? '',
-        tramo:           formData.tramo          as string  ?? 'local',
-        peso:            formData.peso           ? Number(formData.peso) : 0,
-        bultos:          formData.bultos         ? Number(formData.bultos) : 1,
-        fecha_estimada:  formData.fecha_estimada as string  ?? null,
-        tracking:        formData.tracking       as string  ?? null,
-        estado:          'creado',
+        remitente:      formData.remitente      as string,
+        origen:         formData.origen         as string,
+        destino:        formData.destino        as string,
+        destinatario:   formData.destinatario   as string,
+        transportista:  formData.transportista  as string ?? '',
+        tramo:          formData.tramo          as string ?? 'local',
+        peso:           formData.peso           ? Number(formData.peso)   : 0,
+        bultos:         formData.bultos         ? Number(formData.bultos) : 1,
+        fecha_estimada: formData.fecha_estimada as string ?? null,
+        tracking:       formData.tracking       as string ?? null,
+        estado:         'creado',
       });
-
       if (insertError) throw insertError;
-
       toast.success('Envío creado exitosamente');
       setDrawerOpen(false);
       await loadEnvios();
@@ -315,18 +292,12 @@ export function EnviosView({ onNavigate }: Props) {
     });
   };
 
-  // ── Actualizar estado de envío ────────────────────────────────────────────
   const handleUpdateEstado = async (envioId: string, nuevoEstado: EstadoEnvio, descripcion?: string) => {
     if (!supabase) return;
     try {
       setRefreshing(true);
-
-      const { error: updateError } = await supabase
-        .from('envios')
-        .update({ estado: nuevoEstado })
-        .eq('id', envioId);
+      const { error: updateError } = await supabase.from('envios').update({ estado: nuevoEstado }).eq('id', envioId);
       if (updateError) throw updateError;
-
       await supabase.from('envios_eventos').insert({
         envio_id:    envioId,
         estado:      nuevoEstado,
@@ -334,17 +305,15 @@ export function EnviosView({ onNavigate }: Props) {
         ubicacion:   'Sistema',
         fecha:       new Date().toISOString(),
       });
-
       toast.success('Estado actualizado');
       await loadEnvios();
-    } catch (err) {
+    } catch {
       toast.error('Error actualizando estado');
     } finally {
       setRefreshing(false);
     }
   };
 
-  // ── Estadísticas ──────────────────────────────────────────────────────────
   const allEnvios = pedidos.flatMap(p => p.envios);
   const stats = {
     total:       allEnvios.length,
@@ -354,7 +323,6 @@ export function EnviosView({ onNavigate }: Props) {
     pendientes:  allEnvios.filter(e => e.estado === 'creado').length,
   };
 
-  // ── Filtro de pedidos ─────────────────────────────────────────────────────
   const pedidosFiltrados = useMemo(() => {
     return pedidos.filter(p => {
       const matchSearch = !search ||
@@ -385,8 +353,9 @@ export function EnviosView({ onNavigate }: Props) {
         icon={Truck}
         title="Envíos"
         subtitle={`${stats.total} envíos totales · ${stats.en_transito} en tránsito · ${stats.entregados} entregados`}
+        onNavigate={onNavigate}
+        onBackClick={() => onNavigate('logistica')}
         actions={[
-          { label: '← Logística', onClick: () => onNavigate('logistica') },
           { label: refreshing ? 'Actualizando...' : '🔄 Actualizar', onClick: () => loadEnvios() },
           { label: '+ Nuevo Envío', primary: true, onClick: () => setDrawerOpen(true) },
         ]}
@@ -400,7 +369,7 @@ export function EnviosView({ onNavigate }: Props) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '12px', padding: '20px 20px 0' }}>
             <StatCard label="Total Envíos"  value={stats.total}       color="#6B7280" icon={Package}      />
             <StatCard label="En Tránsito"   value={stats.en_transito} color="#7C3AED" icon={Navigation}   />
-            <StatCard label="En Reparto"    value={allEnvios.filter(e=>e.estado==='en_reparto').length} color={ORANGE} icon={Truck} />
+            <StatCard label="En Reparto"    value={allEnvios.filter(e => e.estado === 'en_reparto').length} color={ORANGE} icon={Truck} />
             <StatCard label="Entregados"    value={stats.entregados}  color="#059669" icon={CheckCircle2} />
             <StatCard label="Fallidos"      value={stats.fallidos}    color="#DC2626" icon={XCircle}      sub={stats.fallidos > 0 ? 'Requieren atención' : undefined} />
           </div>
@@ -425,7 +394,7 @@ export function EnviosView({ onNavigate }: Props) {
               <option value="todos">Todos los tramos</option>
               {Object.entries(TRAMO_CFG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
             </select>
-            <span style={{ fontSize: '12px', color: '#9CA3AF' }}>{pedidosFiltrados.length} pedidos · {pedidosFiltrados.flatMap(p=>p.envios).length} envíos</span>
+            <span style={{ fontSize: '12px', color: '#9CA3AF' }}>{pedidosFiltrados.length} pedidos · {pedidosFiltrados.flatMap(p => p.envios).length} envíos</span>
           </div>
 
           {/* Árbol Pedidos → Envíos */}
@@ -433,12 +402,11 @@ export function EnviosView({ onNavigate }: Props) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {pedidosFiltrados.map(pedido => {
                 const isOpen = expandedPedidos.has(pedido.id);
-                const estadosEnvios = pedido.envios.map(e => e.estado);
-                const hayFallido = estadosEnvios.includes('fallido');
+                const estadosEnvios  = pedido.envios.map(e => e.estado);
+                const hayFallido     = estadosEnvios.includes('fallido');
                 const todosEntregados = estadosEnvios.every(s => s === 'entregado');
                 return (
                   <div key={pedido.id} style={{ backgroundColor: '#fff', borderRadius: '12px', border: `1px solid ${hayFallido ? '#FCA5A5' : todosEntregados ? '#A7F3D0' : '#E5E7EB'}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-                    {/* Cabecera del pedido madre */}
                     <button
                       onClick={() => togglePedido(pedido.id)}
                       style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 18px', border: 'none', backgroundColor: todosEntregados ? '#F0FDF4' : hayFallido ? '#FFF5F5' : '#FAFAFA', cursor: 'pointer', textAlign: 'left' }}
@@ -452,7 +420,7 @@ export function EnviosView({ onNavigate }: Props) {
                           <span style={{ fontSize: '14px', fontWeight: 800, color: '#111' }}>{pedido.numero}</span>
                           <span style={{ fontSize: '12px', color: '#6B7280' }}>·</span>
                           <span style={{ fontSize: '13px', color: '#374151', fontWeight: 500 }}>{pedido.cliente}</span>
-                          {hayFallido     && <span style={{ fontSize: '10px', fontWeight: 700, color: '#DC2626', backgroundColor: '#FEE2E2', padding: '2px 7px', borderRadius: '10px' }}>⚠ Tiene fallidos</span>}
+                          {hayFallido      && <span style={{ fontSize: '10px', fontWeight: 700, color: '#DC2626', backgroundColor: '#FEE2E2', padding: '2px 7px', borderRadius: '10px' }}>⚠ Tiene fallidos</span>}
                           {todosEntregados && <span style={{ fontSize: '10px', fontWeight: 700, color: '#059669', backgroundColor: '#D1FAE5', padding: '2px 7px', borderRadius: '10px' }}>✓ Todo entregado</span>}
                         </div>
                         <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
@@ -460,32 +428,21 @@ export function EnviosView({ onNavigate }: Props) {
                         </div>
                       </div>
                       <div style={{ display: 'flex', gap: '6px', flexShrink: 0, flexWrap: 'wrap' }}>
-                        {pedido.envios.map(e => (
-                          <EstadoBadge key={e.id} estado={e.estado} />
-                        ))}
+                        {pedido.envios.map(e => <EstadoBadge key={e.id} estado={e.estado} />)}
                       </div>
                     </button>
 
-                    {/* Envíos hijos */}
                     {isOpen && (
                       <div style={{ borderTop: '1px solid #E5E7EB' }}>
                         {pedido.envios.map((envio, idx) => {
                           const cfg      = ESTADO_CFG[envio.estado];
                           const tramoCfg = TRAMO_CFG[envio.tramo];
-                          const Icon     = cfg.icon;
                           const isSelected = selectedEnvio?.id === envio.id;
                           return (
                             <div
                               key={envio.id}
                               onClick={() => setSelectedEnvio(isSelected ? null : envio)}
-                              style={{
-                                display: 'flex', alignItems: 'center', gap: '12px',
-                                padding: '12px 18px 12px 50px',
-                                borderTop: idx > 0 ? '1px solid #F3F4F6' : 'none',
-                                cursor: 'pointer',
-                                backgroundColor: isSelected ? '#FFF4EC' : 'transparent',
-                                transition: 'background 0.12s',
-                              }}
+                              style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 18px 12px 50px', borderTop: idx > 0 ? '1px solid #F3F4F6' : 'none', cursor: 'pointer', backgroundColor: isSelected ? '#FFF4EC' : 'transparent', transition: 'background 0.12s' }}
                             >
                               <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: cfg.color, flexShrink: 0 }} />
                               <div style={{ minWidth: 0, flex: 1 }}>
@@ -493,7 +450,7 @@ export function EnviosView({ onNavigate }: Props) {
                                   <span style={{ fontSize: '12px', fontWeight: 700, color: '#374151', fontFamily: 'monospace' }}>{envio.numero}</span>
                                   <EstadoBadge estado={envio.estado} />
                                   <span style={{ fontSize: '10px', fontWeight: 600, color: tramoCfg.color, backgroundColor: `${tramoCfg.color}18`, padding: '2px 7px', borderRadius: '10px' }}>{tramoCfg.label}</span>
-                                  <span style={{ fontSize: '11px', color: '#9CA3AF' }}>{envio.carrier}</span>
+                                  <span style={{ fontSize: '11px', color: '#9CA3AF' }}>{envio.transportista}</span>
                                 </div>
                                 <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '3px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                                   <span>📍 {envio.destino}</span>
@@ -513,7 +470,6 @@ export function EnviosView({ onNavigate }: Props) {
                 );
               })}
 
-              {/* Estado vacío */}
               {pedidosFiltrados.length === 0 && !loading && (
                 <div style={{ textAlign: 'center', padding: '48px 24px', color: '#9CA3AF' }}>
                   <Package size={40} color="#E5E7EB" style={{ margin: '0 auto 12px' }} />
@@ -528,7 +484,6 @@ export function EnviosView({ onNavigate }: Props) {
         {/* ── Panel de detalle ── */}
         {selectedEnvio && (
           <div style={{ width: '360px', backgroundColor: '#fff', borderLeft: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', overflow: 'hidden', flexShrink: 0 }}>
-            {/* Header del panel */}
             <div style={{ padding: '20px', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <span style={{ fontSize: '13px', fontWeight: 800, color: '#374151', fontFamily: 'monospace' }}>{selectedEnvio.numero}</span>
@@ -537,7 +492,7 @@ export function EnviosView({ onNavigate }: Props) {
               <EstadoBadge estado={selectedEnvio.estado} />
               <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
-                  ['Carrier',      selectedEnvio.carrier],
+                  ['Transportista', selectedEnvio.transportista],
                   ['Tramo',        TRAMO_CFG[selectedEnvio.tramo]?.label ?? selectedEnvio.tramo],
                   ['Remitente',    selectedEnvio.remitente || '—'],
                   ['Origen',       selectedEnvio.origen],
@@ -555,13 +510,12 @@ export function EnviosView({ onNavigate }: Props) {
               </div>
             </div>
 
-            {/* Timeline de eventos */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
               <p style={{ fontSize: '12px', fontWeight: 700, color: '#374151', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Historial de seguimiento</p>
               <div style={{ position: 'relative' }}>
                 {selectedEnvio.eventos.map((ev, idx) => {
-                  const cfg    = ESTADO_CFG[ev.estado];
-                  const Icon   = cfg.icon;
+                  const cfg   = ESTADO_CFG[ev.estado];
+                  const Icon  = cfg.icon;
                   const isFirst = idx === 0;
                   return (
                     <div key={idx} style={{ display: 'flex', gap: '12px', paddingBottom: '16px', position: 'relative' }}>
@@ -584,24 +538,19 @@ export function EnviosView({ onNavigate }: Props) {
               </div>
             </div>
 
-            {/* Acciones */}
             <div style={{ padding: '14px 16px', borderTop: '1px solid #E5E7EB', display: 'flex', gap: '8px', flexShrink: 0 }}>
               <button style={{ flex: 1, padding: '9px', border: `1.5px solid ${ORANGE}`, borderRadius: '8px', backgroundColor: 'transparent', color: ORANGE, fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                 Ver tracking externo
               </button>
               {selectedEnvio.estado === 'fallido' && (
-                <button
-                  onClick={() => handleUpdateEstado(selectedEnvio.id, 'creado', 'Re-despachado después de fallo')}
-                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
-                >
+                <button onClick={() => handleUpdateEstado(selectedEnvio.id, 'creado', 'Re-despachado después de fallo')}
+                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                   Re-despachar
                 </button>
               )}
               {selectedEnvio.estado === 'creado' && (
-                <button
-                  onClick={() => handleUpdateEstado(selectedEnvio.id, 'despachado', 'Envío despachado')}
-                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: '#2563EB', color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
-                >
+                <button onClick={() => handleUpdateEstado(selectedEnvio.id, 'despachado', 'Envío despachado')}
+                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: '#2563EB', color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                   Despachar
                 </button>
               )}
@@ -610,7 +559,6 @@ export function EnviosView({ onNavigate }: Props) {
         )}
       </div>
 
-      {/* DrawerForm — Nuevo Envío */}
       <DrawerForm
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}

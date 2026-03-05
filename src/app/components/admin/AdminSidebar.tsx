@@ -1,238 +1,106 @@
-/* =====================================================
-   AdminSidebar — Logística · Transportistas · Envíos
-   ===================================================== */
+﻿/**
+ * AdminSidebar.tsx
+ * Charlie Platform -- Sidebar dinamico.
+ * Lee modulos activos desde Supabase via useModules().
+ * Zero hardcoding de secciones.
+ */
 import React from 'react';
-import { Truck, Sparkles, ExternalLink, Blocks, HammerIcon } from 'lucide-react';
-import type { MainSection } from '../../AdminDashboard';
 import { useOrchestrator } from '../../../shells/DashboardShell/app/providers/OrchestratorProvider';
+import { useModules } from '../../../shells/DashboardShell/app/hooks/useModules';
 
 const ACTIVE_BG = 'rgba(255,255,255,0.22)';
 const HOVER_BG  = 'rgba(255,255,255,0.12)';
 
-interface NavItem {
-  id: MainSection;
-  label: string;
-  emoji?: string;
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard',      label: 'Dashboard',       emoji: '🏠' },
-  { id: 'logistica',      label: 'Logística',       emoji: '🚚' },
-  { id: 'envios',         label: 'Envíos',          emoji: '📦' },
-  { id: 'transportistas', label: 'Transportistas',  emoji: '🏢' },
-  { id: 'organizaciones', label: 'Organizaciones',  emoji: '🏗️' },
-];
-
-/* Items del footer — separados del nav principal, siempre visibles */
-interface FooterItem {
-  id: MainSection;
-  label: string;
-  icon: React.ElementType;
-}
-
-const FOOTER_ITEMS: FooterItem[] = [
-  { id: 'constructor',         label: 'Constructor',         icon: Blocks      },
-  { id: 'constructor-modulos', label: 'Constructor Módulos', icon: HammerIcon  },
-];
-
 interface Props {
-  activeSection: MainSection;
-  onNavigate: (section: MainSection) => void;
+  activeSection: string;
+  onNavigate: (section: string) => void;
 }
 
 export function AdminSidebar({ activeSection, onNavigate }: Props) {
   const { config } = useOrchestrator();
+  const { modulos, loading } = useModules();
 
   const clienteNombre = config?.theme?.nombre ?? 'Charlie';
   const colorPrimario = config?.theme?.primary ?? '#FF6B35';
 
   return (
-    <aside
-      style={{
-        width: '200px',
-        height: '100vh',
-        backgroundColor: colorPrimario,
-        display: 'flex',
-        flexDirection: 'column',
-        flexShrink: 0,
-        position: 'sticky',
-        top: 0,
-        overflow: 'hidden',
-      }}
-    >
-      {/* ── Logo ── */}
+    <aside style={{
+      width: '200px',
+      height: '100vh',
+      backgroundColor: colorPrimario,
+      display: 'flex',
+      flexDirection: 'column',
+      flexShrink: 0,
+      position: 'sticky',
+      top: 0,
+      overflow: 'hidden',
+    }}>
+
+      {/* Logo */}
       <div style={{
-        height: '88px',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 16px',
-        borderBottom: '1px solid rgba(255,255,255,0.18)',
-        flexShrink: 0,
+        padding: '24px 16px 16px',
+        borderBottom: '1px solid rgba(255,255,255,0.15)',
       }}>
-        <div style={{ display: 'inline-flex', flexDirection: 'column' }}>
-          <span style={{
-            color: '#000',
-            fontWeight: '600',
-            fontSize: '1.7rem',
-            lineHeight: 1,
-            textAlign: 'justify',
-            textAlignLast: 'justify',
-          }}>
-            {clienteNombre}
-          </span>
+        <div style={{
+          color: '#fff',
+          fontWeight: 700,
+          fontSize: '18px',
+          letterSpacing: '-0.3px',
+        }}>
+          {clienteNombre}
+        </div>
+        <div style={{
+          color: 'rgba(255,255,255,0.65)',
+          fontSize: '11px',
+          marginTop: '2px',
+        }}>
+          Charlie Platform
         </div>
       </div>
 
-      {/* ── User ── */}
-      <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.18)', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-          <div style={{
-            width: '34px', height: '34px', borderRadius: '50%',
-            backgroundColor: 'rgba(255,255,255,0.28)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: '800', fontSize: '0.78rem',
-            flexShrink: 0, border: '2px solid rgba(255,255,255,0.4)',
-          }}>
-            CV
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }}>
+        {loading ? (
+          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', padding: '8px 12px' }}>
+            Cargando...
           </div>
-          <div style={{ overflow: 'hidden' }}>
-            <p style={{ color: '#fff', fontWeight: '700', fontSize: '0.82rem', margin: 0, whiteSpace: 'nowrap' }}>Carlos Varalla</p>
-            <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: '0.68rem', margin: 0 }}>Administrador</p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Nav principal ── */}
-      <nav style={{ flex: 1, padding: '6px 0', overflowY: 'auto' }}>
-        {NAV_ITEMS.map((item) => {
-          const isActive = activeSection === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                width: '100%',
-                padding: '9px 16px',
-                border: 'none',
-                backgroundColor: isActive ? ACTIVE_BG : 'transparent',
-                color: '#fff',
-                fontSize: '13px',
-                fontWeight: isActive ? 700 : 400,
-                cursor: 'pointer',
-                textAlign: 'left',
-                borderRadius: '6px',
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={e => {
-                if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = HOVER_BG;
-              }}
-              onMouseLeave={e => {
-                if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
-              }}
-            >
-              {item.emoji && <span style={{ fontSize: '14px' }}>{item.emoji}</span>}
-              <span style={{ fontSize: '13px' }}>{item.label}</span>
-            </button>
-          );
-        })}
+        ) : (
+          modulos.map(modulo => {
+            const isActive = activeSection === modulo.slug;
+            return (
+              <button
+                key={modulo.slug}
+                onClick={() => onNavigate(modulo.slug)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '9px 12px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: isActive ? ACTIVE_BG : 'transparent',
+                  color: '#fff',
+                  fontSize: '13px',
+                  fontWeight: isActive ? 600 : 400,
+                  textAlign: 'left',
+                  transition: 'background-color 0.15s',
+                  marginBottom: '2px',
+                }}
+                onMouseEnter={e => {
+                  if (!isActive) (e.currentTarget as HTMLButtonElement).style.backgroundColor = HOVER_BG;
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent';
+                }}
+              >
+                {modulo.nombre}
+              </button>
+            );
+          })
+        )}
       </nav>
 
-      {/* ── Tip ── */}
-      <div style={{
-        margin: '0 10px 10px',
-        padding: '10px',
-        backgroundColor: 'rgba(255,255,255,0.15)',
-        borderRadius: '10px',
-        flexShrink: 0,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '5px' }}>
-          <Sparkles size={12} color="#fff" />
-          <span style={{ color: '#fff', fontWeight: '700', fontSize: '0.72rem' }}>Logística</span>
-        </div>
-        <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '0.67rem', margin: 0, lineHeight: '1.4' }}>
-          Gestioná envíos y transportistas desde un solo lugar
-        </p>
-      </div>
-
-      {/* ── Footer tools — Constructor (siempre visible, separado del nav) ── */}
-      <div style={{
-        borderTop: '1px solid rgba(255,255,255,0.18)',
-        padding: '6px 0',
-        flexShrink: 0,
-      }}>
-        {FOOTER_ITEMS.map((item) => {
-          const isActive = activeSection === item.id;
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '9px',
-                width: '100%',
-                padding: '8px 16px',
-                border: 'none',
-                backgroundColor: isActive ? ACTIVE_BG : 'transparent',
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.65)',
-                fontSize: '12px',
-                fontWeight: isActive ? 700 : 400,
-                cursor: 'pointer',
-                textAlign: 'left',
-                borderRadius: '6px',
-                transition: 'all 0.15s',
-              }}
-              onMouseEnter={e => {
-                if (!isActive) {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = HOVER_BG;
-                  (e.currentTarget as HTMLElement).style.color = '#fff';
-                }
-              }}
-              onMouseLeave={e => {
-                if (!isActive) {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
-                  (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)';
-                }
-              }}
-            >
-              <Icon size={13} />
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* ── Ver Tienda ── */}
-      <a
-        href="/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          margin: '0 10px 12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '7px',
-          padding: '9px 0',
-          backgroundColor: '#fff',
-          color: colorPrimario,
-          borderRadius: '10px',
-          textDecoration: 'none',
-          fontSize: '0.8rem',
-          fontWeight: '700',
-          flexShrink: 0,
-          transition: 'opacity 0.15s',
-        }}
-        onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.88'}
-        onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-      >
-        <ExternalLink size={13} />
-        Ver tienda
-      </a>
     </aside>
   );
 }
