@@ -1,23 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { OrangeHeader } from '../OrangeHeader';
 import type { MainSection } from '../../../AdminDashboard';
 import {
   ChevronRight, ChevronDown, Edit2, AlertTriangle,
-  RefreshCw, Download, Zap, ShieldCheck, UserCog, Plus, X, Check, Loader2, Trash2,
+  RefreshCw, Download, Zap, ShieldCheck, UserCog, Plus, X, Check, Loader2,
 } from 'lucide-react';
 import { FolderTree } from 'lucide-react';
 import {
   getDepartamentos, createDepartamento, updateDepartamento, deleteDepartamento,
   type Departamento,
 } from '../../../services/departamentosApi';
-import {
-  getCategorias, createCategoria, updateCategoria, deleteCategoria,
-  type Categoria,
-} from '../../../services/categoriasApi';
-import {
-  getSubcategorias, createSubcategoria, updateSubcategoria, deleteSubcategoria,
-  type Subcategoria,
-} from '../../../services/subcategoriasApi';
 
 interface Props { onNavigate: (section: MainSection) => void; }
 
@@ -37,9 +28,6 @@ function EditModal({ dept, onClose, onSave }: EditModalProps) {
   const [color,  setColor]    = useState(dept?.color  ?? '#FF6835');
   const [orden,  setOrden]    = useState(String(dept?.orden ?? ''));
   const [activo, setActivo]   = useState(dept?.activo ?? true);
-  const [moneda, setMoneda]   = useState<'UYU' | 'USD' | 'EUR'>(dept?.moneda ?? 'UYU');
-  const [edadMinima, setEdadMinima] = useState<'Todas' | '+18'>(dept?.edad_minima ?? 'Todas');
-  const [alcance, setAlcance] = useState<'Local' | 'Nacional' | 'Internacional'>(dept?.alcance ?? 'Local');
   const [saving, setSaving]   = useState(false);
 
   const handleSave = async () => {
@@ -52,9 +40,6 @@ function EditModal({ dept, onClose, onSave }: EditModalProps) {
         color:  color || undefined,
         orden:  orden ? parseInt(orden) : undefined,
         activo,
-        moneda,
-        edad_minima: edadMinima,
-        alcance,
       });
       onClose();
     } finally {
@@ -96,39 +81,10 @@ function EditModal({ dept, onClose, onSave }: EditModalProps) {
           </div>
         </div>
 
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginBottom: '14px', fontSize: '0.875rem', color: '#374151' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginBottom: '20px', fontSize: '0.875rem', color: '#374151' }}>
           <input type="checkbox" checked={activo} onChange={e => setActivo(e.target.checked)} style={{ accentColor: ORANGE }} />
           Activo (visible en la tienda)
         </label>
-
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '700', color: '#374151', marginBottom: '5px' }}>Moneda</label>
-          <select value={moneda} onChange={e => setMoneda(e.target.value as 'UYU' | 'USD' | 'EUR')}
-            style={{ width: '100%', padding: '9px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }}>
-            <option value="UYU">UYU</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '700', color: '#374151', marginBottom: '5px' }}>Edad Mínima</label>
-          <select value={edadMinima} onChange={e => setEdadMinima(e.target.value as 'Todas' | '+18')}
-            style={{ width: '100%', padding: '9px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }}>
-            <option value="Todas">Todas</option>
-            <option value="+18">+18</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '700', color: '#374151', marginBottom: '5px' }}>Alcance</label>
-          <select value={alcance} onChange={e => setAlcance(e.target.value as 'Local' | 'Nacional' | 'Internacional')}
-            style={{ width: '100%', padding: '9px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }}>
-            <option value="Local">Local</option>
-            <option value="Nacional">Nacional</option>
-            <option value="Internacional">Internacional</option>
-          </select>
-        </div>
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
           <button onClick={onClose} style={{ padding: '9px 18px', border: '1px solid #E5E7EB', backgroundColor: '#FFF', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.875rem' }}>
@@ -145,168 +101,6 @@ function EditModal({ dept, onClose, onSave }: EditModalProps) {
   );
 }
 
-// ── Categoría Modal ────────────────────────────────────────────────────────
-interface CategoriaModalProps {
-  categoria: Categoria | null;
-  departamentoId: string;
-  onClose: () => void;
-  onSave: (data: { departamento_id: string; nombre: string; icono?: string; color?: string; orden?: number; activo?: boolean }) => Promise<void>;
-}
-
-function CategoriaModal({ categoria, departamentoId, onClose, onSave }: CategoriaModalProps) {
-  const [nombre, setNombre] = useState(categoria?.nombre ?? '');
-  const [icono, setIcono] = useState(categoria?.icono ?? '');
-  const [color, setColor] = useState(categoria?.color ?? '#FF6835');
-  const [orden, setOrden] = useState(String(categoria?.orden ?? ''));
-  const [activo, setActivo] = useState(categoria?.activo ?? true);
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = async () => {
-    if (!nombre.trim()) return;
-    setSaving(true);
-    try {
-      await onSave({
-        departamento_id: departamentoId,
-        nombre: nombre.trim(),
-        icono: icono.trim() || undefined,
-        color: color || undefined,
-        orden: orden ? parseInt(orden) : undefined,
-        activo,
-      });
-      onClose();
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.45)', zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ backgroundColor: '#FFF', borderRadius: '14px', padding: '28px', width: '420px', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ margin: 0, fontWeight: '800', color: '#111827' }}>{categoria ? 'Editar Categoría' : 'Nueva Categoría'}</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF' }}><X size={18} /></button>
-        </div>
-
-        {[
-          { label: 'Nombre *', value: nombre, onChange: setNombre, placeholder: 'Ej: Electrónica' },
-          { label: 'Icono (emoji)', value: icono, onChange: setIcono, placeholder: 'Ej: 📱' },
-          { label: 'Orden', value: orden, onChange: setOrden, placeholder: 'Ej: 1', type: 'number' },
-        ].map(f => (
-          <div key={f.label} style={{ marginBottom: '14px' }}>
-            <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '700', color: '#374151', marginBottom: '5px' }}>{f.label}</label>
-            <input
-              type={f.type ?? 'text'}
-              value={f.value}
-              onChange={e => f.onChange(e.target.value)}
-              placeholder={f.placeholder}
-              style={{ width: '100%', padding: '9px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }}
-            />
-          </div>
-        ))}
-
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '700', color: '#374151', marginBottom: '5px' }}>Color</label>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <input type="color" value={color} onChange={e => setColor(e.target.value)}
-              style={{ width: '48px', height: '36px', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer', padding: '2px' }} />
-            <span style={{ fontSize: '0.78rem', color: '#6B7280' }}>{color}</span>
-          </div>
-        </div>
-
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginBottom: '20px', fontSize: '0.875rem', color: '#374151' }}>
-          <input type="checkbox" checked={activo} onChange={e => setActivo(e.target.checked)} style={{ accentColor: ORANGE }} />
-          Activo
-        </label>
-
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} style={{ padding: '9px 18px', border: '1px solid #E5E7EB', backgroundColor: '#FFF', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.875rem' }}>
-            Cancelar
-          </button>
-          <button onClick={handleSave} disabled={saving || !nombre.trim()}
-            style={{ padding: '9px 20px', backgroundColor: ORANGE, color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: saving ? 'not-allowed' : 'pointer', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '6px', opacity: saving ? 0.7 : 1 }}>
-            {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
-            {categoria ? 'Guardar' : 'Crear'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Subcategoría Modal ─────────────────────────────────────────────────────
-interface SubcategoriaModalProps {
-  subcategoria: Subcategoria | null;
-  categoriaId: string;
-  onClose: () => void;
-  onSave: (data: { categoria_id: string; nombre: string; orden?: number; activo?: boolean }) => Promise<void>;
-}
-
-function SubcategoriaModal({ subcategoria, categoriaId, onClose, onSave }: SubcategoriaModalProps) {
-  const [nombre, setNombre] = useState(subcategoria?.nombre ?? '');
-  const [orden, setOrden] = useState(String(subcategoria?.orden ?? ''));
-  const [activo, setActivo] = useState(subcategoria?.activo ?? true);
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = async () => {
-    if (!nombre.trim()) return;
-    setSaving(true);
-    try {
-      await onSave({
-        categoria_id: categoriaId,
-        nombre: nombre.trim(),
-        orden: orden ? parseInt(orden) : undefined,
-        activo,
-      });
-      onClose();
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.45)', zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ backgroundColor: '#FFF', borderRadius: '14px', padding: '28px', width: '420px', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ margin: 0, fontWeight: '800', color: '#111827' }}>{subcategoria ? 'Editar Subcategoría' : 'Nueva Subcategoría'}</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF' }}><X size={18} /></button>
-        </div>
-
-        {[
-          { label: 'Nombre *', value: nombre, onChange: setNombre, placeholder: 'Ej: Smartphones' },
-          { label: 'Orden', value: orden, onChange: setOrden, placeholder: 'Ej: 1', type: 'number' },
-        ].map(f => (
-          <div key={f.label} style={{ marginBottom: '14px' }}>
-            <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '700', color: '#374151', marginBottom: '5px' }}>{f.label}</label>
-            <input
-              type={f.type ?? 'text'}
-              value={f.value}
-              onChange={e => f.onChange(e.target.value)}
-              placeholder={f.placeholder}
-              style={{ width: '100%', padding: '9px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }}
-            />
-          </div>
-        ))}
-
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginBottom: '20px', fontSize: '0.875rem', color: '#374151' }}>
-          <input type="checkbox" checked={activo} onChange={e => setActivo(e.target.checked)} style={{ accentColor: ORANGE }} />
-          Activo
-        </label>
-
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} style={{ padding: '9px 18px', border: '1px solid #E5E7EB', backgroundColor: '#FFF', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.875rem' }}>
-            Cancelar
-          </button>
-          <button onClick={handleSave} disabled={saving || !nombre.trim()}
-            style={{ padding: '9px 20px', backgroundColor: ORANGE, color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: saving ? 'not-allowed' : 'pointer', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '6px', opacity: saving ? 0.7 : 1 }}>
-            {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
-            {subcategoria ? 'Guardar' : 'Crear'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ── Row ───────────────────────────────────────────────────────────────────
 interface RowProps {
   dept: Departamento;
@@ -316,87 +110,10 @@ interface RowProps {
   onToggleExpand: (id: string) => void;
   onEdit: (dept: Departamento) => void;
   onToggleActivo: (id: string, activo: boolean) => void;
-  onLoadCategorias: (departamentoId: string) => Promise<Categoria[]>;
-  onSaveCategoria: (data: { departamento_id: string; nombre: string; icono?: string; color?: string; orden?: number; activo?: boolean }) => Promise<void>;
-  onSaveSubcategoria: (data: { categoria_id: string; nombre: string; orden?: number; activo?: boolean }) => Promise<void>;
-  onDeleteCategoria?: (id: string) => Promise<void>;
 }
 
-function DeptRow({ dept, index, isExpanded, viewMode, onToggleExpand, onEdit, onToggleActivo, onLoadCategorias, onSaveCategoria, onSaveSubcategoria, onDeleteCategoria }: RowProps) {
+function DeptRow({ dept, index, isExpanded, viewMode, onToggleExpand, onEdit, onToggleActivo }: RowProps) {
   const isAdmin = viewMode === 'admin';
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [loadingCategorias, setLoadingCategorias] = useState(false);
-  const [expandedCategorias, setExpandedCategorias] = useState<Set<string>>(new Set());
-  const [showCategoriaModal, setShowCategoriaModal] = useState(false);
-  const [showSubcategoriaModal, setShowSubcategoriaModal] = useState(false);
-  const [editCategoria, setEditCategoria] = useState<Categoria | null>(null);
-  const [editSubcategoria, setEditSubcategoria] = useState<Subcategoria | null>(null);
-  const [categoriaForSub, setCategoriaForSub] = useState<string>('');
-  const [deletingCategoriaId, setDeletingCategoriaId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (isExpanded && categorias.length === 0) {
-      loadCategorias();
-    }
-  }, [isExpanded]);
-
-  const loadCategorias = async () => {
-    setLoadingCategorias(true);
-    try {
-      const data = await onLoadCategorias(dept.id);
-      setCategorias(data);
-    } catch (error) {
-      console.error('Error cargando categorías:', error);
-    } finally {
-      setLoadingCategorias(false);
-    }
-  };
-
-  const toggleCategoriaExpand = (id: string) => {
-    const ne = new Set(expandedCategorias);
-    ne.has(id) ? ne.delete(id) : ne.add(id);
-    setExpandedCategorias(ne);
-  };
-
-  const handleSaveCategoria = async (data: { departamento_id: string; nombre: string; icono?: string; color?: string; orden?: number; activo?: boolean }) => {
-    if (editCategoria) {
-      await updateCategoria(editCategoria.id, data);
-    } else {
-      await onSaveCategoria(data);
-    }
-    await loadCategorias();
-    setShowCategoriaModal(false);
-    setEditCategoria(null);
-  };
-
-  const handleDeleteCategoria = async (id: string) => {
-    if (!onDeleteCategoria) return;
-    if (!confirm('¿Estás seguro de que querés eliminar esta categoría? Esto también eliminará todas sus subcategorías.')) {
-      return;
-    }
-    setDeletingCategoriaId(id);
-    try {
-      await onDeleteCategoria(id);
-      await loadCategorias();
-    } catch (error) {
-      console.error('Error eliminando categoría:', error);
-      alert('Error al eliminar la categoría');
-    } finally {
-      setDeletingCategoriaId(null);
-    }
-  };
-
-  const handleSaveSubcategoria = async (data: { categoria_id: string; nombre: string; orden?: number; activo?: boolean }) => {
-    if (editSubcategoria) {
-      await updateSubcategoria(editSubcategoria.id, data);
-    } else {
-      await onSaveSubcategoria(data);
-    }
-    await loadCategorias();
-    setShowSubcategoriaModal(false);
-    setEditSubcategoria(null);
-    setCategoriaForSub('');
-  };
 
   return (
     <div>
@@ -467,124 +184,19 @@ function DeptRow({ dept, index, isExpanded, viewMode, onToggleExpand, onEdit, on
       {/* Expanded */}
       {isExpanded && (
         <div style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #F3F4F6', padding: '12px 16px 12px 60px' }}>
-          {showCategoriaModal && (
-            <CategoriaModal
-              categoria={editCategoria}
-              departamentoId={dept.id}
-              onClose={() => { setShowCategoriaModal(false); setEditCategoria(null); }}
-              onSave={handleSaveCategoria}
-            />
-          )}
-          {showSubcategoriaModal && (
-            <SubcategoriaModal
-              subcategoria={editSubcategoria}
-              categoriaId={categoriaForSub}
-              onClose={() => { setShowSubcategoriaModal(false); setEditSubcategoria(null); setCategoriaForSub(''); }}
-              onSave={handleSaveSubcategoria}
-            />
-          )}
-
-          <div style={{ marginBottom: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: '700', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Categorías
-            </p>
-            {isAdmin && (
-              <button
-                onClick={() => { setEditCategoria(null); setShowCategoriaModal(true); }}
-                style={{ padding: '4px 10px', backgroundColor: ORANGE, color: '#FFF', border: 'none', borderRadius: '6px', fontWeight: '600', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Plus size={12} /> Agregar categoría
-              </button>
+          <p style={{ margin: '0 0 8px', fontSize: '0.72rem', fontWeight: '700', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Info
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+            {dept.descripcion && (
+              <span style={{ padding: '4px 10px', backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '20px', fontSize: '0.75rem', color: '#374151' }}>
+                {dept.descripcion}
+              </span>
             )}
+            <span style={{ padding: '4px 10px', backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '20px', fontSize: '0.75rem', color: '#374151' }}>
+              ID: {dept.id.slice(0, 8)}...
+            </span>
           </div>
-
-          {loadingCategorias ? (
-            <div style={{ padding: '20px', textAlign: 'center', color: '#9CA3AF', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
-              <span style={{ fontSize: '0.75rem' }}>Cargando categorías...</span>
-            </div>
-          ) : categorias.length === 0 ? (
-            <div style={{ padding: '20px', textAlign: 'center', color: '#9CA3AF', fontSize: '0.75rem' }}>
-              No hay categorías. {isAdmin && 'Agregá la primera.'}
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {categorias.map((cat) => (
-                <div key={cat.id} style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: '8px' }}>
-                    <button onClick={() => toggleCategoriaExpand(cat.id)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: '2px', flexShrink: 0 }}>
-                      {expandedCategorias.has(cat.id) ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-                    </button>
-                    <div style={{
-                      width: '24px', height: '24px', borderRadius: '6px',
-                      backgroundColor: cat.color ? `${cat.color}22` : '#F3F4F6',
-                      border: cat.color ? `1px solid ${cat.color}44` : 'none',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '0.9rem', flexShrink: 0,
-                    }}>
-                      {cat.icono || '📁'}
-                    </div>
-                    <span style={{ flex: 1, fontWeight: '600', color: '#111827', fontSize: '0.8rem' }}>{cat.nombre}</span>
-                    {!cat.activo && (
-                      <span style={{ padding: '1px 6px', borderRadius: '10px', backgroundColor: '#F3F4F6', color: '#6B7280', fontSize: '0.65rem', fontWeight: '700' }}>Inactivo</span>
-                    )}
-                    {isAdmin && (
-                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                        <button onClick={() => { setEditCategoria(cat); setShowCategoriaModal(true); }}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: '2px' }}>
-                          <Edit2 size={12} />
-                        </button>
-                        {onDeleteCategoria && (
-                          <button 
-                            onClick={() => handleDeleteCategoria(cat.id)}
-                            disabled={deletingCategoriaId === cat.id}
-                            style={{ 
-                              background: 'none', 
-                              border: 'none', 
-                              cursor: deletingCategoriaId === cat.id ? 'not-allowed' : 'pointer', 
-                              color: deletingCategoriaId === cat.id ? '#D1D5DB' : '#EF4444', 
-                              padding: '2px',
-                              opacity: deletingCategoriaId === cat.id ? 0.5 : 1
-                            }}>
-                            {deletingCategoriaId === cat.id ? (
-                              <Loader2 size={12} style={{ animation: 'spin 1s linear infinite' }} />
-                            ) : (
-                              <Trash2 size={12} />
-                            )}
-                          </button>
-                        )}
-                        <button onClick={() => { setCategoriaForSub(cat.id); setEditSubcategoria(null); setShowSubcategoriaModal(true); }}
-                          style={{ padding: '2px 6px', backgroundColor: '#F0F9FF', color: '#0284C7', border: 'none', borderRadius: '4px', fontWeight: '600', fontSize: '0.65rem', cursor: 'pointer' }}>
-                          + Sub
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  {expandedCategorias.has(cat.id) && cat.subcategorias && cat.subcategorias.length > 0 && (
-                    <div style={{ padding: '8px 12px 8px 44px', backgroundColor: '#FAFAFA', borderTop: '1px solid #F3F4F6' }}>
-                      <p style={{ margin: '0 0 6px', fontSize: '0.65rem', fontWeight: '700', color: '#9CA3AF', textTransform: 'uppercase' }}>Subcategorías</p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        {cat.subcategorias.map((sub) => (
-                          <div key={sub.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 8px', backgroundColor: '#FFFFFF', borderRadius: '4px', border: '1px solid #E5E7EB' }}>
-                            <span style={{ flex: 1, fontSize: '0.75rem', color: '#374151' }}>{sub.nombre}</span>
-                            {!sub.activo && (
-                              <span style={{ padding: '1px 5px', borderRadius: '8px', backgroundColor: '#F3F4F6', color: '#6B7280', fontSize: '0.6rem', fontWeight: '700' }}>Inactivo</span>
-                            )}
-                            {isAdmin && (
-                              <button onClick={() => { setEditSubcategoria(sub); setCategoriaForSub(cat.id); setShowSubcategoriaModal(true); }}
-                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: '2px' }}>
-                                <Edit2 size={10} />
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </div>
@@ -667,13 +279,6 @@ export function DepartamentosView({ onNavigate }: Props) {
           onSave={handleSave}
         />
       )}
-
-      <OrangeHeader
-        icon={FolderTree}
-        title="Departamentos y Categorías"
-        subtitle="Gestión de departamentos, categorías y subcategorías"
-        actions={[{ label: '← Volver', onClick: () => onNavigate('gestion') }]}
-      />
 
       {/* Vista switcher */}
       <div style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB', padding: '0 28px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
@@ -825,18 +430,6 @@ export function DepartamentosView({ onNavigate }: Props) {
                   onToggleExpand={toggleExpand}
                   onEdit={d => { setEditDept(d); setShowModal(true); }}
                   onToggleActivo={handleToggleActivo}
-                  onLoadCategorias={async (departamentoId) => {
-                    return await getCategorias({ departamento_id: departamentoId });
-                  }}
-                  onSaveCategoria={async (data) => {
-                    await createCategoria(data);
-                  }}
-                  onSaveSubcategoria={async (data) => {
-                    await createSubcategoria(data);
-                  }}
-                  onDeleteCategoria={isAdmin ? async (id) => {
-                    await deleteCategoria(id);
-                  } : undefined}
                 />
               ))
             )}

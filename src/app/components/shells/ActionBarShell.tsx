@@ -88,7 +88,7 @@ export function ActionBarShell() {
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = btn.primary ? '#e04e20' : '#F3F4F6'; }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = btn.primary ? colorPrimario : '#fff'; }}
         >
-          {btn.label}
+          {btn.icon && React.createElement(btn.icon, { size: 14 })}{btn.icon && React.createElement(btn.icon, { size: 14 })}{btn.label}
         </button>
       ))}
     </div>

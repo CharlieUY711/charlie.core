@@ -1,24 +1,22 @@
 /* =====================================================
-   PersonasView — Base de Personas (natural / jurídica)
+   PersonasView — Base de Personas (natural / juridica)
+   Patron nuevo: DrawerShell + ActionBar + sin OrangeHeader
    ===================================================== */
 import React, { useState, useEffect, useCallback } from 'react';
-import { OrangeHeader } from '../OrangeHeader';
-import type { MainSection } from '../../../AdminDashboard';
+import { useRegisterActions } from '../../shells/ActionBarContext';
 import { toast } from 'sonner';
 import { getPersonas, createPersona, updatePersona, deletePersona, type Persona } from '../../../services/personasApi';
 import { GoogleAddressAutocomplete } from '../../ui/GoogleAddressAutocomplete';
 import { getPlaceDetails } from '../../../../utils/google/places';
+import { DrawerShell } from '../../shells/DrawerShell';
+import type { SheetDef } from '../../shells/DrawerShell.types';
 import {
-  Search, Plus, Edit2, Trash2, User, Building2,
-  Mail, Phone, FileText, RefreshCw, X, Save, Filter,
-  ChevronDown, MapPin, Globe, CheckCircle, XCircle,
+  User, Building2, Mail, Phone,
+  RefreshCw, Edit2, Trash2,
+  CheckCircle, XCircle,
 } from 'lucide-react';
 
-interface Props { onNavigate: (section: MainSection) => void; }
-
 const ORANGE = '#FF6835';
-const TIPOS = ['', 'natural', 'juridica'];
-const GENEROS = ['', 'masculino', 'femenino', 'otro', 'prefiero no decir'];
 const DOC_TIPOS = ['CI', 'RUT', 'Pasaporte', 'DNI', 'Otro'];
 
 const EMPTY: Omit<Persona, 'id' | 'created_at'> = {
@@ -36,17 +34,125 @@ const EMPTY: Omit<Persona, 'id' | 'created_at'> = {
   activo: true,
 };
 
-export function PersonasView({ onNavigate }: Props) {
+function buildSheets(tipo: string): SheetDef[] {
+  return [
+    {
+      id: 'datos',
+      title: 'Datos',
+      subtitle: tipo === 'natural' ? 'Persona natural' : 'Persona juridica',
+      fields: [
+        {
+          id: 'tipo',
+          label: 'Tipo',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'natural', label: 'Persona Natural' },
+            { value: 'juridica', label: 'Persona Juridica' },
+          ],
+        },
+        { id: 'nombre', label: tipo === 'natural' ? 'Nombre' : 'Razon Social', type: 'text', required: true, placeholder: tipo === 'natural' ? 'Ej: Maria' : 'Ej: TechSur SA', row: 'nombre' },
+        ...(tipo === 'natural' ? [{ id: 'apellido', label: 'Apellido', type: 'text' as const, placeholder: 'Ej: Garcia', row: 'nombre' }] : []),
+        { id: 'email', label: 'Email', type: 'email' as const, placeholder: 'correo@ejemplo.com', row: 'contacto' },
+        { id: 'telefono', label: 'Telefono', type: 'tel' as const, placeholder: '+598 99 123 456', row: 'contacto' },
+        { id: 'documento_tipo', label: 'Tipo Documento', type: 'select' as const, options: DOC_TIPOS.map(d => ({ value: d, label: d })), row: 'doc' },
+        { id: 'documento_numero', label: 'Nro. Documento', type: 'text' as const, placeholder: 'Ej: 1.234.567-8', row: 'doc' },
+        ...(tipo === 'natural' ? [
+          { id: 'fecha_nacimiento', label: 'Fecha de Nacimiento', type: 'date' as const, row: 'extra' },
+          { id: 'genero', label: 'Genero', type: 'select' as const, options: [
+            { value: '', label: 'Sin especificar' },
+            { value: 'masculino', label: 'Masculino' },
+            { value: 'femenino', label: 'Femenino' },
+            { value: 'otro', label: 'Otro' },
+            { value: 'prefiero no decir', label: 'Prefiero no decir' },
+          ], row: 'extra' },
+        ] : []),
+        { id: 'nacionalidad', label: 'Nacionalidad', type: 'text' as const, placeholder: 'Ej: Uruguaya' },
+        { id: 'activo', label: 'Persona activa en el sistema', type: 'toggle' as const },
+      ],
+    },
+    {
+      id: 'direccion',
+      title: 'Direccion',
+      subtitle: 'Ubicacion geografica',
+      fields: [
+        {
+          id: 'direccion_calle',
+          label: 'Direccion',
+          type: 'custom',
+          renderComponent: ({ value, onChange, onMultiChange }) => (
+            <AddressPicker
+              value={String(value || '')}
+              onChange={onChange}
+              onMultiChange={onMultiChange}
+            />
+          ),
+        },
+        { id: 'direccion_ciudad', label: 'Ciudad', type: 'text' as const, placeholder: 'Ej: Montevideo', row: 'geo' },
+        { id: 'direccion_pais', label: 'Pais', type: 'text' as const, placeholder: 'Ej: Uruguay', row: 'geo' },
+        { id: 'direccion_cp', label: 'Codigo Postal', type: 'text' as const, placeholder: 'Ej: 11300' },
+      ],
+    },
+  ];
+}
+
+function AddressPicker({ value, onChange, onMultiChange }: {
+  value: string;
+  onChange: (v: unknown) => void;
+  onMultiChange: (u: Record<string, unknown>) => void;
+}) {
+  return (
+    <div>
+      <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: 6 }}>
+        Direccion
+      </label>
+      <GoogleAddressAutocomplete
+        value={value}
+        onChange={v => onChange(v)}
+        onSelect={async result => {
+          try {
+            if (result.place_id) {
+              const details = await getPlaceDetails(result.place_id);
+              if (details) {
+                let ciudad = '';
+                let pais = '';
+                let cp = '';
+                details.address_components.forEach((comp: any) => {
+                  if (comp.types.includes('locality') || comp.types.includes('administrative_area_level_2')) ciudad = comp.long_name;
+                  if (comp.types.includes('country')) pais = comp.long_name;
+                  if (comp.types.includes('postal_code')) cp = comp.long_name;
+                });
+                onMultiChange({
+                  direccion_calle: result.address,
+                  direccion_ciudad: ciudad,
+                  direccion_pais: pais,
+                  direccion_cp: cp,
+                });
+                toast.success('Direccion completada automaticamente');
+                return;
+              }
+            }
+            onChange(result.address);
+          } catch {
+            onChange(result.address);
+          }
+        }}
+        placeholder="Buscar direccion con Google Maps..."
+      />
+    </div>
+  );
+}
+
+export function PersonasView() {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filterTipo, setFilterTipo] = useState('');
   const [filterActivo, setFilterActivo] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [editando, setEditando] = useState<Persona | null>(null);
-  const [form, setForm] = useState({ ...EMPTY });
-  const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [tipoForm, setTipoForm] = useState<string>('natural');
 
   const fetchPersonas = useCallback(async () => {
     setLoading(true);
@@ -57,8 +163,7 @@ export function PersonasView({ onNavigate }: Props) {
         search: search || undefined,
       });
       setPersonas(data);
-    } catch (e: unknown) {
-      console.error('Error cargando personas:', e);
+    } catch {
       toast.error('Error al cargar personas');
     } finally {
       setLoading(false);
@@ -67,123 +172,86 @@ export function PersonasView({ onNavigate }: Props) {
 
   useEffect(() => { fetchPersonas(); }, [fetchPersonas]);
 
-  const openCreate = () => {
-    setEditando(null);
-    setForm({ ...EMPTY });
-    setShowModal(true);
-  };
+  useRegisterActions({
+    buttons: [
+      { label: 'Actualizar', onClick: () => fetchPersonas() },
+      { label: 'Nueva Persona', primary: true, onClick: () => { setEditando(null); setTipoForm('natural'); setDrawerOpen(true); } },
+    ],
+    searchPlaceholder: 'Buscar por nombre, apellido o email...',
+    onSearch: q => setSearch(q),
+  }, [fetchPersonas]);
 
-  const openEdit = (p: Persona) => {
-    setEditando(p);
-    setForm({
-      tipo: p.tipo,
-      nombre: p.nombre,
-      apellido: p.apellido ?? '',
-      email: p.email ?? '',
-      telefono: p.telefono ?? '',
-      documento_tipo: p.documento_tipo ?? 'CI',
-      documento_numero: p.documento_numero ?? '',
-      fecha_nacimiento: p.fecha_nacimiento?.split('T')[0] ?? '',
-      genero: p.genero ?? '',
-      nacionalidad: p.nacionalidad ?? '',
-      direccion: p.direccion ?? { calle: '', ciudad: '', pais: '' },
-      activo: p.activo,
-    });
-    setShowModal(true);
-  };
+  const initialData = editando ? {
+    tipo: editando.tipo,
+    nombre: editando.nombre,
+    apellido: editando.apellido ?? '',
+    email: editando.email ?? '',
+    telefono: editando.telefono ?? '',
+    documento_tipo: editando.documento_tipo ?? 'CI',
+    documento_numero: editando.documento_numero ?? '',
+    fecha_nacimiento: editando.fecha_nacimiento?.split('T')[0] ?? '',
+    genero: editando.genero ?? '',
+    nacionalidad: editando.nacionalidad ?? '',
+    direccion_calle: (editando.direccion as any)?.calle ?? '',
+    direccion_ciudad: (editando.direccion as any)?.ciudad ?? '',
+    direccion_pais: (editando.direccion as any)?.pais ?? '',
+    direccion_cp: (editando.direccion as any)?.cp ?? '',
+    activo: editando.activo,
+  } : { ...EMPTY, tipo: tipoForm };
 
-  const handleSave = async () => {
-    if (!form.nombre.trim()) { toast.error('El nombre es requerido'); return; }
-    setSaving(true);
-    try {
-      const body: Partial<Persona> = { ...form };
-      if (!body.fecha_nacimiento || body.fecha_nacimiento === '') {
-        delete body.fecha_nacimiento;
-      }
+  const handleSave = async (data: Record<string, unknown>) => {
+    const body: Partial<Persona> = {
+      tipo: data.tipo as 'natural' | 'juridica',
+      nombre: String(data.nombre || ''),
+      apellido: String(data.apellido || ''),
+      email: String(data.email || ''),
+      telefono: String(data.telefono || ''),
+      documento_tipo: String(data.documento_tipo || 'CI'),
+      documento_numero: String(data.documento_numero || ''),
+      fecha_nacimiento: String(data.fecha_nacimiento || '') || undefined,
+      genero: String(data.genero || ''),
+      nacionalidad: String(data.nacionalidad || ''),
+      direccion: {
+        calle: String(data.direccion_calle || ''),
+        ciudad: String(data.direccion_ciudad || ''),
+        pais: String(data.direccion_pais || ''),
+        cp: String(data.direccion_cp || ''),
+      },
+      activo: Boolean(data.activo ?? true),
+    };
+    if (!body.fecha_nacimiento) delete body.fecha_nacimiento;
+    if (!body.nombre?.trim()) throw new Error('El nombre es requerido');
 
-      if (editando) {
-        const data = await updatePersona(editando.id, body);
-        if (!data) throw new Error('No se pudo actualizar la persona');
-        toast.success('Persona actualizada');
-      } else {
-        const data = await createPersona(body);
-        if (!data) throw new Error('No se pudo crear la persona');
-        toast.success('Persona creada');
-      }
-
-      setShowModal(false);
-      fetchPersonas();
-    } catch (e: unknown) {
-      console.error('Error guardando persona:', e);
-      toast.error(`Error al guardar: ${e instanceof Error ? e.message : String(e)}`);
-    } finally {
-      setSaving(false);
+    if (editando) {
+      await updatePersona(editando.id, body);
+      toast.success('Persona actualizada');
+    } else {
+      await createPersona(body);
+      toast.success('Persona creada');
     }
+    fetchPersonas();
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('¿Eliminar esta persona? Esta acción no se puede deshacer.')) return;
+    if (!confirm('Eliminar esta persona? Esta accion no se puede deshacer.')) return;
     setDeletingId(id);
     try {
-      const ok = await deletePersona(id);
-      if (!ok) throw new Error('No se pudo eliminar la persona');
+      await deletePersona(id);
       toast.success('Persona eliminada');
       fetchPersonas();
-    } catch (e: unknown) {
-      console.error('Error eliminando persona:', e);
+    } catch {
       toast.error('Error al eliminar');
     } finally {
       setDeletingId(null);
     }
   };
 
-  const setDir = (key: string, val: string) =>
-    setForm(f => ({ ...f, direccion: { ...(f.direccion ?? {}), [key]: val } }));
+  const sheets = buildSheets(tipoForm);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-      <OrangeHeader
-        icon={User}
-        title="Base de Personas"
-        subtitle="Personas naturales y jurídicas del sistema"
-        actions={[{ label: '+ Nueva Persona', primary: true, onClick: openCreate }]}
-      />
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
 
-      {/* ── Filtros ── */}
-      <div style={{ padding: '16px 28px', backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-        <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-          <Search size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
-          <input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Buscar por nombre, apellido o email..."
-            style={{ width: '100%', paddingLeft: 32, paddingRight: 12, height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box' }}
-          />
-        </div>
-        <select
-          value={filterTipo}
-          onChange={e => setFilterTipo(e.target.value)}
-          style={{ height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.875rem', color: '#374151', cursor: 'pointer' }}
-        >
-          <option value="">Todos los tipos</option>
-          <option value="natural">Natural</option>
-          <option value="juridica">Jurídica</option>
-        </select>
-        <select
-          value={filterActivo}
-          onChange={e => setFilterActivo(e.target.value)}
-          style={{ height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.875rem', color: '#374151', cursor: 'pointer' }}
-        >
-          <option value="">Todos</option>
-          <option value="true">Activos</option>
-          <option value="false">Inactivos</option>
-        </select>
-        <button onClick={fetchPersonas} style={{ height: 36, width: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <RefreshCw size={15} color="#6B7280" />
-        </button>
-      </div>
-
-      {/* ── Tabla ── */}
+      {/* Tabla */}
       <div style={{ flex: 1, overflow: 'auto', padding: '20px 28px' }}>
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#9CA3AF' }}>
@@ -193,7 +261,7 @@ export function PersonasView({ onNavigate }: Props) {
           <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
             <User size={48} style={{ marginBottom: 12, opacity: 0.3 }} />
             <p style={{ fontSize: '1rem', fontWeight: 600 }}>No hay personas registradas</p>
-            <p style={{ fontSize: '0.875rem', marginTop: 4 }}>Creá la primera usando el botón "+ Nueva Persona"</p>
+            <p style={{ fontSize: '0.875rem', marginTop: 4 }}>Crea la primera usando el boton "Nueva Persona"</p>
           </div>
         ) : (
           <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
@@ -207,7 +275,8 @@ export function PersonasView({ onNavigate }: Props) {
               </thead>
               <tbody>
                 {personas.map((p, i) => (
-                  <tr key={p.id} style={{ borderBottom: i < personas.length - 1 ? '1px solid #F3F4F6' : 'none', transition: 'background 0.1s' }}
+                  <tr key={p.id}
+                    style={{ borderBottom: i < personas.length - 1 ? '1px solid #F3F4F6' : 'none', transition: 'background 0.1s' }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#FAFAFA'}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = ''}
                   >
@@ -224,7 +293,7 @@ export function PersonasView({ onNavigate }: Props) {
                     </td>
                     <td style={{ padding: '12px 16px' }}>
                       <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: '0.78rem', fontWeight: 600, backgroundColor: p.tipo === 'natural' ? '#EFF6FF' : '#FFF7ED', color: p.tipo === 'natural' ? '#3B82F6' : ORANGE }}>
-                        {p.tipo === 'natural' ? 'Natural' : 'Jurídica'}
+                        {p.tipo === 'natural' ? 'Natural' : 'Juridica'}
                       </span>
                     </td>
                     <td style={{ padding: '12px 16px', color: '#374151' }}>
@@ -244,10 +313,15 @@ export function PersonasView({ onNavigate }: Props) {
                     </td>
                     <td style={{ padding: '12px 16px' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
-                        <button onClick={() => openEdit(p)} style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #E5E7EB', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: '#374151' }}>
+                        <button
+                          onClick={() => { setEditando(p); setTipoForm(p.tipo); setDrawerOpen(true); }}
+                          style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #E5E7EB', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: '#374151' }}>
                           <Edit2 size={13} /> Editar
                         </button>
-                        <button onClick={() => handleDelete(p.id)} disabled={deletingId === p.id} style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #FEE2E2', background: '#FFF5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: '#EF4444' }}>
+                        <button
+                          onClick={() => handleDelete(p.id)}
+                          disabled={deletingId === p.id}
+                          style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #FEE2E2', background: '#FFF5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: '#EF4444' }}>
                           <Trash2 size={13} />
                         </button>
                       </div>
@@ -260,202 +334,24 @@ export function PersonasView({ onNavigate }: Props) {
         )}
       </div>
 
-      {/* ── Modal ── */}
-      {showModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ backgroundColor: '#fff', borderRadius: 16, width: '100%', maxWidth: 620, maxHeight: '90vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}>
-            {/* Header modal */}
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#111827' }}>
-                {editando ? 'Editar Persona' : 'Nueva Persona'}
-              </h2>
-              <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF' }}><X size={20} /></button>
-            </div>
-
-            {/* Body modal */}
-            <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {/* Tipo */}
-              <div>
-                <label style={labelStyle}>Tipo *</label>
-                <div style={{ display: 'flex', gap: 10 }}>
-                  {(['natural', 'juridica'] as const).map(t => (
-                    <button key={t} onClick={() => setForm(f => ({ ...f, tipo: t }))}
-                      style={{ flex: 1, padding: '10px', borderRadius: 8, border: `2px solid ${form.tipo === t ? ORANGE : '#E5E7EB'}`, background: form.tipo === t ? '#FFF7ED' : '#fff', cursor: 'pointer', fontWeight: 600, color: form.tipo === t ? ORANGE : '#6B7280', fontSize: '0.875rem' }}>
-                      {t === 'natural' ? '👤 Persona Natural' : '🏢 Persona Jurídica'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Nombre / Apellido */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <div>
-                  <label style={labelStyle}>{form.tipo === 'natural' ? 'Nombre *' : 'Razón Social *'}</label>
-                  <input value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} placeholder={form.tipo === 'natural' ? 'Ej: María' : 'Ej: TechSur SA'} />
-                </div>
-                {form.tipo === 'natural' && (
-                  <div>
-                    <label style={labelStyle}>Apellido</label>
-                    <input value={form.apellido ?? ''} onChange={e => setForm(f => ({ ...f, apellido: e.target.value }))} style={inputStyle} placeholder="Ej: García" />
-                  </div>
-                )}
-              </div>
-
-              {/* Email / Teléfono */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <div>
-                  <label style={labelStyle}>Email</label>
-                  <input type="email" value={form.email ?? ''} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={inputStyle} placeholder="correo@ejemplo.com" />
-                </div>
-                <div>
-                  <label style={labelStyle}>Teléfono</label>
-                  <input value={form.telefono ?? ''} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} style={inputStyle} placeholder="+598 99 123 456" />
-                </div>
-              </div>
-
-              {/* Documento */}
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12 }}>
-                <div>
-                  <label style={labelStyle}>Tipo Doc.</label>
-                  <select value={form.documento_tipo ?? 'CI'} onChange={e => setForm(f => ({ ...f, documento_tipo: e.target.value }))} style={selectStyle}>
-                    {DOC_TIPOS.map(d => <option key={d} value={d}>{d}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label style={labelStyle}>Nro. Documento</label>
-                  <input value={form.documento_numero ?? ''} onChange={e => setForm(f => ({ ...f, documento_numero: e.target.value }))} style={inputStyle} placeholder="Ej: 1.234.567-8" />
-                </div>
-              </div>
-
-              {/* Solo para natural */}
-              {form.tipo === 'natural' && (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                  <div>
-                    <label style={labelStyle}>Fecha de Nacimiento</label>
-                    <input type="date" value={form.fecha_nacimiento ?? ''} onChange={e => setForm(f => ({ ...f, fecha_nacimiento: e.target.value }))} style={inputStyle} />
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Género</label>
-                    <select value={form.genero ?? ''} onChange={e => setForm(f => ({ ...f, genero: e.target.value }))} style={selectStyle}>
-                      <option value="">Sin especificar</option>
-                      <option value="masculino">Masculino</option>
-                      <option value="femenino">Femenino</option>
-                      <option value="otro">Otro</option>
-                      <option value="prefiero no decir">Prefiero no decir</option>
-                    </select>
-                  </div>
-                </div>
-              )}
-
-              {/* Nacionalidad */}
-              <div>
-                <label style={labelStyle}>Nacionalidad</label>
-                <input value={form.nacionalidad ?? ''} onChange={e => setForm(f => ({ ...f, nacionalidad: e.target.value }))} style={inputStyle} placeholder="Ej: Uruguaya" />
-              </div>
-
-              {/* Dirección */}
-              <div>
-                <label style={{ ...labelStyle, marginBottom: 8, display: 'block' }}>Dirección</label>
-                <div style={{ marginBottom: 10 }}>
-                  <GoogleAddressAutocomplete
-                    value={form.direccion?.calle ?? ''}
-                    onChange={(value) => setDir('calle', value)}
-                    onSelect={async (result) => {
-                      try {
-                        // Obtener detalles completos del lugar para extraer componentes
-                        if (result.place_id) {
-                          const details = await getPlaceDetails(result.place_id);
-                          if (details) {
-                            // Extraer componentes de la dirección
-                            let ciudad = '';
-                            let pais = '';
-                            let cp = '';
-                            
-                            details.address_components.forEach((comp: any) => {
-                              const types = comp.types;
-                              if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-                                ciudad = comp.long_name;
-                              }
-                              if (types.includes('country')) {
-                                pais = comp.long_name;
-                              }
-                              if (types.includes('postal_code')) {
-                                cp = comp.long_name;
-                              }
-                            });
-                            
-                            // Actualizar todos los campos de dirección
-                            setForm(f => ({
-                              ...f,
-                              direccion: {
-                                calle: result.address,
-                                ciudad: ciudad || f.direccion?.ciudad || '',
-                                pais: pais || f.direccion?.pais || '',
-                                cp: cp || f.direccion?.cp || '',
-                              },
-                            }));
-                            
-                            toast.success('Dirección geocodificada y completada automáticamente');
-                          } else {
-                            // Si no hay detalles, al menos guardar la dirección
-                            setDir('calle', result.address);
-                            toast.success('Dirección guardada');
-                          }
-                        } else {
-                          setDir('calle', result.address);
-                          toast.success('Dirección guardada');
-                        }
-                      } catch (error) {
-                        console.error('Error obteniendo detalles de la dirección:', error);
-                        // Al menos guardar la dirección básica
-                        setDir('calle', result.address);
-                        toast.success('Dirección guardada (algunos campos pueden requerir completarse manualmente)');
-                      }
-                    }}
-                    placeholder="Buscar dirección (con autocompletado de Google Maps)"
-                    className="w-full"
-                  />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <input value={form.direccion?.ciudad ?? ''} onChange={e => setDir('ciudad', e.target.value)} style={inputStyle} placeholder="Ciudad" />
-                  <input value={form.direccion?.pais ?? ''} onChange={e => setDir('pais', e.target.value)} style={inputStyle} placeholder="País" />
-                  <input value={form.direccion?.cp ?? ''} onChange={e => setDir('cp', e.target.value)} style={inputStyle} placeholder="Código postal" />
-                </div>
-              </div>
-
-              {/* Activo */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <input type="checkbox" id="activo" checked={form.activo} onChange={e => setForm(f => ({ ...f, activo: e.target.checked }))} style={{ width: 16, height: 16, cursor: 'pointer', accentColor: ORANGE }} />
-                <label htmlFor="activo" style={{ fontSize: '0.875rem', color: '#374151', cursor: 'pointer' }}>Persona activa en el sistema</label>
-              </div>
-            </div>
-
-            {/* Footer modal */}
-            <div style={{ padding: '16px 24px', borderTop: '1px solid #E5E7EB', display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-              <button onClick={() => setShowModal(false)} style={{ padding: '9px 20px', borderRadius: 8, border: '1.5px solid #E5E7EB', background: '#fff', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, color: '#374151' }}>
-                Cancelar
-              </button>
-              <button onClick={handleSave} disabled={saving} style={{ padding: '9px 24px', borderRadius: 8, border: 'none', backgroundColor: ORANGE, color: '#fff', cursor: saving ? 'not-allowed' : 'pointer', fontSize: '0.875rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6, opacity: saving ? 0.7 : 1 }}>
-                <Save size={15} /> {saving ? 'Guardando...' : (editando ? 'Guardar cambios' : 'Crear persona')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DrawerShell
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onSave={handleSave}
+        title={editando ? 'Editar Persona' : 'Nueva Persona'}
+        icon={User}
+        sheets={sheets}
+        initialData={initialData}
+        labels={{ save: editando ? 'Guardar cambios' : 'Crear persona' }}
+      />
 
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
 
-const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: 5,
-};
-const inputStyle: React.CSSProperties = {
-  width: '100%', height: 38, border: '1.5px solid #E5E7EB', borderRadius: 8,
-  padding: '0 12px', fontSize: '0.875rem', color: '#111827', outline: 'none', boxSizing: 'border-box',
-};
 const selectStyle: React.CSSProperties = {
-  width: '100%', height: 38, border: '1.5px solid #E5E7EB', borderRadius: 8,
+  height: 34, border: '1.5px solid #E5E7EB', borderRadius: 8,
   padding: '0 10px', fontSize: '0.875rem', color: '#374151', cursor: 'pointer', outline: 'none',
 };
+
