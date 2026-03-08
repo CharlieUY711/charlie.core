@@ -3,6 +3,7 @@
    Árbol Pedido Madre → Envíos Hijos · Multi-tramo
    ===================================================== */
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useRegisterActions } from '../../shells/ActionBarContext';
 import {
   Truck, Package, MapPin, CheckCircle2, Clock, XCircle,
   ChevronRight, ChevronDown, Search, Eye,
@@ -10,8 +11,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSupabaseClient } from '../../../../shells/DashboardShell/app/hooks/useSupabaseClient';
-import { DrawerForm } from '../DrawerForm';
-import type { SheetDef } from '../DrawerForm';
+import { DrawerShell } from '../../shells/DrawerShell';
+import type { SheetDef } from '../../shells/DrawerShell.types';
 
 interface Props { onNavigate?: (s: string) => void; }
 
@@ -64,7 +65,7 @@ const ENVIO_SHEETS: SheetDef[] = [
     subtitle: 'Remitente y origen · ¿Desde dónde sale el envío?',
     fields: [
       { id: 'remitente', label: 'Remitente',           type: 'text',    required: true, placeholder: 'Ej: Empresa SA' },
-      { id: 'origen',    label: 'Dirección de origen', type: 'address', required: true, placeholder: 'Ej: Av. Italia 2500, Montevideo' },
+      { id: 'origen',    label: 'Dirección de origen', type: 'text', required: true, placeholder: 'Ej: Av. Italia 2500, Montevideo' },
     ],
   },
   {
@@ -73,7 +74,7 @@ const ENVIO_SHEETS: SheetDef[] = [
     subtitle: 'Destinatario y destino · ¿A dónde llega el envío?',
     fields: [
       { id: 'destinatario', label: 'Destinatario',        type: 'text',    required: true, placeholder: 'Ej: Juan Pérez' },
-      { id: 'destino',      label: 'Dirección de destino', type: 'address', required: true, placeholder: 'Ej: Bvar. Artigas 1500, Montevideo' },
+      { id: 'destino',      label: 'Dirección de destino', type: 'text', required: true, placeholder: 'Ej: Bvar. Artigas 1500, Montevideo' },
     ],
   },
   {
@@ -253,6 +254,16 @@ export function EnviosView({ onNavigate }: Props) {
 
   useEffect(() => { loadEnvios(); }, [loadEnvios]);
 
+  useRegisterActions({
+    buttons: [
+      { label: 'Actualizar', onClick: () => loadEnvios() },
+      { label: 'Nuevo Envío', primary: true, onClick: () => setDrawerOpen(true) },
+    ],
+    searchPlaceholder: 'Buscar pedido, cliente, envio...',
+    onSearch: (q) => setSearch(q),
+  }, [loadEnvios]);
+
+
   const handleSaveEnvio = async (formData: Record<string, unknown>) => {
     if (!supabase) return;
     setSaving(true);
@@ -359,29 +370,6 @@ export function EnviosView({ onNavigate }: Props) {
             <StatCard label="En Reparto"    value={allEnvios.filter(e => e.estado === 'en_reparto').length} color={ORANGE} icon={Truck} />
             <StatCard label="Entregados"    value={stats.entregados}  color="#059669" icon={CheckCircle2} />
             <StatCard label="Fallidos"      value={stats.fallidos}    color="#DC2626" icon={XCircle}      sub={stats.fallidos > 0 ? 'Requieren atención' : undefined} />
-          </div>
-
-          {/* Filtros */}
-          <div style={{ display: 'flex', gap: '10px', padding: '16px 20px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-              <Search size={14} color="#9CA3AF" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
-              <input
-                value={search} onChange={e => setSearch(e.target.value)}
-                placeholder="Buscar pedido, cliente, envío..."
-                style={{ width: '100%', paddingLeft: '34px', paddingRight: '12px', paddingTop: '8px', paddingBottom: '8px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '13px', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }}
-              />
-            </div>
-            <select value={filterEstado} onChange={e => setFilterEstado(e.target.value as EstadoEnvio | 'todos')}
-              style={{ padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '13px', backgroundColor: '#fff', cursor: 'pointer' }}>
-              <option value="todos">Todos los estados</option>
-              {Object.entries(ESTADO_CFG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-            </select>
-            <select value={filterTramo} onChange={e => setFilterTramo(e.target.value)}
-              style={{ padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '13px', backgroundColor: '#fff', cursor: 'pointer' }}>
-              <option value="todos">Todos los tramos</option>
-              {Object.entries(TRAMO_CFG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-            </select>
-            <span style={{ fontSize: '12px', color: '#9CA3AF' }}>{pedidosFiltrados.length} pedidos · {pedidosFiltrados.flatMap(p => p.envios).length} envíos</span>
           </div>
 
           {/* Árbol Pedidos → Envíos */}
@@ -546,7 +534,7 @@ export function EnviosView({ onNavigate }: Props) {
         )}
       </div>
 
-      <DrawerForm
+      <DrawerShell
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         onSave={handleSaveEnvio}
@@ -558,3 +546,6 @@ export function EnviosView({ onNavigate }: Props) {
     </div>
   );
 }
+
+
+

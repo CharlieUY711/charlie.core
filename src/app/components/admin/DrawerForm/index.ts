@@ -1,5 +1,5 @@
 /* =====================================================
-   DrawerForm — Exports públicos
+   DrawerForm - Exports públicos
    ===================================================== */
 export { DrawerForm } from './DrawerForm';
 export type {

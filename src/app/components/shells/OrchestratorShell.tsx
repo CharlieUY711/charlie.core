@@ -1,18 +1,19 @@
-/**
+﻿/**
  * OrchestratorShell.tsx
- * Charlie Platform — Renderizador de vistas y hub de módulos
+ * Charlie Platform â€” Renderizador de vistas y hub de mÃ³dulos
  *
- * Recibe modulos como prop desde AdminDashboard — no llama useModules() propio.
+ * Recibe modulos como prop desde AdminDashboard â€” no llama useModules() propio.
  * Dos modos:
- *   1. View directo  → activeSection está en COMPONENT_REGISTRY → renderiza el módulo
- *   2. Hub de sección → activeSection es una sección → muestra cards de módulos activos
+ *   1. View directo  â†’ activeSection estÃ¡ en COMPONENT_REGISTRY â†’ renderiza el mÃ³dulo
+ *   2. Hub de secciÃ³n â†’ activeSection es una secciÃ³n â†’ muestra cards de mÃ³dulos activos
  */
 
 import React from 'react';
-import { COMPONENT_REGISTRY } from '../utils/componentRegistry';
-import { useOrchestrator }    from '../../shells/DashboardShell/app/providers/OrchestratorProvider';
+import { COMPONENT_REGISTRY } from '../../utils/componentRegistry';
+import { useOrchestrator }    from '../../../shells/DashboardShell/app/providers/OrchestratorProvider';
 import { TopBarShell }        from './TopBarShell';
-import type { ModuloActivo }  from '../../shells/DashboardShell/app/hooks/useModules';
+import { ActionBarShell }     from './ActionBarShell';
+import type { ModuloActivo }  from '../../../shells/DashboardShell/app/hooks/useModules';
 
 interface Props {
   activeSection: string;
@@ -40,6 +41,7 @@ export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props)
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 
       <TopBarShell activeSection={activeSection} onNavigate={onNavigate} />
+      <ActionBarShell />
 
       <div style={{ flex: 1, overflow: 'hidden' }}>
 
@@ -133,3 +135,7 @@ export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props)
     </div>
   );
 }
+
+
+
+

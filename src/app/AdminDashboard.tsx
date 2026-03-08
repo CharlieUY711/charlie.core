@@ -1,10 +1,10 @@
-/* =====================================================
+﻿/* =====================================================
    Charlie Platform - AdminDashboard
    Shell principal - usa SidebarShell dinamico
    ===================================================== */
 import React, { useState, useEffect } from 'react';
 import { SidebarShell }      from '../shells/SidebarShell/SidebarShell';
-import { OrchestratorShell } from './components/OrchestratorShell';
+import { OrchestratorShell } from './components/shells/OrchestratorShell';
 import { Toaster }           from 'sonner';
 import { useOrchestrator }   from '../shells/DashboardShell/app/providers/OrchestratorProvider';
 import { useModules }        from '../shells/DashboardShell/app/hooks/useModules';
@@ -75,3 +75,5 @@ export default function AdminDashboard() {
     </>
   );
 }
+
+
