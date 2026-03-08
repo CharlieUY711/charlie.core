@@ -1,4 +1,4 @@
-﻿/**
+/**
  * TopBarShell.tsx
  * Charlie Platform â€” TopBar principal
  * 100px altura â€” titulo dinamico + iconos de navegacion
@@ -121,7 +121,7 @@ export function TopBarShell({ activeSection, onNavigate }: Props) {
         <IconBtn title="Ideas (proximamente)" color={ORANGE}>
           <Lightbulb size={17} color={ORANGE} strokeWidth={2.2} />
         </IconBtn>
-        <IconBtn title="Mapas (proximamente)" color="#10B981">
+        <IconBtn title="Google Maps" color="#10B981" onClick={() => onNavigate('GoogleMapsTestView')}>
           <MapPin size={17} color="#10B981" strokeWidth={2.2} />
         </IconBtn>
         <IconBtn onClick={signOut} title="Cerrar sesion" color="#EF4444">
@@ -132,5 +132,6 @@ export function TopBarShell({ activeSection, onNavigate }: Props) {
     </header>
   );
 }
+
 
 
