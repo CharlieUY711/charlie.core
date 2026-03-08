@@ -3,8 +3,6 @@
    Árbol Pedido Madre → Envíos Hijos · Multi-tramo
    ===================================================== */
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { OrangeHeader } from '../OrangeHeader';
-import type { MainSection } from '../../../AdminDashboard';
 import {
   Truck, Package, MapPin, CheckCircle2, Clock, XCircle,
   ChevronRight, ChevronDown, Search, Eye,
@@ -15,7 +13,7 @@ import { useSupabaseClient } from '../../../../shells/DashboardShell/app/hooks/u
 import { DrawerForm } from '../DrawerForm';
 import type { SheetDef } from '../DrawerForm';
 
-interface Props { onNavigate: (s: MainSection) => void; }
+interface Props { onNavigate?: (s: string) => void; }
 
 const ORANGE = '#FF6835';
 
@@ -349,17 +347,6 @@ export function EnviosView({ onNavigate }: Props) {
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <OrangeHeader
-        icon={Truck}
-        title="Envíos"
-        subtitle={`${stats.total} envíos totales · ${stats.en_transito} en tránsito · ${stats.entregados} entregados`}
-        onNavigate={onNavigate}
-        onBackClick={() => onNavigate('logistica')}
-        actions={[
-          { label: refreshing ? 'Actualizando...' : '🔄 Actualizar', onClick: () => loadEnvios() },
-          { label: '+ Nuevo Envío', primary: true, onClick: () => setDrawerOpen(true) },
-        ]}
-      />
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
         {/* ── Panel principal ── */}

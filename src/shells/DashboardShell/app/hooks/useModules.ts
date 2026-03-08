@@ -1,34 +1,44 @@
-﻿/**
+/**
  * useModules.ts
- * Charlie Platform -- Hook que resuelve los modulos activos del cliente.
+ * Carga las secciones y módulos activos desde Supabase.
  *
- * Flujo:
- *   1. Lee config.modulos (categorias activas) del Orquestador
- *   2. Si es ["*"] activa todos
- *   3. Consulta modulos_disponibles en Supabase filtrando por categoria
- *   4. Devuelve lista de ModuloActivo con slug y nombre
+ * Campos en modulos_disponibles:
+ *   section  text      — nombre legible de la sección (ej: 'Logística')
+ *   view     text      — nombre del componente (ej: 'EnviosView')
+ *   nombre   text      — label legible del módulo (ej: 'Envíos')
+ *   orden    integer   — orden en el sidebar (default 99)
+ *   activo   boolean
  */
+
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../../utils/supabase/client';
 import { useOrchestrator } from '../providers/OrchestratorProvider';
 
 export interface ModuloActivo {
-  slug:      string;
-  nombre:    string;
-  categoria: string;
+  section: string;
+  view:    string;
+  nombre:  string;
+  orden:   number;
+}
+
+export interface SeccionActiva {
+  section: string;
+  nombre:  string;
+  orden:   number;
 }
 
 interface UseModulesResult {
-  modulos:  ModuloActivo[];
-  loading:  boolean;
-  error:    string | null;
+  secciones: SeccionActiva[];
+  modulos:   ModuloActivo[];
+  loading:   boolean;
+  error:     string | null;
 }
 
 export function useModules(): UseModulesResult {
-  const { config, isReady } = useOrchestrator();
-  const [modulos, setModulos]   = useState<ModuloActivo[]>([]);
-  const [loading, setLoading]   = useState(true);
-  const [error,   setError]     = useState<string | null>(null);
+  const { isReady } = useOrchestrator();
+  const [modulos, setModulos] = useState<ModuloActivo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error,   setError]   = useState<string | null>(null);
 
   useEffect(() => {
     if (!isReady) return;
@@ -36,26 +46,25 @@ export function useModules(): UseModulesResult {
     async function fetchModulos() {
       try {
         setLoading(true);
-        const categoriasActivas = config?.modulos ?? [];
 
-        let query = supabase
+        const { data, error: sbError } = await supabase
           .from('modulos_disponibles')
-          .select('slug, nombre, categoria')
+          .select('section, view, nombre, orden')
           .eq('activo', true)
-          .order('categoria')
-          .order('nombre');
-
-        // ["*"] = todos los modulos activos
-        if (!categoriasActivas.includes('*')) {
-          query = query.in('categoria', categoriasActivas);
-        }
-
-        const { data, error: sbError } = await query;
+          .order('orden', { ascending: true });
 
         if (sbError) throw sbError;
-        setModulos(data ?? []);
+
+        const rows = (data ?? []).map((row: any) => ({
+          section: row.section as string,
+          view:    row.view    as string,
+          nombre:  row.nombre  as string,
+          orden:   row.orden   ?? 99,
+        }));
+
+        setModulos(rows);
       } catch (err: any) {
-        setError(err.message ?? 'Error cargando modulos');
+        setError(err.message ?? 'Error cargando módulos');
         console.error('[useModules]', err);
       } finally {
         setLoading(false);
@@ -63,7 +72,26 @@ export function useModules(): UseModulesResult {
     }
 
     fetchModulos();
-  }, [isReady, config?.modulos]);
+  }, [isReady]);
 
-  return { modulos, loading, error };
+  // Secciones únicas — nombre = valor de section (ya tiene mayúsculas correctas)
+  // Dashboard siempre primero, resto por orden
+  const seccionesMap = new Map<string, SeccionActiva>();
+  for (const m of modulos) {
+    if (!seccionesMap.has(m.section)) {
+      seccionesMap.set(m.section, {
+        section: m.section,
+        nombre:  m.section,  // el nombre de la sección ES su valor (ej: 'Logística')
+        orden:   m.orden,
+      });
+    }
+  }
+
+  const secciones = [...seccionesMap.values()].sort((a, b) => {
+    if (a.section === 'Dashboard') return -1;
+    if (b.section === 'Dashboard') return 1;
+    return a.nombre.localeCompare(b.nombre);
+  });
+
+  return { secciones, modulos, loading, error };
 }

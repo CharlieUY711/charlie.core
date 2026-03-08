@@ -1,21 +1,54 @@
-﻿/**
+/**
  * configLoader.ts
- * Carga la configuracion del cliente desde Supabase (infraestructura Charlie).
+ * Carga la configuración del cliente desde Supabase (infraestructura Charlie).
  *
  * Detecta el cliente por:
  *   1. Query param ?slug=testing  (override manual)
- *   2. window.location.hostname   (produccion)
+ *   2. window.location.hostname   (producción)
  *   3. VITE_DEFAULT_TENANT        (desarrollo local)
  */
 
-const CHARLIE_URL = 'https://qhnmxvexkizcsmivfuam.supabase.co';
-const CHARLIE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFobm14dmV4a2l6Y3NtaXZmdWFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyMjEyODEsImV4cCI6MjA4Njc5NzI4MX0.Ifz4fJYldIGZFzhBK5PPxQeqdYzO2ZKNQ5uo8j2mYmM';
+const CHARLIE_URL = 'https://yomgqobfmgatavnbtvdz.supabase.co';
+const CHARLIE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
 
 export interface Conjunto {
-  tabla:   string;
-  filtro:  Record<string, any>;
-  mapeo:   Record<string, string>;
+  tabla:  string;
+  filtro: Record<string, any>;
+  mapeo:  Record<string, string>;
 }
+
+// ─── Info Block ───────────────────────────────────────────────────────────────
+// tipo 'modulo_activo' — muestra el nombre de la sección activa (sin texto extra)
+// tipo 'promo'         — título + texto para anunciar algo próximo
+// tipo 'mensaje'       — mensaje directo al usuario (puede cambiar a menudo)
+// tipo 'oculto'        — la zona 4 no renderiza
+
+export type InfoBlockTipo = 'modulo_activo' | 'promo' | 'mensaje' | 'oculto';
+
+export interface SidebarInfoBlock {
+  tipo:    InfoBlockTipo;
+  titulo?: string;   // para 'promo' y 'mensaje'
+  texto?:  string;   // para 'promo' y 'mensaje'
+}
+
+// ─── CTA ─────────────────────────────────────────────────────────────────────
+// null  → zona 5 no renderiza
+// label → texto del botón
+// url   → abre en nueva pestaña
+
+export interface SidebarCta {
+  label: string;
+  url?:  string;
+}
+
+// ─── Sidebar ─────────────────────────────────────────────────────────────────
+
+export interface SidebarConfig {
+  infoBlock?: SidebarInfoBlock | null;
+  cta?:       SidebarCta       | null;
+}
+
+// ─── RemoteConfig ─────────────────────────────────────────────────────────────
 
 export interface RemoteConfig {
   tenantId:      string;
@@ -26,9 +59,11 @@ export interface RemoteConfig {
     primary:    string;
     secondary?: string;
     nombre?:    string;
+    sistema?:   string;   // ← nuevo: nombre del sistema (ej: "Charlie Platform")
     logo?:      string;
   };
-  modulos:   string[];
+  sidebar:  SidebarConfig;   // ← nuevo: config completa del sidebar
+  modulos:  string[];
   backend: {
     tipo:        string;
     url:         string;
@@ -38,6 +73,8 @@ export interface RemoteConfig {
   };
   conjuntos: Record<string, Conjunto>;
 }
+
+// ─── Fetcher ──────────────────────────────────────────────────────────────────
 
 async function charlieFetch(path: string) {
   const res = await fetch(`${CHARLIE_URL}/rest/v1/${path}`, {
@@ -52,7 +89,7 @@ async function charlieFetch(path: string) {
 }
 
 function detectTenantIdentifier(): string | null {
-  const params = new URLSearchParams(window.location.search);
+  const params    = new URLSearchParams(window.location.search);
   const slugParam = params.get('slug');
   if (slugParam) return slugParam;
 
@@ -63,12 +100,14 @@ function detectTenantIdentifier(): string | null {
   return hostname;
 }
 
+// ─── Loader ───────────────────────────────────────────────────────────────────
+
 export async function loadRemoteConfig(): Promise<RemoteConfig | null> {
   try {
     const identifier = detectTenantIdentifier();
 
     if (!identifier) {
-      console.warn('[ConfigLoader] No se detecto tenant.');
+      console.warn('[ConfigLoader] No se detectó tenant.');
       return null;
     }
 
@@ -93,9 +132,19 @@ export async function loadRemoteConfig(): Promise<RemoteConfig | null> {
       tenantId:      cfg.tenant_id,
       tenantNombre:  cfg.nombre,
       clienteNombre: cfg.nombre,
-      shell:         cfg.shell     || 'DashboardShell',
-      theme:         cfg.theme     || { primary: '#6366F1' },
-      modulos:       cfg.modulos   || [],
+      shell:         cfg.shell    || 'DashboardShell',
+      theme: {
+        primary:   cfg.theme?.primary   || '#FF6B35',
+        secondary: cfg.theme?.secondary,
+        nombre:    cfg.theme?.nombre,
+        sistema:   cfg.theme?.sistema,       // ← nuevo campo en tenant_config.theme
+        logo:      cfg.theme?.logo,
+      },
+      sidebar: {
+        infoBlock: cfg.sidebar?.infoBlock ?? { tipo: 'modulo_activo' },
+        cta:       cfg.sidebar?.cta       ?? null,
+      },
+      modulos: cfg.modulos || [],
       backend: {
         tipo:        cfg.backend?.tipo     || 'supabase',
         url:         cfg.backend?.url      || '',
