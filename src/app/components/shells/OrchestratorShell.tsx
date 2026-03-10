@@ -1,24 +1,21 @@
-﻿/**
+/**
  * OrchestratorShell.tsx
- * Charlie Platform â€” Renderizador de vistas y hub de mÃ³dulos
+ * Charlie Platform — Renderizador de vistas y hub de modulos
  *
- * Recibe modulos como prop desde AdminDashboard â€” no llama useModules() propio.
  * Dos modos:
- *   1. View directo  â†’ activeSection estÃ¡ en COMPONENT_REGISTRY â†’ renderiza el mÃ³dulo
- *   2. Hub de secciÃ³n â†’ activeSection es una secciÃ³n â†’ muestra cards de mÃ³dulos activos
+ *   1. View directo  → activeSection esta en COMPONENT_REGISTRY → renderiza el modulo
+ *   2. Hub de seccion → activeSection es una seccion → muestra cards de modulos activos
  */
 
 import React from 'react';
 import { COMPONENT_REGISTRY } from '../../utils/componentRegistry';
-import { useOrchestrator }    from '../../../shells/DashboardShell/app/providers/OrchestratorProvider';
+import { useShell }           from '../../context/ShellContext';
 import { TopBarShell }        from './TopBarShell';
 import { ActionBarShell }     from './ActionBarShell';
-import type { ModuloActivo }  from '../../../shells/DashboardShell/app/hooks/useModules';
 
 interface Props {
   activeSection: string;
   onNavigate:   (s: string) => void;
-  modulos:      ModuloActivo[];
 }
 
 const Fallback = (
@@ -30,12 +27,11 @@ const Fallback = (
   </div>
 );
 
-export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props) {
-  const { config }    = useOrchestrator();
-  const colorPrimario = config?.theme?.primary ?? '#FF6B35';
+export function OrchestratorShell({ activeSection, onNavigate }: Props) {
+  const { colorPrimario, modulos } = useShell();
 
-  const esViewDirecto      = COMPONENT_REGISTRY[activeSection] !== undefined;
-  const modulosDeSeccion   = modulos.filter(m => m.section === activeSection);
+  const esViewDirecto    = COMPONENT_REGISTRY[activeSection] !== undefined;
+  const modulosDeSeccion = modulos.filter(m => m.section === activeSection);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -46,7 +42,6 @@ export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props)
       <div style={{ flex: 1, overflow: 'hidden' }}>
 
         {esViewDirecto ? (
-          // Modo 1: Modulo directo
           <React.Suspense fallback={Fallback}>
             {React.createElement(
               COMPONENT_REGISTRY[activeSection] as React.ComponentType<{ onNavigate: (s: string) => void }>,
@@ -55,21 +50,12 @@ export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props)
           </React.Suspense>
 
         ) : (
-          // Modo 2: Hub de seccion
           <div style={{
-            backgroundColor: '#F8F9FA',
-            padding:         '32px',
-            overflowY:       'auto',
-            height:          '100%',
-            boxSizing:       'border-box' as const,
+            backgroundColor: '#F8F9FA', padding: '32px',
+            overflowY: 'auto', height: '100%', boxSizing: 'border-box',
           }}>
             {modulosDeSeccion.length === 0 ? (
-              <div style={{
-                color:     '#9CA3AF',
-                fontSize:  '14px',
-                marginTop: '48px',
-                textAlign: 'center' as const,
-              }}>
+              <div style={{ color: '#9CA3AF', fontSize: '14px', marginTop: '48px', textAlign: 'center' }}>
                 No hay modulos activos en esta seccion.
               </div>
             ) : (
@@ -79,18 +65,11 @@ export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props)
                     key={view}
                     onClick={() => onNavigate(view)}
                     style={{
-                      width:           '180px',
-                      height:          '180px',
-                      borderRadius:    '16px',
-                      border:          '1px solid #E5E7EB',
-                      cursor:          'pointer',
-                      backgroundColor: '#fff',
-                      boxShadow:       '0 1px 4px rgba(0,0,0,0.06)',
-                      display:         'flex',
-                      flexDirection:   'column',
-                      alignItems:      'center',
-                      justifyContent:  'center',
-                      gap:             '12px',
+                      width: '180px', height: '180px', borderRadius: '16px',
+                      border: '1px solid #E5E7EB', cursor: 'pointer',
+                      backgroundColor: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+                      display: 'flex', flexDirection: 'column',
+                      alignItems: 'center', justifyContent: 'center', gap: '12px',
                     }}
                     onMouseEnter={e => {
                       e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.10)';
@@ -102,25 +81,17 @@ export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props)
                     }}
                   >
                     <div style={{
-                      width:           52,
-                      height:          52,
-                      borderRadius:    '14px',
+                      width: 52, height: 52, borderRadius: '14px',
                       backgroundColor: colorPrimario,
-                      display:         'flex',
-                      alignItems:      'center',
-                      justifyContent:  'center',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
                       <span style={{ color: '#fff', fontSize: '20px', fontWeight: 700 }}>
                         {(nombre ?? view).charAt(0).toUpperCase()}
                       </span>
                     </div>
                     <span style={{
-                      color:      '#1a1a1a',
-                      fontSize:   '13px',
-                      fontWeight: 600,
-                      textAlign:  'center' as const,
-                      padding:    '0 12px',
-                      lineHeight: 1.3,
+                      color: '#1a1a1a', fontSize: '13px', fontWeight: 600,
+                      textAlign: 'center', padding: '0 12px', lineHeight: 1.3,
                     }}>
                       {nombre ?? view}
                     </span>
@@ -135,7 +106,3 @@ export function OrchestratorShell({ activeSection, onNavigate, modulos }: Props)
     </div>
   );
 }
-
-
-
-
