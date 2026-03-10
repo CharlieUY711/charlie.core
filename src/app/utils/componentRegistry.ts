@@ -38,6 +38,8 @@ export const COMPONENT_REGISTRY: Record<string, React.LazyExoticComponent<React.
   'IdeasBoardView':             React.lazy(() => import('../components/admin/views/IdeasBoardView').then(m => ({ default: m.IdeasBoardView }))),
   'AuthRegistroView':           React.lazy(() => import('../components/admin/views/AuthRegistroView').then(m => ({ default: m.AuthRegistroView }))),
   'AdminDashboardView':         React.lazy(() => import('../components/admin/views/AdminDashboardView').then(m => ({ default: m.AdminDashboardView }))),
+  'RepositorioView':            React.lazy(() => import('../components/admin/views/RepositorioView').then(m => ({ default: m.RepositorioView }))),
+  'RepositorioView':            React.lazy(() => import('../components/admin/views/RepositorioView').then(m => ({ default: m.RepositorioView }))),
   'UserDashboardView':          React.lazy(() => import('../components/admin/views/UserDashboardView').then(m => ({ default: m.UserDashboardView }))),
 
   // ── Logística ─────────────────────────────────────────────────────────────
@@ -105,3 +107,5 @@ export const COMPONENT_REGISTRY: Record<string, React.LazyExoticComponent<React.
   'QrGeneratorView':            React.lazy(() => import('../components/admin/views/QrGeneratorView').then(m => ({ default: m.QrGeneratorView }))),
 
 };
+
+
