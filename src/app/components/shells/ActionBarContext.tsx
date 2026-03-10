@@ -1,49 +1,69 @@
 /**
  * ActionBarContext.tsx
- * Contexto global para que cada vista registre sus acciones en el TopBarShell.
- * Uso en una vista:
- *   useRegisterActions({ buttons: [...], searchPlaceholder: '...', onSearch: ... }, [deps])
+ * Charlie Platform — Contexto de la barra de acciones
+ *
+ * Cada módulo registra su count y handlers opcionales.
+ * ActionBarShell usa count para habilitar/deshabilitar botones automáticamente.
  */
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
-
-export interface ActionButton {
-  label:    string;
-  onClick:  () => void;
-  primary?: boolean;
-}
+import React, { createContext, useContext, useState, useCallback } from 'react';
 
 export interface ActionBarState {
-  buttons:            ActionButton[];
-  searchPlaceholder?: string;
+  count?:             number;
   onSearch?:          (q: string) => void;
+  searchPlaceholder?: string;
+  onRefresh?:         () => void;
+  onNew?:             () => void;
+  onEdit?:            () => void;
+  onDelete?:          () => void;
+  onExport?:          () => void;
+  onImport?:          () => void;
 }
 
-interface ActionBarContextType {
+interface ActionBarContextValue {
   state:    ActionBarState;
   register: (s: ActionBarState) => void;
   clear:    () => void;
 }
 
-const Ctx = createContext<ActionBarContextType | null>(null);
+const DEFAULT: ActionBarState = {};
 
-export function ActionBarProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<ActionBarState>({ buttons: [] });
-  const register = useCallback((s: ActionBarState) => setState(s), []);
-  const clear    = useCallback(() => setState({ buttons: [] }), []);
-  return <Ctx.Provider value={{ state, register, clear }}>{children}</Ctx.Provider>;
+const ActionBarContext = createContext<ActionBarContextValue>({
+  state:    DEFAULT,
+  register: () => {},
+  clear:    () => {},
+});
+
+export function ActionBarProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<ActionBarState>(DEFAULT);
+
+  const register = useCallback((s: ActionBarState) => {
+    setState(s);
+  }, []);
+
+  const clear = useCallback(() => {
+    setState(DEFAULT);
+  }, []);
+
+  return (
+    <ActionBarContext.Provider value={{ state, register, clear }}>
+      {children}
+    </ActionBarContext.Provider>
+  );
 }
 
 export function useActionBar() {
-  const ctx = useContext(Ctx);
-  if (!ctx) throw new Error('useActionBar must be inside ActionBarProvider');
-  return ctx;
+  return useContext(ActionBarContext);
 }
 
-/** Hook para que cada vista registre sus acciones al montarse */
-export function useRegisterActions(config: ActionBarState, deps: unknown[]) {
+/**
+ * useRegisterActions — hook para que cada módulo registre su estado.
+ * Uso mínimo: useRegisterActions({ count: items.length }, [items.length])
+ */
+export function useRegisterActions(s: ActionBarState, deps: React.DependencyList = []) {
   const { register, clear } = useActionBar();
-  useEffect(() => {
-    register(config);
+
+  React.useEffect(() => {
+    register(s);
     return () => clear();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
