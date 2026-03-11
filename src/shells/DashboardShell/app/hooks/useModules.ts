@@ -25,7 +25,8 @@ export interface ModuloActivo {
   grupo:       string | null;
   isReal:      boolean;
   hasSupabase: boolean;
-  viewFile:    string | null;
+  viewFile:     string | null;
+  serviceFile:  string | null;
 }
 
 export interface SeccionActiva {
@@ -55,7 +56,7 @@ export function useModules(): UseModulesResult {
         setLoading(true);
         const { data, error: sbError } = await supabase
           .from('modulos_disponibles')
-          .select('section, view, nombre, orden, grupo, is_real, has_supabase, view_file')
+          .select('section, view, nombre, orden, grupo, is_real, has_supabase, view_file, service_file')
           .eq('activo', true)
           .order('orden', { ascending: true });
 
@@ -70,6 +71,7 @@ export function useModules(): UseModulesResult {
           isReal:      row.is_real      ?? false,
           hasSupabase: row.has_supabase ?? false,
           viewFile:    row.view_file    ?? null,
+          serviceFile: row.service_file ?? null,
         }));
 
         setModulos(rows);
@@ -103,3 +105,4 @@ export function useModules(): UseModulesResult {
 
   return { secciones, modulos, loading, error };
 }
+

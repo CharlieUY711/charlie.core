@@ -9,10 +9,10 @@ import {
   ChevronRight, ChevronDown, CheckCircle2, XCircle,
   ToggleLeft, ToggleRight, Clock, Square,
 } from 'lucide-react';
-import type { MainSection } from '../../../AdminDashboard';
-import { MODULE_MANIFEST, MANIFEST_BY_GROUP, type ManifestEntry } from '../../../utils/moduleManifest';
+import { useModules } from '../../../../shells/DashboardShell/app/hooks/useModules';
+import type { ModuloActivo } from '../../../../shells/DashboardShell/app/hooks/useModules';
 
-interface Props { onNavigate?: (s: MainSection) => void; }
+interface Props { onNavigate?: (s: string) => void; }
 
 const CRITERIA = [
   { id: 'C1', description: 'Tiene componente React (view)',          auto: true  },
@@ -25,7 +25,7 @@ const CRITERIA = [
   { id: 'C8', description: 'Usa Data Zero (useTable, no .from)',     auto: false },
 ];
 
-function detectAuto(e: ManifestEntry) {
+function detectAuto(e: ModuloActivo) {
   return { C1: e.isReal, C2: !!e.hasSupabase, C3: !!e.serviceFile };
 }
 
@@ -53,19 +53,20 @@ function fmtRelative(iso: string) {
 }
 
 const GROUP_COLORS: Record<string, string> = {
-  'Sistema': '#475569', 'eCommerce': '#FF6835', 'Logística': '#059669',
-  'Marketing': '#EC4899', 'RRSS': '#F43F5E', 'Herramientas': '#0D9488',
-  'Gestión': '#2563EB', 'Integraciones': '#0891B2', 'Auth': '#7C3AED',
+  'sistema': '#475569', 'ecommerce': '#FF6835', 'logistica': '#059669',
+  'marketing': '#EC4899', 'rrss': '#F43F5E', 'herramientas': '#0D9488',
+  'gestion': '#2563EB', 'integraciones': '#0891B2', 'auth': '#7C3AED',
+  'construccion': '#F59E0B', 'dashboard': '#6366F1',
 };
 const ROADMAP_COLOR = '#94A3B8';
 
 // ─── Sub-componente: árbol genérico ──────────────────────────────────────────
 
 interface TreeProps {
-  entries:        ManifestEntry[];
-  expandedState:  [Set<string>, (g: string) => void];
-  isRoadmap:      boolean;
-  manual?:        Record<string, StoredModule>;
+  entries:         ModuloActivo[];
+  expandedState:   [Set<string>, (g: string) => void];
+  isRoadmap:       boolean;
+  manual?:         Record<string, StoredModule>;
   onToggleManual?: (section: string, cid: string) => void;
   onToggleImport?: (section: string) => void;
 }
@@ -73,18 +74,18 @@ interface TreeProps {
 function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, onToggleImport }: TreeProps) {
   const [expanded, toggleGroup] = expandedState;
 
-  const getCriteria = (e: ManifestEntry) => {
+  const getCriteria = (e: ModuloActivo) => {
     const auto = detectAuto(e);
     const man  = manual?.[e.section]?.values ?? {};
-    return Object.fromEntries(CRITERIA.map(c => [c.id, c.auto ? (auto[c.id] ?? false) : (man[c.id] ?? false)]));
+    return Object.fromEntries(CRITERIA.map(c => [c.id, c.auto ? (auto[c.id as keyof typeof auto] ?? false) : (man[c.id] ?? false)]));
   };
-  const getScore     = (e: ManifestEntry) => Object.values(getCriteria(e)).filter(Boolean).length;
-  const getUpdatedAt = (e: ManifestEntry) => manual?.[e.section]?.updatedAt ?? null;
+  const getScore     = (e: ModuloActivo) => Object.values(getCriteria(e)).filter(Boolean).length;
+  const getUpdatedAt = (e: ModuloActivo) => manual?.[e.section]?.updatedAt ?? null;
 
-  // Agrupar las entries recibidas
-  const grouped = entries.reduce<Record<string, ManifestEntry[]>>((acc, e) => {
-    if (!acc[e.group]) acc[e.group] = [];
-    acc[e.group].push(e);
+  const grouped = entries.reduce<Record<string, ModuloActivo[]>>((acc, e) => {
+    const g = e.grupo ?? 'sin-grupo';
+    if (!acc[g]) acc[g] = [];
+    acc[g].push(e);
     return acc;
   }, {});
 
@@ -103,7 +104,6 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
 
         return (
           <div key={group}>
-            {/* Encabezado */}
             <div
               onClick={() => toggleGroup(group)}
               style={{
@@ -144,7 +144,6 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
               </span>
             </div>
 
-            {/* Módulos */}
             {isOpen && (
               <div style={{ border: '1px solid #E5E7EB', borderTop: 'none', borderRadius: '0 0 12px 12px', overflow: 'hidden' }}>
                 {groupEntries.map((entry, idx) => {
@@ -162,7 +161,7 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                           style={{ cursor: 'pointer', color: ROADMAP_COLOR, flexShrink: 0 }}>
                           <Square size={14} />
                         </div>
-                        <span style={{ fontSize: '13px', color: '#94A3B8', flex: 1 }}>{entry.label}</span>
+                        <span style={{ fontSize: '13px', color: '#94A3B8', flex: 1 }}>{entry.nombre}</span>
                       </div>
                     );
                   }
@@ -178,7 +177,7 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                       borderBottom: isLast ? 'none' : '1px solid #F3F4F6',
                     }}>
                       <div style={{ minWidth: '180px' }}>
-                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>{entry.label}</span>
+                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>{entry.nombre}</span>
                         {updatedAt && (
                           <div style={{ fontSize: '10px', color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '3px', marginTop: '2px' }}>
                             <Clock size={9} />{fmtRelative(updatedAt)}
@@ -231,9 +230,10 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
 // ─── Vista principal ──────────────────────────────────────────────────────────
 
 export function ChecklistView(_props: Props) {
+  const { modulos } = useModules();
   const [manual,            setManual]   = useState<Record<string, StoredModule>>(loadManual);
   const [imported,          setImported] = useState<Set<string>>(loadImported);
-  const [expandedChecklist, setExpandedC] = useState<Set<string>>(new Set(['Sistema', 'Logística']));
+  const [expandedChecklist, setExpandedC] = useState<Set<string>>(new Set(['sistema', 'logistica']));
   const [expandedRoadmap,   setExpandedR] = useState<Set<string>>(new Set());
 
   useEffect(() => { saveManual(manual);     }, [manual]);
@@ -250,27 +250,25 @@ export function ChecklistView(_props: Props) {
     });
   };
 
-  const isInChecklist = (e: ManifestEntry) => !e.pendingImport || imported.has(e.section);
+  const isInChecklist = (e: ModuloActivo) => imported.has(e.section) || e.isReal;
   const toggleImport  = (section: string) =>
     setImported(p => { const n = new Set(p); n.has(section) ? n.delete(section) : n.add(section); return n; });
 
-  const checklistEntries = MODULE_MANIFEST.filter(e => isInChecklist(e));
-  const roadmapEntries   = MODULE_MANIFEST.filter(e => !isInChecklist(e));
+  const checklistEntries = modulos.filter(e => isInChecklist(e));
+  const roadmapEntries   = modulos.filter(e => !isInChecklist(e));
 
   const totalScore = checklistEntries.reduce((s, e) => {
     const auto = detectAuto(e);
     const man  = manual[e.section]?.values ?? {};
-    return s + CRITERIA.filter(c => c.auto ? auto[c.id] : man[c.id]).length;
+    return s + CRITERIA.filter(c => c.auto ? auto[c.id as keyof typeof auto] : man[c.id]).length;
   }, 0);
   const maxScore = checklistEntries.length * 8;
   const pct      = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
 
-  useModuleSubtitulo("Checklist: ${checklistEntries.length} módulos · ${totalScore}/${maxScore} · ${pct}%  ·  Roadmap: ${roadmapEntries.length} pendientes");
-
+  useModuleSubtitulo(`Checklist: ${checklistEntries.length} módulos · ${totalScore}/${maxScore} · ${pct}%  ·  Roadmap: ${roadmapEntries.length} pendientes`);
 
   return (
     <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA', padding: '32px' }}>
-
 
       {/* ── Barra global ── */}
       <div style={{ marginBottom: '24px', backgroundColor: '#fff', borderRadius: '12px', padding: '16px 20px', border: '1px solid #E5E7EB' }}>
@@ -307,7 +305,7 @@ export function ChecklistView(_props: Props) {
       {/* ══ ÁRBOL 1 — CHECKLIST ══ */}
       <div style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-          <div style={{ width: '3px', height: '18px', borderRadius: '2px', backgroundColor: GROUP_COLORS['Logística'] }} />
+          <div style={{ width: '3px', height: '18px', borderRadius: '2px', backgroundColor: GROUP_COLORS['logistica'] }} />
           <h2 style={{ fontSize: '14px', fontWeight: 800, color: '#111', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             Checklist
           </h2>
