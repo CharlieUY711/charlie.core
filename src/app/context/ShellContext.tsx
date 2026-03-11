@@ -17,8 +17,7 @@
  *   Solo AdminDashboard instancia este Provider.
  *   Los shells solo consumen useShell() — sin imports de DashboardShell.
  */
-
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { ModuloActivo, SeccionActiva } from '../../shells/DashboardShell/app/hooks/useModules';
 
 export interface ShellUser {
@@ -34,6 +33,8 @@ export interface ShellContextValue {
   secciones:      SeccionActiva[];
   modulos:        ModuloActivo[];
   loadingModulos: boolean;
+  subtitulo:      string | null;
+  setSubtitulo:   (s: string | null) => void;
 }
 
 const defaultValue: ShellContextValue = {
@@ -43,18 +44,21 @@ const defaultValue: ShellContextValue = {
   secciones:      [],
   modulos:        [],
   loadingModulos: true,
+  subtitulo:      null,
+  setSubtitulo:   () => {},
 };
 
 const ShellContext = createContext<ShellContextValue>(defaultValue);
 
 interface ShellProviderProps {
   children: React.ReactNode;
-  value:    ShellContextValue;
+  value:    Omit<ShellContextValue, 'subtitulo' | 'setSubtitulo'>;
 }
 
 export function ShellProvider({ children, value }: ShellProviderProps) {
+  const [subtitulo, setSubtitulo] = useState<string | null>(null);
   return (
-    <ShellContext.Provider value={value}>
+    <ShellContext.Provider value={{ ...value, subtitulo, setSubtitulo }}>
       {children}
     </ShellContext.Provider>
   );

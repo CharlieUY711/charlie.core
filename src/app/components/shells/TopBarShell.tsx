@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function TopBarShell({ activeSection, onNavigate }: Props) {
-  const { colorPrimario, user, signOut, secciones, modulos } = useShell();
+  const { colorPrimario, user, signOut, secciones, modulos, subtitulo } = useShell();
 
   const seccion   = secciones.find(s => s.section === activeSection);
   const modulo    = modulos.find(m => m.view === activeSection);
@@ -69,7 +69,7 @@ export function TopBarShell({ activeSection, onNavigate }: Props) {
       flexShrink:      0,
     }}>
 
-      {/* Badge + titulo */}
+      {/* Badge + titulo + subtitulo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
         <div style={{
           width:          38,
@@ -85,18 +85,32 @@ export function TopBarShell({ activeSection, onNavigate }: Props) {
             {titulo.charAt(0).toUpperCase()}
           </span>
         </div>
-        <h1 style={{
-          margin:       0,
-          fontSize:     '1.2rem',
-          fontWeight:   800,
-          color:        '#1A1A2E',
-          lineHeight:   1.2,
-          whiteSpace:   'nowrap',
-          overflow:     'hidden',
-          textOverflow: 'ellipsis',
-        }}>
-          {titulo}
-        </h1>
+        <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          <h1 style={{
+            margin:       0,
+            fontSize:     '1.2rem',
+            fontWeight:   800,
+            color:        '#1A1A2E',
+            lineHeight:   1.2,
+            whiteSpace:   'nowrap',
+            overflow:     'hidden',
+            textOverflow: 'ellipsis',
+          }}>
+            {titulo}
+          </h1>
+          {subtitulo && (
+            <span style={{
+              fontSize:   '12px',
+              color:      '#6B7280',
+              marginTop:  '2px',
+              whiteSpace: 'nowrap',
+              overflow:   'hidden',
+              textOverflow: 'ellipsis',
+            }}>
+              {subtitulo}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Iconos de navegacion */}

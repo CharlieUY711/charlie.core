@@ -4,6 +4,7 @@
    Árbol 2: Roadmap (pendientes de importar)
    ===================================================== */
 import React, { useState, useEffect } from 'react';
+import { useModuleSubtitulo } from '../../../hooks/useModuleSubtitulo';
 import {
   ChevronRight, ChevronDown, CheckCircle2, XCircle,
   ToggleLeft, ToggleRight, Clock, Square,
@@ -264,25 +265,12 @@ export function ChecklistView(_props: Props) {
   const maxScore = checklistEntries.length * 8;
   const pct      = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
 
+  useModuleSubtitulo("Checklist: ${checklistEntries.length} módulos · ${totalScore}/${maxScore} · ${pct}%  ·  Roadmap: ${roadmapEntries.length} pendientes");
+
+
   return (
     <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA', padding: '32px' }}>
 
-      {/* ── Header ── */}
-      <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#111', margin: '0 0 8px' }}>
-          Checklist & Roadmap
-        </h1>
-        <div style={{ display: 'flex', gap: '20px', fontSize: '13px', color: '#6B7280' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: GROUP_COLORS['Logística'], display: 'inline-block' }} />
-            Checklist: {checklistEntries.length} módulos · {totalScore}/{maxScore} · {pct}%
-          </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: ROADMAP_COLOR, display: 'inline-block' }} />
-            Roadmap: {roadmapEntries.length} pendientes
-          </span>
-        </div>
-      </div>
 
       {/* ── Barra global ── */}
       <div style={{ marginBottom: '24px', backgroundColor: '#fff', borderRadius: '12px', padding: '16px 20px', border: '1px solid #E5E7EB' }}>

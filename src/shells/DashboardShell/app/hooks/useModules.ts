@@ -3,22 +3,29 @@
  * Carga las secciones y módulos activos desde Supabase.
  *
  * Campos en modulos_disponibles:
- *   section  text      — nombre legible de la sección (ej: 'Logística')
- *   view     text      — nombre del componente (ej: 'EnviosView')
- *   nombre   text      — label legible del módulo (ej: 'Envíos')
- *   orden    integer   — orden en el sidebar (default 99)
- *   activo   boolean
+ *   section      text      — nombre legible de la sección (ej: 'Logística')
+ *   view         text      — nombre del componente (ej: 'EnviosView')
+ *   nombre       text      — label legible del módulo (ej: 'Envíos')
+ *   orden        integer   — orden en el sidebar (default 99)
+ *   activo       boolean
+ *   grupo        text      — agrupación (ej: 'logistica')
+ *   is_real      boolean   — si el módulo está implementado
+ *   has_supabase boolean   — si tiene integración con Supabase
+ *   view_file    text      — nombre del archivo de vista
  */
-
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../../utils/supabase/client';
 import { useOrchestrator } from '../providers/OrchestratorProvider';
 
 export interface ModuloActivo {
-  section: string;
-  view:    string;
-  nombre:  string;
-  orden:   number;
+  section:     string;
+  view:        string;
+  nombre:      string;
+  orden:       number;
+  grupo:       string | null;
+  isReal:      boolean;
+  hasSupabase: boolean;
+  viewFile:    string | null;
 }
 
 export interface SeccionActiva {
@@ -46,20 +53,23 @@ export function useModules(): UseModulesResult {
     async function fetchModulos() {
       try {
         setLoading(true);
-
         const { data, error: sbError } = await supabase
           .from('modulos_disponibles')
-          .select('section, view, nombre, orden')
+          .select('section, view, nombre, orden, grupo, is_real, has_supabase, view_file')
           .eq('activo', true)
           .order('orden', { ascending: true });
 
         if (sbError) throw sbError;
 
         const rows = (data ?? []).map((row: any) => ({
-          section: row.section as string,
-          view:    row.view    as string,
-          nombre:  row.nombre  as string,
-          orden:   row.orden   ?? 99,
+          section:     row.section      as string,
+          view:        row.view         as string,
+          nombre:      row.nombre       as string,
+          orden:       row.orden        ?? 99,
+          grupo:       row.grupo        ?? null,
+          isReal:      row.is_real      ?? false,
+          hasSupabase: row.has_supabase ?? false,
+          viewFile:    row.view_file    ?? null,
         }));
 
         setModulos(rows);
@@ -74,14 +84,12 @@ export function useModules(): UseModulesResult {
     fetchModulos();
   }, [isReady]);
 
-  // Secciones únicas — nombre = valor de section (ya tiene mayúsculas correctas)
-  // Dashboard siempre primero, resto por orden
   const seccionesMap = new Map<string, SeccionActiva>();
   for (const m of modulos) {
     if (!seccionesMap.has(m.section)) {
       seccionesMap.set(m.section, {
         section: m.section,
-        nombre:  m.section,  // el nombre de la sección ES su valor (ej: 'Logística')
+        nombre:  m.section,
         orden:   m.orden,
       });
     }
