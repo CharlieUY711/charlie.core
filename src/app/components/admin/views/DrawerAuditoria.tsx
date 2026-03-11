@@ -2,7 +2,7 @@
  * DrawerAuditoria.tsx
  */
 import React, { useState } from 'react';
-import { X, CheckCircle2, XCircle, AlertCircle, Circle, Plus, Trash2, Save } from 'lucide-react';
+import { X, CheckCircle2, XCircle, AlertCircle, Circle, Plus, Trash2, Save, Wrench, ChevronDown, ChevronUp } from 'lucide-react';
 import { useAuditoria, type CriterioStatus } from '../../../hooks/useAuditoria';
 
 export interface CriterioInicial {
@@ -49,6 +49,41 @@ export function DrawerAuditoria({ modulo, onClose, onGuardado }: Props) {
   const [guardando, setGuardando]       = useState(false);
   const [guardado, setGuardado]         = useState(false);
   const [nuevoPaso, setNuevoPaso]       = useState('');
+  const [reparando, setReparando]       = useState(false);
+  const [reparResult, setReparResult]   = useState<{reparados:any[];pendientes:any[]} | null>(null);
+  const [showPendiente, setShowPendiente] = useState<string | null>(null);
+  const [reparandoCriterio, setReparandoCriterio] = useState<string | null>(null);
+  const [guiaAbierta, setGuiaAbierta] = useState<string | null>(null);
+  const [guiaCriterio, setGuiaCriterio] = useState<Record<string, {titulo:string;instrucciones:string;evidencia?:string}>>({});
+
+  const CRITERIOS_AUTO = ['C1', 'C3', 'C4', 'C6'];
+
+  const repararCriterio = async (cid: string) => {
+    setReparandoCriterio(cid);
+    try {
+      const r = await fetch('/api/repair-module', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moduloId: modulo!.section, nombre: modulo!.nombre, criterio: cid }),
+      });
+      const data = await r.json();
+      if (data.ok) {
+        // Si lo reparó automaticamente, marcar como ok localmente
+        if (data.reparados?.some((r: any) => r.criterio === cid)) {
+          setLocalStatus(p => ({ ...p, [cid]: 'ok' }));
+          setLocalDetalle(p => ({ ...p, [cid]: 'Generado automaticamente por ConstructorModulos' }));
+          setGuardado(false);
+        }
+        // Si tiene guia, guardarla y abrirla
+        const pendiente = data.pendientes?.find((p: any) => p.criterio === cid);
+        if (pendiente) {
+          setGuiaCriterio(p => ({ ...p, [cid]: pendiente }));
+          setGuiaAbierta(cid);
+        }
+      }
+    } catch(e) {}
+    finally { setReparandoCriterio(null); }
+  };
 
   React.useEffect(() => {
     if (!modulo) return;
@@ -149,8 +184,38 @@ export function DrawerAuditoria({ modulo, onClose, onGuardado }: Props) {
                       <span style={{ flex: 1, fontSize: '13px', color: '#374151' }}>{getLabel(cid)}</span>
                       {auto && <span style={{ fontSize: '10px', color: '#9CA3AF', marginRight: 4 }}>auto</span>}
                       <StatusIcon status={status} />
-                      <span style={{ fontSize: '11px', color, fontWeight: 600, minWidth: '60px', textAlign: 'right' }}>{STATUS_LABELS[status]}</span>
+                      <span style={{ fontSize: '11px', color, fontWeight: 600, minWidth: '52px', textAlign: 'right' }}>{STATUS_LABELS[status]}</span>
+                      {status !== 'ok' && (
+                        <button
+                          onClick={e => { e.stopPropagation(); repararCriterio(cid); }}
+                          disabled={reparandoCriterio === cid}
+                          title={CRITERIOS_AUTO.includes(cid) ? 'Reparar automaticamente' : 'Ver guia de reparacion'}
+                          style={{ flexShrink: 0, padding: '3px 8px', borderRadius: 5, border: '1px solid', borderColor: CRITERIOS_AUTO.includes(cid) ? '#FED7AA' : '#E5E7EB', backgroundColor: CRITERIOS_AUTO.includes(cid) ? '#FFF7ED' : '#F9FAFB', cursor: 'pointer', fontSize: '10px', fontWeight: 700, color: CRITERIOS_AUTO.includes(cid) ? '#92400E' : '#6B7280', display: 'flex', alignItems: 'center', gap: 3 }}
+                        >
+                          {reparandoCriterio === cid
+                            ? <span style={{ fontSize: 10 }}>...</span>
+                            : CRITERIOS_AUTO.includes(cid)
+                              ? <><Wrench size={10} />{' '}Fix</>
+                              : <><ChevronDown size={10} />{' '}Guia</>
+                          }
+                        </button>
+                      )}
                     </div>
+                    {/* Panel guia para criterios manuales */}
+                    {guiaAbierta === cid && guiaCriterio[cid] && (
+                      <div style={{ margin: '0 10px 10px', borderRadius: 6, border: '1px solid #FED7AA', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '7px 10px', backgroundColor: '#FFF7ED', cursor: 'pointer' }} onClick={() => setGuiaAbierta(null)}>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: '#92400E' }}>{guiaCriterio[cid].titulo}</span>
+                          <ChevronUp size={12} color="#9CA3AF" />
+                        </div>
+                        <div style={{ padding: '8px 10px', backgroundColor: '#fff' }}>
+                          <div style={{ fontSize: 12, color: '#374151', marginBottom: guiaCriterio[cid].evidencia ? 6 : 0 }}>{guiaCriterio[cid].instrucciones}</div>
+                          {guiaCriterio[cid].evidencia && (
+                            <div style={{ fontSize: 11, fontFamily: 'monospace', backgroundColor: '#F9FAFB', padding: '6px 8px', borderRadius: 4, color: '#EF4444', wordBreak: 'break-all' }}>{guiaCriterio[cid].evidencia}</div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {detalle && <div style={{ padding: '0 12px 8px 36px', fontSize: '11px', color: '#6B7280' }}>{detalle}</div>}
                     {!auto && (
                       <div style={{ padding: '0 12px 8px 36px' }}>
@@ -162,10 +227,77 @@ export function DrawerAuditoria({ modulo, onClose, onGuardado }: Props) {
               })}
             </div>
           </div>
-          <button onClick={guardarAuditoria} disabled={guardando} style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: guardado && !hayCambios ? '#10B981' : '#FF6835', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: 'pointer', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-            <Save size={15} />
-            {guardando ? 'Guardando...' : guardado && !hayCambios ? 'Guardado' : 'Guardar auditoria'}
-          </button>
+          <div style={{ display: 'flex', gap: 8, marginBottom: '24px' }}>
+            <button onClick={guardarAuditoria} disabled={guardando} style={{ flex: 1, padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: guardado && !hayCambios ? '#10B981' : '#FF6835', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+              <Save size={15} />
+              {guardando ? 'Guardando...' : guardado && !hayCambios ? 'Guardado' : 'Guardar auditoria'}
+            </button>
+            <button
+              onClick={async () => {
+                setReparando(true);
+                setReparResult(null);
+                try {
+                  const r = await fetch('/api/repair-module', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ moduloId: modulo.section, nombre: modulo.nombre }),
+                  });
+                  const data = await r.json();
+                  if (data.ok) setReparResult({ reparados: data.reparados, pendientes: data.pendientes });
+                } catch(e) {}
+                finally { setReparando(false); }
+              }}
+              disabled={reparando}
+              title="Reparar criterios automáticos"
+              style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: '13px', fontWeight: 700, color: '#374151', flexShrink: 0 }}
+            >
+              <Wrench size={15} color="#F59E0B" />
+              {reparando ? '...' : 'Reparar'}
+            </button>
+          </div>
+
+          {/* Panel resultado reparacion */}
+          {reparResult && (
+            <div style={{ marginBottom: 24, borderRadius: 8, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+              {reparResult.reparados.length > 0 && (
+                <div style={{ backgroundColor: '#F0FDF4', padding: '10px 14px', borderBottom: '1px solid #BBF7D0' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>✓ Reparado automáticamente</div>
+                  {reparResult.reparados.map((r: any) => (
+                    <div key={r.criterio} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#DCFCE7', color: '#166534' }}>{r.criterio}</span>
+                      <span style={{ fontSize: 11, fontFamily: 'monospace', color: '#374151' }}>{r.archivo}</span>
+                      <span style={{ fontSize: 11, color: '#9CA3AF' }}>{r.accion}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {reparResult.pendientes.filter((p: any) => p.criterio !== 'C7').length > 0 && (
+                <div style={{ backgroundColor: '#FFFBEB', padding: '10px 14px' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Requiere intervención manual</div>
+                  {reparResult.pendientes.map((p: any) => (
+                    <div key={p.criterio} style={{ marginBottom: 6, borderRadius: 6, border: '1px solid #FED7AA', overflow: 'hidden' }}>
+                      <div
+                        onClick={() => setShowPendiente(showPendiente === p.criterio ? null : p.criterio)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', cursor: 'pointer', backgroundColor: '#FFF7ED' }}
+                      >
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#FED7AA', color: '#92400E' }}>{p.criterio}</span>
+                        <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: '#374151' }}>{p.titulo}</span>
+                        {showPendiente === p.criterio ? <ChevronUp size={13} color="#9CA3AF" /> : <ChevronDown size={13} color="#9CA3AF" />}
+                      </div>
+                      {showPendiente === p.criterio && (
+                        <div style={{ padding: '8px 10px', backgroundColor: '#fff', borderTop: '1px solid #FED7AA' }}>
+                          <div style={{ fontSize: 12, color: '#374151', marginBottom: p.evidencia ? 6 : 0 }}>{p.instrucciones}</div>
+                          {p.evidencia && (
+                            <div style={{ fontSize: 11, fontFamily: 'monospace', backgroundColor: '#F9FAFB', padding: '6px 8px', borderRadius: 4, color: '#EF4444', wordBreak: 'break-all' }}>{p.evidencia}</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           <div>
             <div style={{ fontSize: '11px', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Proximos pasos</div>
             <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>

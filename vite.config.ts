@@ -3,6 +3,7 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { auditPlugin } from './vite-plugin-audit'
+import { createModuleEndpoint, repairModuleEndpoint } from './vite-plugin-creator'
 
 export default defineConfig({
   plugins: [
@@ -11,6 +12,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
     auditPlugin(),
+    {
+      name: 'vite-creator-plugin',
+      configureServer(server) { createModuleEndpoint(server); repairModuleEndpoint(server); },
+    },
   ],
   resolve: {
     alias: {

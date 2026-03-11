@@ -1,0 +1,39 @@
+/**
+ * tokens.css  — C5 ✓ C6 ✓
+ * Charlie Platform · Design tokens para módulo secondhand
+ * Generado por ConstructorModulos
+ * C5: sin colores hex hardcodeados — usar siempre var(--m-*)
+ * C6: tokens con fallbacks definidos aquí
+ */
+:root {
+  /* Colores principales — heredados del sistema */
+  --m-primary:      var(--charlie-primary, #FF6835);
+  --m-primary-10:   color-mix(in srgb, var(--m-primary) 10%, white);
+  --m-primary-20:   color-mix(in srgb, var(--m-primary) 20%, white);
+
+  /* Superficies */
+  --m-bg:           #F8F9FA;
+  --m-surface:      #FFFFFF;
+  --m-surface-2:    #F3F4F6;
+
+  /* Bordes */
+  --m-border:       #E5E7EB;
+  --m-border-focus: var(--m-primary);
+
+  /* Texto */
+  --m-text:         #111827;
+  --m-text-secondary: #374151;
+  --m-text-muted:   #9CA3AF;
+
+  /* Estados */
+  --m-success:      #10B981;
+  --m-warning:      #F59E0B;
+  --m-danger:       #EF4444;
+  --m-info:         #3B82F6;
+
+  /* Espaciado base */
+  --m-radius:       8px;
+  --m-radius-lg:    12px;
+  --m-gap:          12px;
+  --m-gap-lg:       20px;
+}
