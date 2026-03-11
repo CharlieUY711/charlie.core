@@ -7,7 +7,7 @@ export function DashboardView({ onNavigate }: Props) {
     <div style={{
       flex: 1,
       height: '100%',
-      backgroundColor: '#F8F9FA',
+      backgroundColor: 'var(--m-bg)',
     }} />
   );
 }

@@ -35,7 +35,7 @@ export function IntegracionesView({ onNavigate }: Props) {
   const cards: HubCardDef[] = [
     {
       id: 'integraciones-pagos', icon: CreditCard, onClick: nav('integraciones-pagos'),
-      gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)', color: '#FF6835',
+      gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)', color: 'var(--m-primary)',
       badge: '🇺🇾 Uruguay · 🌎 Global', label: 'Pasarela de Pagos',
       description: 'Plexo, OCA, Creditel, Abitab, RedPagos, Mercado Pago, PayPal, Stripe. Plexo recomendado para Uruguay.',
       stats: [
@@ -46,7 +46,7 @@ export function IntegracionesView({ onNavigate }: Props) {
     },
     {
       id: 'integraciones-logistica', icon: Truck, onClick: nav('integraciones-logistica'),
-      gradient: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: '#10B981',
+      gradient: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: 'var(--m-success)',
       badge: '🇺🇾 Uruguay', label: 'Logística',
       description: 'Correo UY, Brixo, Mosca, PedidosYa, Fedex, DHL y más. Soporte sin API.',
       stats: [
@@ -57,7 +57,7 @@ export function IntegracionesView({ onNavigate }: Props) {
     },
     {
       id: 'integraciones-marketplace', icon: Store, onClick: nav('integraciones-marketplace'),
-      gradient: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)', color: '#3B82F6',
+      gradient: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)', color: 'var(--m-info)',
       badge: '🇺🇾 Uruguay · 🌎 Global', label: 'Marketplace',
       description: 'Mercado Libre, MercadoPago. Sincronización bidireccional de productos y pedidos.',
       stats: [
@@ -79,7 +79,7 @@ export function IntegracionesView({ onNavigate }: Props) {
     },
     {
       id: 'integraciones-identidad', icon: Shield, onClick: nav('integraciones-identidad'),
-      gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)', color: '#8B5CF6',
+      gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)', color: 'var(--m-purple)',
       badge: '🌎 Global', label: 'Identidad',
       description: 'MetaMap (KYC). Verificación de identidad y cumplimiento normativo.',
       stats: [
@@ -90,7 +90,7 @@ export function IntegracionesView({ onNavigate }: Props) {
     },
     {
       id: 'integraciones-analytics', icon: BarChart2, onClick: nav('integraciones-analytics'),
-      gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)', color: '#0EA5E9',
+      gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)', color: 'var(--m-info)',
       badge: '🌎 Global', label: 'Analytics',
       description: 'Google Analytics y más. Tracking de eventos y métricas de negocio.',
       stats: [
@@ -101,7 +101,7 @@ export function IntegracionesView({ onNavigate }: Props) {
     },
     {
       id: 'integraciones-api-keys', icon: Key, onClick: nav('integraciones-api-keys'),
-      gradient: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)', color: '#6366F1',
+      gradient: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)', color: 'var(--m-purple)',
       badge: '🌎 Global', label: 'API Keys',
       description: 'Gestioná las API keys para dar acceso a terceros a tu plataforma.',
       stats: [
@@ -112,7 +112,7 @@ export function IntegracionesView({ onNavigate }: Props) {
     },
     {
       id: 'integraciones-webhooks', icon: Webhook, onClick: nav('integraciones-webhooks'),
-      gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: '#F59E0B',
+      gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: 'var(--m-warning)',
       badge: '🌎 Global', label: 'Webhooks',
       description: 'Configurá webhooks para recibir eventos externos y notificaciones en tiempo real.',
       stats: [
@@ -131,11 +131,11 @@ export function IntegracionesView({ onNavigate }: Props) {
   ];
 
   const intro = (
-    <div style={{ padding: '12px 18px', backgroundColor: '#FFF4F0', border: '1.5px solid rgba(255,104,53,0.2)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <div style={{ padding: '12px 18px', backgroundColor: 'var(--m-primary-10)', border: '1.5px solid rgba(255,104,53,0.2)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
       <span style={{ fontSize: '1.2rem' }}>🇺🇾</span>
       <div>
-        <span style={{ fontWeight: '700', fontSize: '0.85rem', color: '#111827' }}>Uruguay First</span>
-        <span style={{ fontSize: '0.8rem', color: '#6B7280', marginLeft: '8px' }}>
+        <span style={{ fontWeight: '700', fontSize: '0.85rem', color: 'var(--m-text)' }}>Uruguay First</span>
+        <span style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)', marginLeft: '8px' }}>
           Empezamos por los proveedores del mercado uruguayo y expandimos progresivamente a Brasil y Latam.
         </span>
       </div>

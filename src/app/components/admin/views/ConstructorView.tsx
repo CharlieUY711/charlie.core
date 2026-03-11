@@ -26,26 +26,26 @@ interface Props { onNavigate: (s: MainSection) => void; }
 
 /* ── Design tokens ── */
 const C = {
-  orange:        '#FF6835',
-  orangeHover:   '#F05520',
-  orange10:      '#FFF4F0',
-  orange20:      '#FFE8DF',
-  gray50:        '#F8FAFC',
-  gray100:       '#F1F5F9',
-  gray200:       '#E2E8F0',
-  gray300:       '#CBD5E1',
-  gray400:       '#94A3B8',
-  gray500:       '#64748B',
-  gray600:       '#475569',
-  gray700:       '#334155',
-  gray900:       '#0F172A',
-  white:         '#FFFFFF',
-  green:         '#10B981',
-  green10:       '#F0FDF4',
-  amber:         '#F59E0B',
-  amber10:       '#FFFBEB',
-  red:           '#EF4444',
-  code:          '#0D1117',
+  orange:        'var(--m-primary)',
+  orangeHover:   'var(--m-primary)',
+  orange10:      'var(--m-primary-10)',
+  orange20:      'var(--m-primary-20)',
+  gray50:        'var(--m-surface-2)',
+  gray100:       'var(--m-surface-2)',
+  gray200:       'var(--m-border)',
+  gray300:       'var(--m-border)',
+  gray400:       'var(--m-text-muted)',
+  gray500:       'var(--m-text-muted)',
+  gray600:       'var(--m-text-muted)',
+  gray700:       'var(--m-text-secondary)',
+  gray900:       'var(--m-text)',
+  white:         'var(--m-surface)',
+  green:         'var(--m-success)',
+  green10:       'var(--m-success-bg)',
+  amber:         'var(--m-warning)',
+  amber10:       'var(--m-warning-bg)',
+  red:           'var(--m-danger)',
+  code:          'var(--m-text)',
 };
 
 const STORAGE_KEY = 'charlie_constructor_v15';
@@ -193,16 +193,16 @@ const CATEGORIES = [...new Set(MODULES.map(m => m.category))];
 const BASE_ENV = ['SUPABASE_URL', 'SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY', 'VITE_APP_NAME', 'VITE_APP_URL'];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'eCommerce':    '#FF6835',
-  'Logística':    '#059669',
+  'eCommerce':    'var(--m-primary)',
+  'Logística':    'var(--m-success)',
   'Marketing':    '#EC4899',
-  'RRSS':         '#F43F5E',
-  'Gestión':      '#2563EB',
-  'Herramientas': '#0D9488',
-  'Sistema':      '#475569',
-  'Integraciones':'#0891B2',
-  'Auth':         '#7C3AED',
-  'Workspace':    '#4F46E5',
+  'RRSS':         'var(--m-danger)',
+  'Gestión':      'var(--m-info)',
+  'Herramientas': 'var(--m-success)',
+  'Sistema':      'var(--m-text-muted)',
+  'Integraciones':'var(--m-cyan)',
+  'Auth':         'var(--m-purple)',
+  'Workspace':    'var(--m-purple)',
 };
 
 /** Módulos Hub — viven en el header de la categoría, pre-seleccionados */
@@ -244,13 +244,13 @@ const CURRENCIES = [
 ];
 
 const BADGE_COLORS: Record<string, { bg: string; color: string }> = {
-  AR:         { bg: '#EFF6FF', color: '#1D4ED8' },
-  LATAM:      { bg: '#F0FDF4', color: '#15803D' },
+  AR:         { bg: 'var(--m-info-bg)', color: 'var(--m-info-text)' },
+  LATAM:      { bg: 'var(--m-success-bg)', color: 'var(--m-success)' },
   Global:     { bg: C.gray100, color: C.gray600 },
-  Local:      { bg: '#FEF3C7', color: '#92400E' },
-  Meta:       { bg: '#EFF6FF', color: '#1877F2' },
-  Google:     { bg: '#FEF2F2', color: '#DC2626' },
-  Supabase:   { bg: '#F0FDF4', color: '#16A34A' },
+  Local:      { bg: 'var(--m-warning-bg)', color: 'var(--m-warning-text)' },
+  Meta:       { bg: 'var(--m-info-bg)', color: '#1877F2' },
+  Google:     { bg: 'var(--m-danger-bg)', color: 'var(--m-danger)' },
+  Supabase:   { bg: 'var(--m-success-bg)', color: 'var(--m-success)' },
   Base:       { bg: C.gray100, color: C.gray500 },
   X:          { bg: C.gray900, color: C.white },
   default:    { bg: C.gray100, color: C.gray500 },
@@ -970,12 +970,12 @@ export function ConstructorView({ onNavigate }: Props) {
                 <span style={{ fontSize: '0.68rem', color: C.gray400 }}>({allEnvVars.length})</span>
               </div>
               <div style={{ ...codeBlock, maxHeight: '180px' }}>
-                <p style={{ margin: '0 0 8px', color: '#4B5563', fontSize: '0.68rem' }}># .env.example</p>
+                <p style={{ margin: '0 0 8px', color: 'var(--m-text-secondary)', fontSize: '0.68rem' }}># .env.example</p>
                 {allEnvVars.map(v => (
-                  <p key={v} style={{ margin: '1px 0', color: '#8B949E' }}>
-                    <span style={{ color: '#79C0FF' }}>{v}</span>
-                    <span style={{ color: '#4B5563' }}>=</span>
-                    <span style={{ color: '#7EE787' }}>""</span>
+                  <p key={v} style={{ margin: '1px 0', color: 'var(--m-text-muted)' }}>
+                    <span style={{ color: 'var(--m-info-bg)' }}>{v}</span>
+                    <span style={{ color: 'var(--m-text-secondary)' }}>=</span>
+                    <span style={{ color: 'var(--m-success-bg)' }}>""</span>
                   </p>
                 ))}
               </div>
@@ -983,7 +983,7 @@ export function ConstructorView({ onNavigate }: Props) {
 
             {/* Aviso */}
             <div style={{ backgroundColor: C.amber10, border: `1px solid #FDE68A`, borderRadius: '6px', padding: '14px 16px' }}>
-              <p style={{ margin: '0 0 6px', fontSize: '0.75rem', fontWeight: '600', color: '#92400E' }}>Requisitos mínimos</p>
+              <p style={{ margin: '0 0 6px', fontSize: '0.75rem', fontWeight: '600', color: 'var(--m-warning-text)' }}>Requisitos mínimos</p>
               <ul style={{ margin: 0, paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 {[
                   'Proyecto Supabase creado',
@@ -991,7 +991,7 @@ export function ConstructorView({ onNavigate }: Props) {
                   'Repositorio conectado a Vercel / Netlify',
                   ...(selectedSubs['metodos-pago']?.size > 0 ? ['Cuentas activas en las pasarelas de pago'] : []),
                   ...(allEnvVars.some(v => v.includes('MAPS')) ? ['Google Maps API Key habilitada para el dominio'] : []),
-                ].map((t, i) => <li key={i} style={{ fontSize: '0.75rem', color: '#78350F' }}>{t}</li>)}
+                ].map((t, i) => <li key={i} style={{ fontSize: '0.75rem', color: 'var(--m-warning-text)' }}>{t}</li>)}
               </ul>
             </div>
 
@@ -1063,8 +1063,8 @@ export function ConstructorView({ onNavigate }: Props) {
                   <div style={{ marginTop: '16px', border: `1px solid ${C.gray200}`, borderRadius: '6px', overflow: 'hidden' }}>
                     <div style={{ backgroundColor: secondaryColor, padding: '7px 12px', display: 'flex', alignItems: 'center', gap: '7px' }}>
                       <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: primaryColor }} />
-                      <span style={{ fontSize: '0.72rem', fontWeight: '600', color: '#fff', opacity: 0.9, flex: 1 }}>{storeName || 'Tu Tienda'}</span>
-                      <div style={{ backgroundColor: primaryColor, color: '#fff', fontSize: '0.62rem', fontWeight: '600', padding: '3px 8px', borderRadius: '4px' }}>Shop</div>
+                      <span style={{ fontSize: '0.72rem', fontWeight: '600', color: 'var(--m-surface)', opacity: 0.9, flex: 1 }}>{storeName || 'Tu Tienda'}</span>
+                      <div style={{ backgroundColor: primaryColor, color: 'var(--m-surface)', fontSize: '0.62rem', fontWeight: '600', padding: '3px 8px', borderRadius: '4px' }}>Shop</div>
                     </div>
                     <div style={{ backgroundColor: bgColor, padding: '10px 12px', display: 'flex', gap: '6px' }}>
                       {[1, 2, 3].map(i => <div key={i} style={{ flex: 1, height: '36px', borderRadius: '5px', backgroundColor: i === 3 ? primaryColor : C.gray100 }} />)}
@@ -1182,12 +1182,12 @@ export function ConstructorView({ onNavigate }: Props) {
                   </div>
                 </div>
                 <div style={{ ...codeBlock, maxHeight: '200px', marginBottom: '12px' }}>
-                  <p style={{ margin: '0 0 8px', color: '#4B5563', fontSize: '0.65rem' }}># {projectName}</p>
+                  <p style={{ margin: '0 0 8px', color: 'var(--m-text-secondary)', fontSize: '0.65rem' }}># {projectName}</p>
                   {allEnvVars.map(v => (
-                    <p key={v} style={{ margin: '1px 0', color: '#8B949E', fontSize: '0.7rem' }}>
-                      <span style={{ color: '#79C0FF' }}>{v}</span>
-                      <span style={{ color: '#4B5563' }}>=</span>
-                      <span style={{ color: '#7EE787' }}>{v === 'VITE_STORE_NAME' ? `"${storeName}"` : v === 'VITE_CURRENCY' ? `"${storeCurrency}"` : v === 'VITE_PRIMARY_COLOR' ? `"${primaryColor}"` : v === 'VITE_SECONDARY_COLOR' ? `"${secondaryColor}"` : '""'}</span>
+                    <p key={v} style={{ margin: '1px 0', color: 'var(--m-text-muted)', fontSize: '0.7rem' }}>
+                      <span style={{ color: 'var(--m-info-bg)' }}>{v}</span>
+                      <span style={{ color: 'var(--m-text-secondary)' }}>=</span>
+                      <span style={{ color: 'var(--m-success-bg)' }}>{v === 'VITE_STORE_NAME' ? `"${storeName}"` : v === 'VITE_CURRENCY' ? `"${storeCurrency}"` : v === 'VITE_PRIMARY_COLOR' ? `"${primaryColor}"` : v === 'VITE_SECONDARY_COLOR' ? `"${secondaryColor}"` : '""'}</span>
                     </p>
                   ))}
                 </div>
@@ -1215,7 +1215,7 @@ export function ConstructorView({ onNavigate }: Props) {
                     const isStrVal = /: "/.test(line);
                     const isBrace  = /^[\s]*[{}\[\],]$/.test(line.trim());
                     return (
-                      <p key={i} style={{ margin: 0, fontSize: '0.7rem', color: isBrace ? '#4B5563' : isStrVal ? '#7EE787' : '#79C0FF', whiteSpace: 'pre', lineHeight: '1.6' }}>{line}</p>
+                      <p key={i} style={{ margin: 0, fontSize: '0.7rem', color: isBrace ? '#4B5563' : isStrVal ? '#7EE787' : 'var(--m-info-bg)', whiteSpace: 'pre', lineHeight: '1.6' }}>{line}</p>
                     );
                   })}
                 </div>
@@ -1296,7 +1296,7 @@ export function ConstructorView({ onNavigate }: Props) {
                     ❌ Error al aplicar. Verificá que el tenant existe.
                   </p>
                 )}
-                {loadResult === 'ok'  && <p style={{ margin: '6px 0 0', fontSize: '0.75rem', color: '#16A34A' }}>✅ Módulos de "{tenantSlug}" cargados — revisá y modificá en el paso 1</p>}
+                {loadResult === 'ok'  && <p style={{ margin: '6px 0 0', fontSize: '0.75rem', color: 'var(--m-success)' }}>✅ Módulos de "{tenantSlug}" cargados — revisá y modificá en el paso 1</p>}
                 {loadResult === 'error' && <p style={{ margin: '6px 0 0', fontSize: '0.75rem', color: C.red }}>❌ Tenant no encontrado. Verificá el slug.</p>}
               </div>
 

@@ -81,7 +81,7 @@ export function MigracionRRSSView({ onNavigate }: Props) {
   }
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
       <OrangeHeader
         icon={ArrowLeftRight}
         title="Migración de Redes Sociales"
@@ -96,16 +96,16 @@ export function MigracionRRSSView({ onNavigate }: Props) {
 
       {/* Platform selector */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '32px 28px' }}>
-        <p style={{ color: '#888', fontSize: '14px', marginBottom: '24px' }}>Seleccioná la plataforma que querés gestionar:</p>
+        <p style={{ color: 'var(--m-text-muted)', fontSize: '14px', marginBottom: '24px' }}>Seleccioná la plataforma que querés gestionar:</p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', maxWidth: '840px' }}>
           {(['instagram', 'facebook'] as Platform[]).map(p => {
             const cfg = PLATFORMS[p];
             return (
-              <div key={p} style={{ backgroundColor: '#fff', borderRadius: '16px', border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+              <div key={p} style={{ backgroundColor: 'var(--m-surface)', borderRadius: '16px', border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
                 <div style={{ background: cfg.gradient, padding: '24px', display: 'flex', alignItems: 'center', gap: '14px' }}>
                   {cfg.icon}
                   <div>
-                    <div style={{ color: '#fff', fontWeight: 800, fontSize: '17px' }}>{p === 'instagram' ? 'Instagram' : 'Facebook'}</div>
+                    <div style={{ color: 'var(--m-surface)', fontWeight: 800, fontSize: '17px' }}>{p === 'instagram' ? 'Instagram' : 'Facebook'}</div>
                     <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '12px' }}>{cfg.subtitle}</div>
                   </div>
                 </div>
@@ -117,12 +117,12 @@ export function MigracionRRSSView({ onNavigate }: Props) {
                   ].map((f, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <CheckCircle2 size={14} color="#10B981" />
-                      <span style={{ fontSize: '13px', color: '#374151' }}>{f}</span>
+                      <span style={{ fontSize: '13px', color: 'var(--m-text-secondary)' }}>{f}</span>
                     </div>
                   ))}
                   <button
                     onClick={() => setActivePlatform(p)}
-                    style={{ width: '100%', marginTop: '16px', padding: '12px', background: cfg.gradient, color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', transition: 'opacity 0.15s' }}
+                    style={{ width: '100%', marginTop: '16px', padding: '12px', background: cfg.gradient, color: 'var(--m-surface)', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', transition: 'opacity 0.15s' }}
                     onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
                     onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                   >
@@ -135,10 +135,10 @@ export function MigracionRRSSView({ onNavigate }: Props) {
         </div>
 
         {/* Info card */}
-        <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginTop: '24px', maxWidth: '840px' }}>
+        <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginTop: '24px', maxWidth: '840px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
             <span>ℹ️</span>
-            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#111' }}>Información Importante</h3>
+            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Información Importante</h3>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
             {[
@@ -149,9 +149,9 @@ export function MigracionRRSSView({ onNavigate }: Props) {
               <div key={col.title}>
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '10px' }}>
                   <span style={{ fontSize: '14px' }}>{col.icon}</span>
-                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#374151' }}>{col.title}</span>
+                  <span style={{ fontWeight: 700, fontSize: '13px', color: 'var(--m-text-secondary)' }}>{col.title}</span>
                 </div>
-                <ul style={{ margin: 0, paddingLeft: '16px', color: '#555', fontSize: '12px', lineHeight: '1.8' }}>
+                <ul style={{ margin: 0, paddingLeft: '16px', color: 'var(--m-text-muted)', fontSize: '12px', lineHeight: '1.8' }}>
                   {col.items.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
               </div>
@@ -195,18 +195,18 @@ function PlatformView({ platform, onBack, onNavigate }: { platform: Platform; on
           {cfg.icon}
         </div>
         <div>
-          <h2 style={{ color: '#fff', margin: 0, fontWeight: 800, fontSize: '16px', lineHeight: 1.2 }}>{cfg.name}</h2>
+          <h2 style={{ color: 'var(--m-surface)', margin: 0, fontWeight: 800, fontSize: '16px', lineHeight: 1.2 }}>{cfg.name}</h2>
           <p style={{ color: 'rgba(255,255,255,0.8)', margin: '2px 0 0', fontSize: '12px' }}>{cfg.subtitle}</p>
         </div>
       </div>
 
       {/* Tabs bar */}
-      <div style={{ backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', display: 'flex', flexShrink: 0 }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', display: 'flex', flexShrink: 0 }}>
         {TABS.map(tab => {
           const active = activeTab === tab.id;
           return (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '14px 22px', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: active ? 700 : 500, transition: 'all 0.15s', background: active ? cfg.gradient : 'transparent', color: active ? '#fff' : '#555', borderRadius: active ? '0' : '0', position: 'relative', whiteSpace: 'nowrap' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '14px 22px', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: active ? 700 : 500, transition: 'all 0.15s', background: active ? cfg.gradient : 'transparent', color: active ? '#fff' : 'var(--m-text-muted)', borderRadius: active ? '0' : '0', position: 'relative', whiteSpace: 'nowrap' }}
             >
               {tab.icon}
               {tab.label}
@@ -217,7 +217,7 @@ function PlatformView({ platform, onBack, onNavigate }: { platform: Platform; on
       </div>
 
       {/* Tab content */}
-      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F5F5F5' }}>
+      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-surface-2)' }}>
         {activeTab === 'config'  && <TabConfig  cfg={cfg} platform={platform} onBack={onBack} onVerified={() => setVerified(true)} />}
         {activeTab === 'backup'  && <TabBackup  cfg={cfg} verified={verified} />}
         {activeTab === 'delete'  && <TabDelete  cfg={cfg} />}
@@ -357,7 +357,7 @@ function TabConfig({ cfg, platform, onBack, onVerified }: { cfg: PlatformConfig;
 
   if (loadingCreds) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px', gap: '12px', color: '#6B7280' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px', gap: '12px', color: 'var(--m-text-muted)' }}>
         <Loader2 size={22} style={{ animation: 'spin 1s linear infinite' }} />
         <span style={{ fontSize: '14px' }}>Cargando credenciales desde la base de datos…</span>
         <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
@@ -368,28 +368,28 @@ function TabConfig({ cfg, platform, onBack, onVerified }: { cfg: PlatformConfig;
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 24px 48px' }}>
       {/* Back */}
-      <button onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer', color: '#555', fontSize: '14px', marginBottom: '20px', padding: '4px 0' }}>
+      <button onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-text-muted)', fontSize: '14px', marginBottom: '20px', padding: '4px 0' }}>
         <ChevronLeft size={16} /> Volver
       </button>
 
       {/* Hero card */}
       <div style={{ background: cfg.gradient, borderRadius: '16px', padding: '24px 28px', marginBottom: '24px' }}>
-        <h2 style={{ color: '#fff', margin: '0 0 6px', fontWeight: 800, fontSize: '20px' }}>Configuración de {cfg.name.replace('Migración de ', '')}</h2>
+        <h2 style={{ color: 'var(--m-surface)', margin: '0 0 6px', fontWeight: 800, fontSize: '20px' }}>Configuración de {cfg.name.replace('Migración de ', '')}</h2>
         <p style={{ color: 'rgba(255,255,255,0.85)', margin: 0, fontSize: '14px' }}>Sigue estos pasos para configurar la integración con {cfg.name.replace('Migración de ', '')}</p>
       </div>
 
       {/* Steps */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
-        <h3 style={{ margin: '0 0 18px', fontSize: '15px', fontWeight: 700, color: '#111' }}>Pasos de Configuración</h3>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
+        <h3 style={{ margin: '0 0 18px', fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Pasos de Configuración</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {steps.map(step => (
-            <div key={step.n} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', padding: '14px 16px', borderRadius: '10px', border: '1px solid #F0F0F0', backgroundColor: '#FAFAFA' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: cfg.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: '13px', flexShrink: 0 }}>
+            <div key={step.n} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', padding: '14px 16px', borderRadius: '10px', border: '1px solid #F0F0F0', backgroundColor: 'var(--m-surface-2)' }}>
+              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: cfg.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--m-surface)', fontWeight: 800, fontSize: '13px', flexShrink: 0 }}>
                 {step.n}
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                  <span style={{ fontWeight: 600, fontSize: '14px', color: '#111' }}>{step.label}</span>
+                  <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--m-text)' }}>{step.label}</span>
                   {step.link && (
                     <a href={step.link} target="_blank" rel="noreferrer"
                       style={{ display: 'flex', alignItems: 'center', gap: '3px', color: cfg.accent, fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
@@ -397,7 +397,7 @@ function TabConfig({ cfg, platform, onBack, onVerified }: { cfg: PlatformConfig;
                     </a>
                   )}
                 </div>
-                <p style={{ margin: 0, fontSize: '12px', color: '#6B7280' }}>{step.desc}</p>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--m-text-muted)' }}>{step.desc}</p>
               </div>
             </div>
           ))}
@@ -405,16 +405,16 @@ function TabConfig({ cfg, platform, onBack, onVerified }: { cfg: PlatformConfig;
       </div>
 
       {/* Permissions */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
-        <h3 style={{ margin: '0 0 14px', fontSize: '15px', fontWeight: 700, color: '#111' }}>Permisos Requeridos</h3>
-        <div style={{ backgroundColor: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: '10px', padding: '12px 16px' }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
+        <h3 style={{ margin: '0 0 14px', fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Permisos Requeridos</h3>
+        <div style={{ backgroundColor: 'var(--m-warning-bg)', border: '1px solid #FED7AA', borderRadius: '10px', padding: '12px 16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '10px' }}>
             <AlertTriangle size={14} color="#D97706" />
-            <span style={{ fontSize: '13px', color: '#D97706', fontWeight: 600 }}>Estos permisos deben ser aprobados en Meta for Developers</span>
+            <span style={{ fontSize: '13px', color: 'var(--m-warning)', fontWeight: 600 }}>Estos permisos deben ser aprobados en Meta for Developers</span>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {cfg.permissions.map(p => (
-              <span key={p} style={{ padding: '3px 10px', border: `1px solid ${cfg.accent}`, borderRadius: '20px', fontSize: '12px', color: cfg.accent, fontWeight: 500, backgroundColor: '#fff' }}>
+              <span key={p} style={{ padding: '3px 10px', border: `1px solid ${cfg.accent}`, borderRadius: '20px', fontSize: '12px', color: cfg.accent, fontWeight: 500, backgroundColor: 'var(--m-surface)' }}>
                 {p}
               </span>
             ))}
@@ -423,11 +423,11 @@ function TabConfig({ cfg, platform, onBack, onVerified }: { cfg: PlatformConfig;
       </div>
 
       {/* Credentials */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#111' }}>Credenciales</h3>
+          <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Credenciales</h3>
           <button onClick={() => setShowCreds(!showCreds)}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', border: '1.5px solid #E0E0E0', borderRadius: '8px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: '#333' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', border: '1.5px solid #E0E0E0', borderRadius: '8px', backgroundColor: 'var(--m-surface)', cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: 'var(--m-text)' }}>
             {showCreds ? <EyeOff size={14} /> : <Eye size={14} />}
             {showCreds ? 'Ocultar' : 'Mostrar'}
           </button>
@@ -436,19 +436,19 @@ function TabConfig({ cfg, platform, onBack, onVerified }: { cfg: PlatformConfig;
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' }}>
           {cfg.credentialFields.map(field => (
             <div key={field.key}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: missingKeys.has(field.key) ? '#DC2626' : '#333', marginBottom: '6px' }}>{field.label}{missingKeys.has(field.key) && <span style={{ marginLeft: '6px', fontSize: '11px', fontWeight: 700, color: '#DC2626' }}>← Requerido</span>}</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: missingKeys.has(field.key) ? '#DC2626' : 'var(--m-text)', marginBottom: '6px' }}>{field.label}{missingKeys.has(field.key) && <span style={{ marginLeft: '6px', fontSize: '11px', fontWeight: 700, color: 'var(--m-danger)' }}>← Requerido</span>}</label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input
                   type={showCreds ? 'text' : 'password'}
                   value={creds[field.key] ?? ''}
                   onChange={e => { setCreds(c => ({ ...c, [field.key]: e.target.value })); setMissingKeys(m => { const n = new Set(m); n.delete(field.key); return n; }); }}
                   placeholder={field.placeholder}
-                  style={{ flex: 1, border: `1.5px solid ${missingKeys.has(field.key) ? '#DC2626' : '#E0E0E0'}`, borderRadius: '10px', padding: '10px 14px', fontSize: '14px', outline: 'none', backgroundColor: missingKeys.has(field.key) ? '#FEF2F2' : '#FAFAFA', color: '#888' }}
+                  style={{ flex: 1, border: `1.5px solid ${missingKeys.has(field.key) ? '#DC2626' : 'var(--m-border)'}`, borderRadius: '10px', padding: '10px 14px', fontSize: '14px', outline: 'none', backgroundColor: missingKeys.has(field.key) ? '#FEF2F2' : 'var(--m-surface-2)', color: 'var(--m-text-muted)' }}
                   onFocus={e => (e.target.style.borderColor = missingKeys.has(field.key) ? '#DC2626' : cfg.accent)}
-                  onBlur={e => (e.target.style.borderColor = missingKeys.has(field.key) ? '#DC2626' : '#E0E0E0')}
+                  onBlur={e => (e.target.style.borderColor = missingKeys.has(field.key) ? '#DC2626' : 'var(--m-border)')}
                 />
                 <button onClick={() => handleCopy(creds[field.key] ?? '', field.label)}
-                  style={{ width: '40px', height: '40px', border: '1.5px solid #E0E0E0', borderRadius: '10px', backgroundColor: '#FAFAFA', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  style={{ width: '40px', height: '40px', border: '1.5px solid #E0E0E0', borderRadius: '10px', backgroundColor: 'var(--m-surface-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Copy size={14} color="#888" />
                 </button>
               </div>
@@ -460,51 +460,51 @@ function TabConfig({ cfg, platform, onBack, onVerified }: { cfg: PlatformConfig;
           <button
             onClick={handleSave}
             disabled={saving}
-            style={{ padding: '14px', background: cfg.gradient, color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: saving ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', opacity: saving ? 0.7 : 1 }}>
+            style={{ padding: '14px', background: cfg.gradient, color: 'var(--m-surface)', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: saving ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', opacity: saving ? 0.7 : 1 }}>
             {saving ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Guardando…</> : '💾 Guardar Credenciales'}
           </button>
           <button
             onClick={handleVerify}
             disabled={verifying}
-            style={{ padding: '14px', backgroundColor: '#fff', color: '#333', border: '1.5px solid #E0E0E0', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: verifying ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', opacity: verifying ? 0.7 : 1 }}>
+            style={{ padding: '14px', backgroundColor: 'var(--m-surface)', color: 'var(--m-text)', border: '1.5px solid #E0E0E0', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: verifying ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', opacity: verifying ? 0.7 : 1 }}>
             {verifying ? <><Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> Verificando…</> : '🔌 Verificar Conexión'}
           </button>
         </div>
 
         {/* Resultado de verificación */}
         {verifyResult && (
-          <div style={{ marginTop: '12px', padding: '12px 16px', backgroundColor: verifyResult.ok ? '#ECFDF5' : '#FEF2F2', border: `1px solid ${verifyResult.ok ? '#A7F3D0' : '#FECACA'}`, borderRadius: '10px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+          <div style={{ marginTop: '12px', padding: '12px 16px', backgroundColor: verifyResult.ok ? '#ECFDF5' : 'var(--m-danger-bg)', border: `1px solid ${verifyResult.ok ? '#A7F3D0' : 'var(--m-danger-border)'}`, borderRadius: '10px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
             {verifyResult.ok
               ? <CheckCircle2 size={15} color="#059669" style={{ flexShrink: 0, marginTop: '1px' }} />
               : <AlertTriangle size={15} color="#DC2626" style={{ flexShrink: 0, marginTop: '1px' }} />}
-            <span style={{ fontSize: '12px', fontWeight: 600, color: verifyResult.ok ? '#065F46' : '#7F1D1D', lineHeight: 1.5 }}>{verifyResult.msg}</span>
+            <span style={{ fontSize: '12px', fontWeight: 600, color: verifyResult.ok ? '#065F46' : 'var(--m-danger-text)', lineHeight: 1.5 }}>{verifyResult.msg}</span>
           </div>
         )}
 
         {/* Info: dónde se guarda */}
-        <div style={{ marginTop: '14px', padding: '12px 16px', backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div style={{ marginTop: '14px', padding: '12px 16px', backgroundColor: 'var(--m-info-bg)', border: '1px solid #BAE6FD', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Info size={13} color="#0369A1" />
-              <span style={{ fontSize: '12px', fontWeight: 700, color: '#0369A1' }}>Almacenamiento — Supabase KV</span>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-info)' }}>Almacenamiento — Supabase KV</span>
             </div>
             {savedAt && (
               <button onClick={handleDeleteCreds}
-                style={{ fontSize: '11px', color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
+                style={{ fontSize: '11px', color: 'var(--m-danger)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
                 🗑 Eliminar credenciales
               </button>
             )}
           </div>
-          <span style={{ fontSize: '12px', color: '#0369A1', lineHeight: 1.5 }}>
+          <span style={{ fontSize: '12px', color: 'var(--m-info)', lineHeight: 1.5 }}>
             Las credenciales se guardan en la <strong>base de datos Supabase</strong> del proyecto (tabla KV), cifradas en tránsito via HTTPS. Persisten entre sesiones y dispositivos.
           </span>
           {savedAt && (
-            <span style={{ fontSize: '11px', color: '#0EA5E9', fontWeight: 600, marginTop: '2px' }}>
+            <span style={{ fontSize: '11px', color: 'var(--m-info)', fontWeight: 600, marginTop: '2px' }}>
               💾 Último guardado: {new Date(savedAt).toLocaleString('es-UY', { dateStyle: 'short', timeStyle: 'short' })}
             </span>
           )}
           {!savedAt && (
-            <span style={{ fontSize: '11px', color: '#F59E0B', fontWeight: 600, marginTop: '2px' }}>
+            <span style={{ fontSize: '11px', color: 'var(--m-warning)', fontWeight: 600, marginTop: '2px' }}>
               ⚠️ Sin credenciales en la base de datos — completá los campos y guardá
             </span>
           )}
@@ -547,53 +547,53 @@ function TabBackup({ cfg, verified }: { cfg: PlatformConfig; verified: boolean }
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 24px 48px' }}>
       {/* Warning if not verified */}
       {!verified && (
-        <div style={{ backgroundColor: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: '12px', padding: '14px 18px', marginBottom: '20px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+        <div style={{ backgroundColor: 'var(--m-warning-bg)', border: '1px solid #FED7AA', borderRadius: '12px', padding: '14px 18px', marginBottom: '20px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
           <AlertTriangle size={18} color="#D97706" style={{ flexShrink: 0, marginTop: '1px' }} />
           <div>
-            <div style={{ fontWeight: 700, fontSize: '14px', color: '#D97706', marginBottom: '2px' }}>Conexión no verificada</div>
-            <div style={{ fontSize: '13px', color: '#92400E' }}>Por favor verifica tu conexión en la pestaña "Configuración" antes de respaldar.</div>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--m-warning)', marginBottom: '2px' }}>Conexión no verificada</div>
+            <div style={{ fontSize: '13px', color: 'var(--m-warning-text)' }}>Por favor verifica tu conexión en la pestaña "Configuración" antes de respaldar.</div>
           </div>
         </div>
       )}
 
       {done && (
-        <div style={{ backgroundColor: '#ECFDF5', border: '1px solid #A7F3D0', borderRadius: '12px', padding: '14px 18px', marginBottom: '20px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div style={{ backgroundColor: 'var(--m-success-bg)', border: '1px solid #A7F3D0', borderRadius: '12px', padding: '14px 18px', marginBottom: '20px', display: 'flex', gap: '12px', alignItems: 'center' }}>
           <CheckCircle2 size={18} color="#059669" />
           <div>
-            <div style={{ fontWeight: 700, fontSize: '14px', color: '#059669' }}>Respaldo completado</div>
-            <div style={{ fontSize: '13px', color: '#065F46' }}>Tu contenido fue respaldado y está disponible para descargar.</div>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--m-success)' }}>Respaldo completado</div>
+            <div style={{ fontSize: '13px', color: 'var(--m-success-text)' }}>Tu contenido fue respaldado y está disponible para descargar.</div>
           </div>
         </div>
       )}
 
       {/* Content selector */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
-        <h3 style={{ margin: '0 0 6px', fontSize: '15px', fontWeight: 700, color: '#111' }}>Respaldar Contenido</h3>
-        <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#6B7280' }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
+        <h3 style={{ margin: '0 0 6px', fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Respaldar Contenido</h3>
+        <p style={{ margin: '0 0 20px', fontSize: '13px', color: 'var(--m-text-muted)' }}>
           Seleccioná qué tipo de contenido deseas respaldar.{isIG ? ' Las stories solo están disponibles por 24 horas.' : ''}
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
           {types.map(t => (
             <button key={t.id} onClick={() => setSelected(t.id)}
-              style={{ padding: '20px 12px', borderRadius: '12px', border: `2px solid ${selected === t.id ? 'transparent' : '#E5E7EB'}`, background: selected === t.id ? cfg.gradient : '#fff', cursor: 'pointer', textAlign: 'center', transition: 'all 0.15s' }}>
+              style={{ padding: '20px 12px', borderRadius: '12px', border: `2px solid ${selected === t.id ? 'transparent' : 'var(--m-border)'}`, background: selected === t.id ? cfg.gradient : 'var(--m-surface)', cursor: 'pointer', textAlign: 'center', transition: 'all 0.15s' }}>
               <div style={{ marginBottom: '8px', display: 'flex', justifyContent: 'center', opacity: selected === t.id ? 1 : 0.6 }}>
-                <Download size={22} color={selected === t.id ? '#fff' : '#555'} />
+                <Download size={22} color={selected === t.id ? '#fff' : 'var(--m-text-muted)'} />
               </div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: selected === t.id ? '#fff' : '#333' }}>{t.label}</div>
-              <div style={{ fontSize: '11px', color: selected === t.id ? 'rgba(255,255,255,0.8)' : '#9CA3AF', marginTop: '3px' }}>{t.sub}</div>
+              <div style={{ fontWeight: 700, fontSize: '13px', color: selected === t.id ? '#fff' : 'var(--m-text)' }}>{t.label}</div>
+              <div style={{ fontSize: '11px', color: selected === t.id ? 'rgba(255,255,255,0.8)' : 'var(--m-text-muted)', marginTop: '3px' }}>{t.sub}</div>
             </button>
           ))}
         </div>
       </div>
 
       {/* Action */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
-        <h3 style={{ margin: '0 0 14px', fontSize: '15px', fontWeight: 700, color: '#111' }}>Iniciar Respaldo</h3>
-        <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#6B7280' }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
+        <h3 style={{ margin: '0 0 14px', fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Iniciar Respaldo</h3>
+        <p style={{ margin: '0 0 20px', fontSize: '13px', color: 'var(--m-text-muted)' }}>
           El respaldo descargará tu contenido en formato JSON + imágenes ZIP. El proceso puede demorar algunos minutos según la cantidad de publicaciones.
         </p>
         <button onClick={handleBackup} disabled={backing}
-          style={{ padding: '14px 32px', background: verified ? cfg.gradient : '#E5E7EB', color: verified ? '#fff' : '#9CA3AF', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '15px', cursor: verified ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', gap: '8px', transition: 'opacity 0.15s' }}>
+          style={{ padding: '14px 32px', background: verified ? cfg.gradient : 'var(--m-border)', color: verified ? '#fff' : 'var(--m-text-muted)', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '15px', cursor: verified ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', gap: '8px', transition: 'opacity 0.15s' }}>
           <Download size={17} />
           {backing ? 'Respaldando...' : `Respaldar ${types.find(t => t.id === selected)?.label}`}
         </button>
@@ -628,29 +628,29 @@ function TabDelete({ cfg }: { cfg: PlatformConfig }) {
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 24px 48px' }}>
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
-        <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: 700, color: '#111' }}>Eliminar Contenido</h3>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
+        <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Eliminar Contenido</h3>
 
         {/* Warning */}
-        <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+        <div style={{ backgroundColor: 'var(--m-danger-bg)', border: '1px solid #FECACA', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
           <AlertTriangle size={16} color="#DC2626" style={{ flexShrink: 0, marginTop: '1px' }} />
           <div>
-            <p style={{ margin: 0, fontSize: '13px', color: '#7F1D1D', fontWeight: 600 }}>⚠️ Esta acción es irreversible</p>
-            <p style={{ margin: '3px 0 0', fontSize: '12px', color: '#991B1B' }}>Aseguráte de haber hecho un respaldo completo antes de continuar.</p>
+            <p style={{ margin: 0, fontSize: '13px', color: 'var(--m-danger-text)', fontWeight: 600 }}>⚠️ Esta acción es irreversible</p>
+            <p style={{ margin: '3px 0 0', fontSize: '12px', color: 'var(--m-danger-text)' }}>Aseguráte de haber hecho un respaldo completo antes de continuar.</p>
           </div>
         </div>
 
         {/* Confirmation input */}
         <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#333', marginBottom: '8px' }}>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--m-text)', marginBottom: '8px' }}>
             Para confirmar, escribe <strong>"ELIMINAR"</strong>:
           </label>
           <input
             value={confirm} onChange={e => setConfirm(e.target.value)}
             placeholder='Escribe ELIMINAR para confirmar'
-            style={{ width: '100%', border: `1.5px solid ${confirmed ? '#DC2626' : '#E0E0E0'}`, borderRadius: '10px', padding: '11px 14px', fontSize: '14px', outline: 'none', backgroundColor: confirmed ? '#FEF2F2' : '#FAFAFA', boxSizing: 'border-box' }}
+            style={{ width: '100%', border: `1.5px solid ${confirmed ? '#DC2626' : 'var(--m-border)'}`, borderRadius: '10px', padding: '11px 14px', fontSize: '14px', outline: 'none', backgroundColor: confirmed ? '#FEF2F2' : 'var(--m-surface-2)', boxSizing: 'border-box' }}
             onFocus={e => (e.target.style.borderColor = '#DC2626')}
-            onBlur={e => (e.target.style.borderColor = confirmed ? '#DC2626' : '#E0E0E0')}
+            onBlur={e => (e.target.style.borderColor = confirmed ? '#DC2626' : 'var(--m-border)')}
           />
         </div>
 
@@ -658,11 +658,11 @@ function TabDelete({ cfg }: { cfg: PlatformConfig }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
           {types.map((t, i) => (
             <button key={t.id} onClick={() => handleDelete(t.id)} disabled={!!deleting}
-              style={{ padding: '20px 12px', borderRadius: '12px', border: `2px solid ${i === 3 ? 'transparent' : '#FECACA'}`, background: i === 3 ? (confirmed ? 'linear-gradient(135deg, #DC2626, #B91C1C)' : '#E5E7EB') : (confirmed ? '#FEF2F2' : '#FAFAFA'), cursor: confirmed ? 'pointer' : 'not-allowed', textAlign: 'center', transition: 'all 0.15s' }}>
+              style={{ padding: '20px 12px', borderRadius: '12px', border: `2px solid ${i === 3 ? 'transparent' : 'var(--m-danger-border)'}`, background: i === 3 ? (confirmed ? 'linear-gradient(135deg, #DC2626, #B91C1C)' : 'var(--m-border)') : (confirmed ? '#FEF2F2' : 'var(--m-surface-2)'), cursor: confirmed ? 'pointer' : 'not-allowed', textAlign: 'center', transition: 'all 0.15s' }}>
               <div style={{ marginBottom: '8px', display: 'flex', justifyContent: 'center' }}>
-                <Trash2 size={22} color={i === 3 ? (confirmed ? '#fff' : '#9CA3AF') : (confirmed ? '#DC2626' : '#D1D5DB')} />
+                <Trash2 size={22} color={i === 3 ? (confirmed ? '#fff' : 'var(--m-text-muted)') : (confirmed ? '#DC2626' : 'var(--m-border)')} />
               </div>
-              <div style={{ fontWeight: 700, fontSize: '13px', color: i === 3 ? (confirmed ? '#fff' : '#9CA3AF') : (confirmed ? '#DC2626' : '#9CA3AF') }}>
+              <div style={{ fontWeight: 700, fontSize: '13px', color: i === 3 ? (confirmed ? '#fff' : 'var(--m-text-muted)') : (confirmed ? '#DC2626' : 'var(--m-text-muted)') }}>
                 {deleting === t.id ? '⏳ Eliminando...' : t.label}
               </div>
             </button>
@@ -688,20 +688,20 @@ function TabRebrand({ cfg, platform }: { cfg: PlatformConfig; platform: Platform
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px 24px 48px' }}>
       {/* API Limitations banner */}
-      <div style={{ backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '12px', padding: '14px 18px', marginBottom: '20px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+      <div style={{ backgroundColor: 'var(--m-info-bg)', border: '1px solid #BFDBFE', borderRadius: '12px', padding: '14px 18px', marginBottom: '20px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
         <Info size={18} color="#2563EB" style={{ flexShrink: 0, marginTop: '1px' }} />
         <div>
-          <div style={{ fontWeight: 700, fontSize: '14px', color: '#1D4ED8', marginBottom: '6px' }}>
+          <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--m-info-text)', marginBottom: '6px' }}>
             Limitaciones de la API de {isIG ? 'Instagram' : 'Facebook'}
           </div>
           {isIG ? (
-            <ul style={{ margin: 0, paddingLeft: '16px', color: '#1E40AF', fontSize: '13px', lineHeight: '1.7' }}>
+            <ul style={{ margin: 0, paddingLeft: '16px', color: 'var(--m-info-text)', fontSize: '13px', lineHeight: '1.7' }}>
               <li>Solo se puede actualizar la <strong>biografía</strong> y el <strong>sitio web</strong></li>
               <li>El <strong>username</strong>, <strong>nombre</strong> y <strong>foto de perfil</strong> deben cambiarse manualmente en Instagram</li>
               <li>La configuración de privacidad debe cambiarse en la app</li>
             </ul>
           ) : (
-            <ul style={{ margin: 0, paddingLeft: '16px', color: '#1E40AF', fontSize: '13px', lineHeight: '1.7' }}>
+            <ul style={{ margin: 0, paddingLeft: '16px', color: 'var(--m-info-text)', fontSize: '13px', lineHeight: '1.7' }}>
               <li>Se puede actualizar la <strong>descripción</strong> y el <strong>sitio web</strong> de la página</li>
               <li>El <strong>nombre de la página</strong> puede requerir aprobación de Meta</li>
               <li>La foto de portada y perfil se pueden cambiar vía API</li>
@@ -711,8 +711,8 @@ function TabRebrand({ cfg, platform }: { cfg: PlatformConfig; platform: Platform
       </div>
 
       {/* Profile info */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
-        <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: 700, color: '#111' }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px', marginBottom: '20px' }}>
+        <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>
           Información del Perfil
         </h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -722,77 +722,77 @@ function TabRebrand({ cfg, platform }: { cfg: PlatformConfig; platform: Platform
             { label: isIG ? 'Nombre (Solo lectura - cambiar en Instagram)' : 'Username (Solo lectura)', placeholder: isIG ? 'Charlie Marketplace' : '@charliemarketplace', editable: false },
           ].map(f => (
             <div key={f.label}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#9CA3AF', marginBottom: '6px' }}>{f.label}</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--m-text-muted)', marginBottom: '6px' }}>{f.label}</label>
               <input disabled placeholder={f.placeholder}
-                style={{ width: '100%', border: '1.5px solid #F0F0F0', borderRadius: '10px', padding: '11px 14px', fontSize: '14px', backgroundColor: '#F9F9F9', color: '#9CA3AF', boxSizing: 'border-box', cursor: 'not-allowed' }} />
+                style={{ width: '100%', border: '1.5px solid #F0F0F0', borderRadius: '10px', padding: '11px 14px', fontSize: '14px', backgroundColor: 'var(--m-surface-2)', color: 'var(--m-text-muted)', boxSizing: 'border-box', cursor: 'not-allowed' }} />
             </div>
           ))}
 
           {/* Editable: Bio */}
           <div>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: '#333', marginBottom: '6px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--m-text)', marginBottom: '6px' }}>
               Biografía <CheckCircle2 size={14} color="#10B981" />
             </label>
             <textarea value={bio} onChange={e => setBio(e.target.value.slice(0, 150))} rows={4}
               placeholder="Tu marketplace favorito 🛍️"
-              style={{ width: '100%', border: '1.5px solid #E0E0E0', borderRadius: '10px', padding: '11px 14px', fontSize: '14px', boxSizing: 'border-box', outline: 'none', resize: 'vertical', fontFamily: 'inherit', backgroundColor: '#FAFAFA' }}
+              style={{ width: '100%', border: '1.5px solid #E0E0E0', borderRadius: '10px', padding: '11px 14px', fontSize: '14px', boxSizing: 'border-box', outline: 'none', resize: 'vertical', fontFamily: 'inherit', backgroundColor: 'var(--m-surface-2)' }}
               onFocus={e => (e.target.style.borderColor = cfg.accent)}
               onBlur={e => (e.target.style.borderColor = '#E0E0E0')} />
-            <div style={{ textAlign: 'right', fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}>{bio.length}/150 caracteres</div>
+            <div style={{ textAlign: 'right', fontSize: '12px', color: 'var(--m-text-muted)', marginTop: '4px' }}>{bio.length}/150 caracteres</div>
           </div>
 
           {/* Editable: Website */}
           <div>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: '#333', marginBottom: '6px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--m-text)', marginBottom: '6px' }}>
               Sitio Web <CheckCircle2 size={14} color="#10B981" />
             </label>
             <input value={website} onChange={e => setWebsite(e.target.value)} placeholder="https://charliemarketplace.com"
-              style={{ width: '100%', border: '1.5px solid #E0E0E0', borderRadius: '10px', padding: '11px 14px', fontSize: '14px', boxSizing: 'border-box', outline: 'none', backgroundColor: '#FAFAFA' }}
+              style={{ width: '100%', border: '1.5px solid #E0E0E0', borderRadius: '10px', padding: '11px 14px', fontSize: '14px', boxSizing: 'border-box', outline: 'none', backgroundColor: 'var(--m-surface-2)' }}
               onFocus={e => (e.target.style.borderColor = cfg.accent)}
               onBlur={e => (e.target.style.borderColor = '#E0E0E0')} />
           </div>
 
           {/* Save button */}
           <button onClick={handleSave}
-            style={{ padding: '14px', background: cfg.gradient, color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%' }}>
+            style={{ padding: '14px', background: cfg.gradient, color: 'var(--m-surface)', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%' }}>
             {saving ? '⏳ Guardando...' : <><Check size={16} /> Guardar Cambios</>}
           </button>
         </div>
       </div>
 
       {/* Profile photo */}
-      <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
-        <h3 style={{ margin: '0 0 16px', fontSize: '15px', fontWeight: 700, color: '#111' }}>Foto de Perfil</h3>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '24px' }}>
+        <h3 style={{ margin: '0 0 16px', fontSize: '15px', fontWeight: 700, color: 'var(--m-text)' }}>Foto de Perfil</h3>
 
         {isIG ? (
           <>
-            <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+            <div style={{ backgroundColor: 'var(--m-danger-bg)', border: '1px solid #FECACA', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
               <AlertTriangle size={16} color="#DC2626" style={{ flexShrink: 0, marginTop: '1px' }} />
-              <p style={{ margin: 0, fontSize: '13px', color: '#7F1D1D' }}>
+              <p style={{ margin: 0, fontSize: '13px', color: 'var(--m-danger-text)' }}>
                 <strong>Instagram NO permite</strong> cambiar la foto de perfil vía API. Debes hacerlo manualmente en la app de Instagram.
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px' }}>
-              <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', cursor: 'not-allowed' }}>
+              <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'var(--m-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', cursor: 'not-allowed' }}>
                 <Upload size={28} color="#D1D5DB" />
               </div>
-              <p style={{ textAlign: 'center', fontSize: '13px', color: '#9CA3AF', lineHeight: '1.6' }}>
+              <p style={{ textAlign: 'center', fontSize: '13px', color: 'var(--m-text-muted)', lineHeight: '1.6' }}>
                 Para cambiar tu foto de perfil, abrí la app de Instagram → Perfil<br />→ Editar perfil → Cambiar foto de perfil
               </p>
             </div>
           </>
         ) : (
           <>
-            <p style={{ fontSize: '13px', color: '#6B7280', marginBottom: '16px' }}>En Facebook puedes actualizar la foto de perfil y la foto de portada de tu página vía API.</p>
+            <p style={{ fontSize: '13px', color: 'var(--m-text-muted)', marginBottom: '16px' }}>En Facebook puedes actualizar la foto de perfil y la foto de portada de tu página vía API.</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {['Foto de Perfil', 'Foto de Portada'].map(label => (
-                <div key={label} style={{ border: '2px dashed #E0E0E0', borderRadius: '12px', padding: '24px', textAlign: 'center', cursor: 'pointer', backgroundColor: '#FAFAFA' }}
+                <div key={label} style={{ border: '2px dashed #E0E0E0', borderRadius: '12px', padding: '24px', textAlign: 'center', cursor: 'pointer', backgroundColor: 'var(--m-surface-2)' }}
                   onMouseEnter={e => (e.currentTarget.style.borderColor = cfg.accent)}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = '#E0E0E0')}
                   onClick={() => toast.info(`Subí ${label.toLowerCase()} aquí`)}>
                   <Upload size={24} color="#9CA3AF" style={{ margin: '0 auto 10px' }} />
-                  <div style={{ fontWeight: 600, fontSize: '13px', color: '#333', marginBottom: '3px' }}>{label}</div>
-                  <div style={{ fontSize: '11px', color: '#9CA3AF' }}>JPG / PNG · Max 5MB</div>
+                  <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--m-text)', marginBottom: '3px' }}>{label}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>JPG / PNG · Max 5MB</div>
                 </div>
               ))}
             </div>

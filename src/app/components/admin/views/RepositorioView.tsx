@@ -303,18 +303,18 @@ const MODULOS = buildModulos();
 // COLORES Y BADGES
 // ─────────────────────────────────────────────────────────────────────────────
 const GRUPO_COLORS: Record<string, string> = {
-  'Logística':     '#16a34a',
-  'eCommerce':     '#f97316',
-  'CRM':           '#9333ea',
-  'ERP':           '#2563eb',
+  'Logística':     'var(--m-success)',
+  'eCommerce':     'var(--m-warning)',
+  'CRM':           'var(--m-purple)',
+  'ERP':           'var(--m-info)',
   'Marketing':     '#ec4899',
-  'Herramientas':  '#0d9488',
-  'Sistema':       '#64748b',
-  'Auditoría':     '#7c3aed',
-  'Dashboard':     '#0ea5e9',
-  'Integraciones': '#06b6d4',
-  'Proyectos':     '#4f46e5',
-  'Sin grupo':     '#9ca3af',
+  'Herramientas':  'var(--m-success)',
+  'Sistema':       'var(--m-text-muted)',
+  'Auditoría':     'var(--m-purple)',
+  'Dashboard':     'var(--m-info)',
+  'Integraciones': 'var(--m-cyan)',
+  'Proyectos':     'var(--m-purple)',
+  'Sin grupo':     'var(--m-text-muted)',
 };
 
 function getScoreColor(score: number): string {
@@ -325,16 +325,16 @@ function getScoreColor(score: number): string {
 }
 
 function getEstructuraBadge(e: ModuloEstructura) {
-  if (e === 'charlie') return { label: 'Charlie ✓', bg: '#dcfce7', color: '#15803d', border: '#86efac' };
-  if (e === 'partial') return { label: 'Parcial', bg: '#fef9c3', color: '#854d0e', border: '#fde047' };
-  return { label: 'Legacy', bg: '#fee2e2', color: '#991b1b', border: '#fca5a5' };
+  if (e === 'charlie') return { label: 'Charlie ✓', bg: 'var(--m-success-bg)', color: 'var(--m-success)', border: 'var(--m-success-bg)' };
+  if (e === 'partial') return { label: 'Parcial', bg: 'var(--m-warning-bg)', color: 'var(--m-warning-text)', border: 'var(--m-warning)' };
+  return { label: 'Legacy', bg: 'var(--m-danger-bg)', color: 'var(--m-danger-text)', border: 'var(--m-danger-bg)' };
 }
 
 function CriterioIcon({ status }: { status: CriterioStatus }) {
-  if (status === 'ok') return <CheckCircle2 style={{ width: 14, height: 14, color: '#16a34a', flexShrink: 0 }} />;
-  if (status === 'fail') return <XCircle style={{ width: 14, height: 14, color: '#dc2626', flexShrink: 0 }} />;
-  if (status === 'partial') return <AlertCircle style={{ width: 14, height: 14, color: '#f97316', flexShrink: 0 }} />;
-  return <Minus style={{ width: 14, height: 14, color: '#9ca3af', flexShrink: 0 }} />;
+  if (status === 'ok') return <CheckCircle2 style={{ width: 14, height: 14, color: 'var(--m-success)', flexShrink: 0 }} />;
+  if (status === 'fail') return <XCircle style={{ width: 14, height: 14, color: 'var(--m-danger)', flexShrink: 0 }} />;
+  if (status === 'partial') return <AlertCircle style={{ width: 14, height: 14, color: 'var(--m-warning)', flexShrink: 0 }} />;
+  return <Minus style={{ width: 14, height: 14, color: 'var(--m-text-muted)', flexShrink: 0 }} />;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -344,18 +344,82 @@ interface Props {
   onNavigate?: (section: string) => void;
 }
 
+function GrupoStats({ mods, scoresDB }: { mods: ModuloRepo[]; scoresDB: Record<string,number> }) {
+  const ok      = mods.filter(m => (scoresDB[m.id] ?? m.score) === 8).length;
+  const parcial = mods.filter(m => { const s = scoresDB[m.id] ?? m.score; return s >= 4 && s < 8; }).length;
+  const mal     = mods.filter(m => (scoresDB[m.id] ?? m.score) < 4).length;
+  const avg     = Math.round(mods.reduce((a, m) => a + (scoresDB[m.id] ?? m.score), 0) / mods.length * 10) / 10;
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 8 }}>
+      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: 'var(--m-success-bg)', color: 'var(--m-success-text)', border: '1px solid var(--m-success-border)' }}>{ok} ✓</span>
+      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: 'var(--m-warning-bg)', color: 'var(--m-warning-text)', border: '1px solid var(--m-warning-border)' }}>{parcial} ●</span>
+      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: 'var(--m-danger-bg)', color: 'var(--m-danger-text)', border: '1px solid var(--m-danger-border)' }}>{mal} ✕</span>
+      <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-text-muted)', marginLeft: 2 }}>Ø{avg}/8</span>
+    </div>
+  );
+}
+
 export function RepositorioView({ onNavigate }: Props) {
   const [search, setSearch] = useState('');
   const [grupoFiltro, setGrupoFiltro] = useState<string>('all');
   const [estructuraFiltro, setEstructuraFiltro] = useState<string>('all');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [scoresDB, setScoresDB] = React.useState<Record<string,number>>({});
+
+  // Lista dinamica de modulos desde /api/modules (fallback a estatica)
+  const [modulos, setModulos] = React.useState<ModuloRepo[]>(MODULOS);
+
+  useEffect(() => {
+    fetch('/api/modules')
+      .then(r => r.json())
+      .then((data: { modulos: { id: string; viewFile: string; nombre: string; grupo: string }[] }) => {
+        if (!data.modulos?.length) return;
+        const dinamicos = data.modulos.map(m => {
+          const criterios = generarCriterios(m.viewFile);
+          const esCharlieCompleto = MODULOS_CHARLIE_COMPLETOS.has(m.id);
+          return {
+            id: m.id,
+            nombre: m.nombre,
+            viewFile: m.viewFile,
+            estructura: (esCharlieCompleto ? 'charlie' : criterios.filter(c => c.status === 'ok').length >= 4 ? 'partial' : 'legacy') as ModuloEstructura,
+            grupo: m.grupo !== "General" && m.grupo !== "Sin grupo" ? m.grupo : getGrupo(m.viewFile),
+            criterios,
+            score: calcularScore(criterios),
+            tieneServicio: !!(VIEW_SERVICE_MAP[m.viewFile] && SERVICIOS_DISPONIBLES.has(VIEW_SERVICE_MAP[m.viewFile])),
+            tieneModuleConfig: TIENE_MODULE_CONFIG.has(m.id),
+            tieneTokens: TIENE_TOKENS.has(m.id),
+            tieneSchema: TIENE_SCHEMA.has(VIEW_SERVICE_MAP[m.viewFile] ?? ''),
+            tieneAdapter: esCharlieCompleto,
+          };
+        });
+        setModulos(dinamicos);
+      })
+      .catch(() => {}); // fallback a modulos estatico
+  }, []);
+
+  // Cargar scores reales desde Supabase al montar
+  useEffect(() => {
+    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
+    fetch('https://yomgqobfmgatavnbtvdz.supabase.co/rest/v1/modulos_auditoria?select=modulo_id,status', {
+      headers: { apikey: anon, Authorization: 'Bearer ' + anon },
+    })
+      .then(r => r.json())
+      .then((rows: { modulo_id: string; status: string }[]) => {
+        const scores: Record<string, number> = {};
+        for (const row of rows) {
+          if (!scores[row.modulo_id]) scores[row.modulo_id] = 0;
+          if (row.status === 'ok') scores[row.modulo_id]++;
+        }
+        setScoresDB(scores);
+      })
+      .catch(() => {});
+  }, []);
   const { setSubtitulo } = useShell();
 
   useEffect(() => {
-    const total    = MODULOS.length;
-    const charlie  = MODULOS.filter(m => m.estructura === 'charlie').length;
-    const avgScore = Math.round(MODULOS.reduce((s, m) => s + (scoresDB[m.id] ?? m.score), 0) / total * 10) / 10;
+    const total    = modulos.length;
+    const charlie  = modulos.filter(m => m.estructura === 'charlie').length;
+    const avgScore = Math.round(modulos.reduce((s, m) => s + (scoresDB[m.id] ?? m.score), 0) / total * 10) / 10;
     setSubtitulo(`${total} modulos · ${charlie} Charlie · score promedio ${avgScore}/8`);
     return () => setSubtitulo(null);
   }, [scoresDB]);
@@ -385,10 +449,10 @@ export function RepositorioView({ onNavigate }: Props) {
   const [moduloAuditado, setModuloAuditado] = React.useState<{section:string;nombre:string;criteriosIniciales?:any[]} | null>(null);
   const [sortBy, setSortBy] = useState<'nombre' | 'score' | 'grupo'>('grupo');
 
-  const grupos = useMemo(() => Array.from(new Set(MODULOS.map(m => m.grupo))).sort(), []);
+  const grupos = useMemo(() => Array.from(new Set(modulos.map(m => m.grupo))).sort(), []);
 
   const filtrados = useMemo(() => {
-    return MODULOS
+    return modulos
       .filter(m => {
         if (search && !m.nombre.toLowerCase().includes(search.toLowerCase()) &&
             !m.viewFile.toLowerCase().includes(search.toLowerCase())) return false;
@@ -404,12 +468,12 @@ export function RepositorioView({ onNavigate }: Props) {
   }, [search, grupoFiltro, estructuraFiltro, sortBy]);
 
   const stats = useMemo(() => {
-    const total = MODULOS.length;
-    const charlie = MODULOS.filter(m => m.estructura === 'charlie').length;
-    const partial = MODULOS.filter(m => m.estructura === 'partial').length;
-    const legacy = MODULOS.filter(m => m.estructura === 'legacy').length;
-    const avgScore = Math.round(MODULOS.reduce((s, m) => s + m.score, 0) / total);
-    const conServicio = MODULOS.filter(m => m.tieneServicio).length;
+    const total = modulos.length;
+    const charlie = modulos.filter(m => m.estructura === 'charlie').length;
+    const partial = modulos.filter(m => m.estructura === 'partial').length;
+    const legacy = modulos.filter(m => m.estructura === 'legacy').length;
+    const avgScore = Math.round(modulos.reduce((s, m) => s + m.score, 0) / total);
+    const conServicio = modulos.filter(m => m.tieneServicio).length;
     return { total, charlie, partial, legacy, avgScore, conServicio };
   }, []);
 
@@ -433,40 +497,40 @@ export function RepositorioView({ onNavigate }: Props) {
   }, [filtrados, sortBy]);
 
   const S: Record<string, React.CSSProperties> = {
-    root: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA', fontFamily: 'system-ui, sans-serif' },
+    root: { display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: 'var(--m-bg)', fontFamily: 'system-ui, sans-serif' },
     scroll: { flex: 1, overflowY: 'auto', padding: '20px 24px' },
 
     // Stats bar
     statsBar: { display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 12, marginBottom: 20 },
-    statCard: { backgroundColor: '#fff', borderRadius: 10, padding: '12px 14px', border: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', gap: 2 },
+    statCard: { backgroundColor: 'var(--m-surface)', borderRadius: 10, padding: '12px 14px', border: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', gap: 2 },
     statNum: { fontSize: 22, fontWeight: 800, lineHeight: 1 },
-    statLabel: { fontSize: 11, color: '#6B7280' },
+    statLabel: { fontSize: 11, color: 'var(--m-text-muted)' },
 
     // Toolbar
     toolbar: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' as const },
     searchWrap: { position: 'relative', flex: 1, minWidth: 180 },
-    searchInput: { width: '100%', paddingLeft: 34, paddingRight: 12, paddingTop: 8, paddingBottom: 8, borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 13, backgroundColor: '#fff', outline: 'none', boxSizing: 'border-box' as const },
-    searchIcon: { position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' },
-    select: { padding: '7px 10px', borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 12, backgroundColor: '#fff', cursor: 'pointer' },
+    searchInput: { width: '100%', paddingLeft: 34, paddingRight: 12, paddingTop: 8, paddingBottom: 8, borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 13, backgroundColor: 'var(--m-surface)', outline: 'none', boxSizing: 'border-box' as const },
+    searchIcon: { position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--m-text-muted)' },
+    select: { padding: '7px 10px', borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 12, backgroundColor: 'var(--m-surface)', cursor: 'pointer' },
 
     // Grupo header
     grupoHeader: { display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', marginBottom: 6, marginTop: 16 },
     grupoLabel: { fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const },
 
     // Módulo row
-    moduloWrap: { backgroundColor: '#fff', border: '1px solid #E5E7EB', borderRadius: 10, marginBottom: 6, overflow: 'hidden' },
+    moduloWrap: { backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: 10, marginBottom: 6, overflow: 'hidden' },
     moduloRow: { display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', cursor: 'pointer', userSelect: 'none' as const },
-    moduloNombre: { flex: 1, fontSize: 13, fontWeight: 600, color: '#111827' },
-    moduloView: { fontSize: 11, color: '#9CA3AF', fontFamily: 'monospace' },
-    scoreBadge: { width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: '#fff', flexShrink: 0 },
+    moduloNombre: { flex: 1, fontSize: 13, fontWeight: 600, color: 'var(--m-text)' },
+    moduloView: { fontSize: 11, color: 'var(--m-text-muted)', fontFamily: 'monospace' },
+    scoreBadge: { width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: 'var(--m-surface)', flexShrink: 0 },
     badge: { fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 4, border: '1px solid', flexShrink: 0 },
 
     // Criterios panel
-    criteriosPanel: { borderTop: '1px solid #F3F4F6', padding: '12px 14px', backgroundColor: '#FAFAFA' },
+    criteriosPanel: { borderTop: '1px solid #F3F4F6', padding: '12px 14px', backgroundColor: 'var(--m-surface-2)' },
     criterioRow: { display: 'flex', alignItems: 'flex-start', gap: 8, padding: '5px 0', borderBottom: '1px solid #F3F4F6' },
-    criterioId: { fontSize: 10, fontWeight: 800, color: '#6B7280', minWidth: 24, paddingTop: 1 },
-    criterioLabel: { fontSize: 12, fontWeight: 600, color: '#374151', minWidth: 160 },
-    criterioDetalle: { fontSize: 11, color: '#6B7280', flex: 1 },
+    criterioId: { fontSize: 10, fontWeight: 800, color: 'var(--m-text-muted)', minWidth: 24, paddingTop: 1 },
+    criterioLabel: { fontSize: 12, fontWeight: 600, color: 'var(--m-text-secondary)', minWidth: 160 },
+    criterioDetalle: { fontSize: 11, color: 'var(--m-text-muted)', flex: 1 },
 
     // Mini criterios (en la row)
     miniCriterios: { display: 'flex', gap: 3, alignItems: 'center' },
@@ -507,12 +571,12 @@ export function RepositorioView({ onNavigate }: Props) {
           {/* Botón Auditar */}
           <button
             onClick={e => { e.stopPropagation(); setModuloAuditado({ section: m.id, nombre: m.nombre, criteriosIniciales: m.criterios.map(c => ({ id: c.id, label: c.label, status: c.status, detalle: c.detalle ?? '', auto: ['C1','C2','C3'].includes(c.id) })) }); }}
-            style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: 6, cursor: 'pointer', padding: '4px 10px', fontSize: 11, color: '#6B7280', flexShrink: 0 }}
+            style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: 6, cursor: 'pointer', padding: '4px 10px', fontSize: 11, color: 'var(--m-text-muted)', flexShrink: 0 }}
           >Auditar</button>
           {/* Chevron */}
           {isOpen
-            ? <ChevronDown style={{ width: 14, height: 14, color: '#9CA3AF', flexShrink: 0 }} />
-            : <ChevronRight style={{ width: 14, height: 14, color: '#9CA3AF', flexShrink: 0 }} />
+            ? <ChevronDown style={{ width: 14, height: 14, color: 'var(--m-text-muted)', flexShrink: 0 }} />
+            : <ChevronRight style={{ width: 14, height: 14, color: 'var(--m-text-muted)', flexShrink: 0 }} />
           }
         </div>
 
@@ -529,22 +593,22 @@ export function RepositorioView({ onNavigate }: Props) {
             ))}
             <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {!m.tieneModuleConfig && (
-                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>
+                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: 'var(--m-danger-bg)', color: 'var(--m-danger-text)', border: '1px solid #FECACA' }}>
                   Falta module.config.ts
                 </span>
               )}
               {!m.tieneTokens && (
-                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>
+                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: 'var(--m-danger-bg)', color: 'var(--m-danger-text)', border: '1px solid #FECACA' }}>
                   Falta tokens.css
                 </span>
               )}
               {!m.tieneServicio && (
-                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: '#FFF7ED', color: '#92400E', border: '1px solid #FED7AA' }}>
+                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: 'var(--m-warning-bg)', color: 'var(--m-warning-text)', border: '1px solid #FED7AA' }}>
                   Sin service layer
                 </span>
               )}
               {m.estructura === 'charlie' && (
-                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0' }}>
+                <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, backgroundColor: 'var(--m-success-bg)', color: 'var(--m-success-text)', border: '1px solid #BBF7D0' }}>
                   ✓ Estructura Charlie completa
                 </span>
               )}
@@ -562,27 +626,27 @@ export function RepositorioView({ onNavigate }: Props) {
         {/* Stats */}
         <div style={S.statsBar}>
           <div style={S.statCard}>
-            <span style={{ ...S.statNum, color: '#111827' }}>{stats.total}</span>
+            <span style={{ ...S.statNum, color: 'var(--m-text)' }}>{stats.total}</span>
             <span style={S.statLabel}>Módulos totales</span>
           </div>
           <div style={S.statCard}>
-            <span style={{ ...S.statNum, color: '#16a34a' }}>{stats.charlie}</span>
+            <span style={{ ...S.statNum, color: 'var(--m-success)' }}>{stats.charlie}</span>
             <span style={S.statLabel}>Estructura Charlie</span>
           </div>
           <div style={S.statCard}>
-            <span style={{ ...S.statNum, color: '#f97316' }}>{stats.partial}</span>
+            <span style={{ ...S.statNum, color: 'var(--m-warning)' }}>{stats.partial}</span>
             <span style={S.statLabel}>Parcialmente OK</span>
           </div>
           <div style={S.statCard}>
-            <span style={{ ...S.statNum, color: '#dc2626' }}>{stats.legacy}</span>
+            <span style={{ ...S.statNum, color: 'var(--m-danger)' }}>{stats.legacy}</span>
             <span style={S.statLabel}>Legacy</span>
           </div>
           <div style={S.statCard}>
-            <span style={{ ...S.statNum, color: '#0ea5e9' }}>{stats.conServicio}</span>
+            <span style={{ ...S.statNum, color: 'var(--m-info)' }}>{stats.conServicio}</span>
             <span style={S.statLabel}>Con service layer</span>
           </div>
           <div style={S.statCard}>
-            <span style={{ ...S.statNum, color: '#7c3aed' }}>{stats.avgScore}/8</span>
+            <span style={{ ...S.statNum, color: 'var(--m-purple)' }}>{stats.avgScore}/8</span>
             <span style={S.statLabel}>Score promedio</span>
           </div>
         </div>
@@ -613,8 +677,8 @@ export function RepositorioView({ onNavigate }: Props) {
             <option value="score">Ordenar por score</option>
             <option value="nombre">Ordenar por nombre</option>
           </select>
-          <span style={{ fontSize: 12, color: '#6B7280', whiteSpace: 'nowrap' }}>
-            {filtrados.length} de {MODULOS.length}
+          <span style={{ fontSize: 12, color: 'var(--m-text-muted)', whiteSpace: 'nowrap' }}>
+            {filtrados.length} de {modulos.length}
           </span>
         </div>
 
@@ -625,23 +689,10 @@ export function RepositorioView({ onNavigate }: Props) {
               <div style={{ ...S.grupoHeader, cursor: 'pointer' }} onClick={() => toggleGrupo(grupo)}>
                 <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: GRUPO_COLORS[grupo] ?? '#9ca3af' }} />
                 <span style={{ ...S.grupoLabel, color: GRUPO_COLORS[grupo] ?? '#6B7280' }}>{grupo}</span>
-                <span style={{ fontSize: 11, color: '#9CA3AF' }}>{mods.length} módulos</span>
-                <div style={{ flex: 1, height: 1, backgroundColor: '#F3F4F6' }} />
-                {gruposColapsados.has(grupo) && (() => {
-                  const ok      = mods.filter(m => (scoresDB[m.id] ?? m.score) === 8).length;
-                  const parcial = mods.filter(m => { const s = scoresDB[m.id] ?? m.score; return s >= 4 && s < 8; }).length;
-                  const mal     = mods.filter(m => (scoresDB[m.id] ?? m.score) < 4).length;
-                  const avg     = Math.round(mods.reduce((a, m) => a + (scoresDB[m.id] ?? m.score), 0) / mods.length * 10) / 10;
-                  return (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 8 }}>
-                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0' }}>{ok} ✓</span>
-                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#FFF7ED', color: '#92400E', border: '1px solid #FED7AA' }}>{parcial} ●</span>
-                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>{mal} ✕</span>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: '#6B7280', marginLeft: 2 }}>Ø{avg}/8</span>
-                    </div>
-                  );
-                })()}
-                <span style={{ fontSize: 11, color: '#9CA3AF', marginLeft: 6 }}>{gruposColapsados.has(grupo) ? '▶' : '▼'}</span>
+                <span style={{ fontSize: 11, color: 'var(--m-text-muted)' }}>{mods.length} módulos</span>
+                <div style={{ flex: 1, height: 1, backgroundColor: 'var(--m-surface-2)' }} />
+                {gruposColapsados.has(grupo) && <GrupoStats mods={mods} scoresDB={scoresDB} />}
+                <span style={{ fontSize: 11, color: 'var(--m-text-muted)', marginLeft: 6 }}>{gruposColapsados.has(grupo) ? '▶' : '▼'}</span>
               </div>
               {!gruposColapsados.has(grupo) && mods.map(renderModulo)}
             </div>
@@ -655,41 +706,41 @@ export function RepositorioView({ onNavigate }: Props) {
           {nuevoModulo && (
             <>
               <div onClick={() => setNuevoModulo(false)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.3)', zIndex: 100, backdropFilter: 'blur(2px)' }} />
-              <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 440, backgroundColor: '#fff', zIndex: 101, display: 'flex', flexDirection: 'column', boxShadow: '-4px 0 24px rgba(0,0,0,0.12)' }}>
+              <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 440, backgroundColor: 'var(--m-surface)', zIndex: 101, display: 'flex', flexDirection: 'column', boxShadow: '-4px 0 24px rgba(0,0,0,0.12)' }}>
                 <div style={{ padding: '20px 24px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg, #FF6835 0%, #ff8c42 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Plus size={18} color="#fff" />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: '#111' }}>Nuevo módulo</div>
-                    <div style={{ fontSize: 12, color: '#9CA3AF' }}>Genera C1 C3 C4 C5 C6 C8 automáticamente</div>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--m-text)' }}>Nuevo módulo</div>
+                    <div style={{ fontSize: 12, color: 'var(--m-text-muted)' }}>Genera C1 C3 C4 C5 C6 C8 automáticamente</div>
                   </div>
-                  <button onClick={() => setNuevoModulo(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: '#9CA3AF', padding: 4 }}>✕</button>
+                  <button onClick={() => setNuevoModulo(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: 'var(--m-text-muted)', padding: 4 }}>✕</button>
                 </div>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
                   <div>
-                    <label style={{ fontSize: 11, fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Nombre del módulo *</label>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Nombre del módulo *</label>
                     <input value={nmNombre} onChange={e => setNmNombre(e.target.value)} placeholder="ej: Proveedores" style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
-                    {nmNombre && <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 4 }}>{'→'} {nmNombre.toLowerCase().replace(/\s+/g, '')}View.tsx</div>}
+                    {nmNombre && <div style={{ fontSize: 11, color: 'var(--m-text-muted)', marginTop: 4 }}>{'→'} {nmNombre.toLowerCase().replace(/\s+/g, '')}View.tsx</div>}
                   </div>
                   <div>
-                    <label style={{ fontSize: 11, fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Tabla Supabase (C2) *</label>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Tabla Supabase (C2) *</label>
                     <input value={nmTabla} onChange={e => setNmTabla(e.target.value)} placeholder="ej: proveedores" style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
-                    <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 4 }}>Nombre exacto de la tabla en Supabase</div>
+                    <div style={{ fontSize: 11, color: 'var(--m-text-muted)', marginTop: 4 }}>Nombre exacto de la tabla en Supabase</div>
                   </div>
                   <div>
-                    <label style={{ fontSize: 11, fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Grupo</label>
-                    <select value={nmGrupo} onChange={e => setNmGrupo(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 13, outline: 'none', boxSizing: 'border-box', backgroundColor: '#fff' }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Grupo</label>
+                    <select value={nmGrupo} onChange={e => setNmGrupo(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 13, outline: 'none', boxSizing: 'border-box', backgroundColor: 'var(--m-surface)' }}>
                       {grupos.map(g => <option key={g} value={g}>{g}</option>)}
                       <option value="Sin grupo">Sin grupo</option>
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontSize: 11, fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Descripción</label>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Descripción</label>
                     <textarea value={nmDesc} onChange={e => setNmDesc(e.target.value)} placeholder="Para qué sirve este módulo..." rows={3} style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid #E5E7EB', fontSize: 13, outline: 'none', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'system-ui' }} />
                   </div>
-                  <div style={{ backgroundColor: '#F9FAFB', borderRadius: 8, border: '1px solid #E5E7EB', padding: '12px 14px' }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>Archivos a generar</div>
+                  <div style={{ backgroundColor: 'var(--m-surface-2)', borderRadius: 8, border: '1px solid #E5E7EB', padding: '12px 14px' }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>Archivos a generar</div>
                     {[
                       { criterio: 'C1',    archivo: `views/${nmNombre ? nmNombre.toLowerCase().replace(/\s+/g,'') : '{nombre}'}View.tsx` },
                       { criterio: 'C3 C8', archivo: `services/${nmNombre ? nmNombre.toLowerCase().replace(/\s+/g,'') : '{nombre}'}Api.ts` },
@@ -697,24 +748,24 @@ export function RepositorioView({ onNavigate }: Props) {
                       { criterio: 'C5 C6', archivo: `modules/${nmNombre ? nmNombre.toLowerCase().replace(/\s+/g,'') : '{nombre}'}/ui/tokens.css` },
                     ].map(({ criterio, archivo }) => (
                       <div key={criterio} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                        <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#EFF6FF', color: '#1D4ED8', flexShrink: 0 }}>{criterio}</span>
-                        <span style={{ fontSize: 11, fontFamily: 'monospace', color: '#374151' }}>{archivo}</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: 'var(--m-info-bg)', color: 'var(--m-info-text)', flexShrink: 0 }}>{criterio}</span>
+                        <span style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--m-text-secondary)' }}>{archivo}</span>
                       </div>
                     ))}
-                    <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #E5E7EB', fontSize: 11, color: '#9CA3AF' }}>C2 y C7 requieren configuración manual posterior</div>
+                    <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #E5E7EB', fontSize: 11, color: 'var(--m-text-muted)' }}>C2 y C7 requieren configuración manual posterior</div>
                   </div>
                   {nmResultado && (
-                    <div style={{ borderRadius: 8, border: `1px solid ${nmResultado.ok ? '#BBF7D0' : '#FECACA'}`, backgroundColor: nmResultado.ok ? '#F0FDF4' : '#FEF2F2', padding: '12px 14px' }}>
+                    <div style={{ borderRadius: 8, border: `1px solid ${nmResultado.ok ? '#BBF7D0' : 'var(--m-danger-border)'}`, backgroundColor: nmResultado.ok ? '#F0FDF4' : 'var(--m-danger-bg)', padding: '12px 14px' }}>
                       {nmResultado.ok ? (
                         <>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: '#166534', marginBottom: 8 }}>✓ Módulo creado exitosamente</div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--m-success-text)', marginBottom: 8 }}>✓ Módulo creado exitosamente</div>
                           {nmResultado.archivos?.map((a: any) => (
-                            <div key={a.path} style={{ fontSize: 11, color: '#166534', marginBottom: 3 }}>✓ {a.path} <span style={{ color: '#9CA3AF' }}>— {a.contenido}</span></div>
+                            <div key={a.path} style={{ fontSize: 11, color: 'var(--m-success-text)', marginBottom: 3 }}>✓ {a.path} <span style={{ color: 'var(--m-text-muted)' }}>— {a.contenido}</span></div>
                           ))}
-                          <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 8 }}>Reiniciá el dev server para que Vite detecte los nuevos archivos.</div>
+                          <div style={{ fontSize: 11, color: 'var(--m-text-muted)', marginTop: 8 }}>Reiniciá el dev server para que Vite detecte los nuevos archivos.</div>
                         </>
                       ) : (
-                        <div style={{ fontSize: 13, color: '#991B1B' }}>✕ {nmResultado.error}</div>
+                        <div style={{ fontSize: 13, color: 'var(--m-danger-text)' }}>✕ {nmResultado.error}</div>
                       )}
                     </div>
                   )}
@@ -739,7 +790,7 @@ export function RepositorioView({ onNavigate }: Props) {
                         setNmCreando(false);
                       }
                     }}
-                    style={{ width: '100%', padding: 11, borderRadius: 8, border: 'none', backgroundColor: !nmNombre.trim() || !nmTabla.trim() ? '#E5E7EB' : '#FF6835', color: !nmNombre.trim() || !nmTabla.trim() ? '#9CA3AF' : '#fff', fontSize: 13, fontWeight: 700, cursor: !nmNombre.trim() || !nmTabla.trim() ? 'not-allowed' : 'pointer' }}
+                    style={{ width: '100%', padding: 11, borderRadius: 8, border: 'none', backgroundColor: !nmNombre.trim() || !nmTabla.trim() ? '#E5E7EB' : 'var(--m-primary)', color: !nmNombre.trim() || !nmTabla.trim() ? '#9CA3AF' : 'var(--m-surface)', fontSize: 13, fontWeight: 700, cursor: !nmNombre.trim() || !nmTabla.trim() ? 'not-allowed' : 'pointer' }}
                   >
                     {nmCreando ? 'Creando...' : 'Crear módulo'}
                   </button>

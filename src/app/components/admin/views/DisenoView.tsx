@@ -115,7 +115,7 @@ export function DisenoView({ onNavigate }: Props) {
       {/* Tab bar */}
       <div
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--m-surface)',
           borderBottom: `3px solid ${ORANGE}`,
           padding: '0 32px',
           display: 'flex',
@@ -132,7 +132,7 @@ export function DisenoView({ onNavigate }: Props) {
               border: 'none',
               cursor: 'pointer',
               backgroundColor: 'transparent',
-              color: activeTab === tab.id ? ORANGE : '#6B7280',
+              color: activeTab === tab.id ? ORANGE : 'var(--m-text-muted)',
               fontWeight: activeTab === tab.id ? '700' : '500',
               fontSize: '0.875rem',
               borderBottom:
@@ -152,7 +152,7 @@ export function DisenoView({ onNavigate }: Props) {
           flex: 1,
           overflowY: 'auto',
           padding: '28px 32px',
-          backgroundColor: '#F8F9FA',
+          backgroundColor: 'var(--m-bg)',
         }}
       >
         {activeTab === '1' && <Tab1Content />}
@@ -170,13 +170,13 @@ export function DisenoView({ onNavigate }: Props) {
 function Tab1Content() {
   return (
     <div>
-      <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: '0 0 20px' }}>
+      <p style={{ color: 'var(--m-text-muted)', fontSize: '0.875rem', margin: '0 0 20px' }}>
         Vista #1 — Acceso rápido a los 6 módulos principales del sistema
       </p>
       <ModuleCardGrid cards={tab1Cards} columns={3} />
 
       {/* Design spec cards */}
-      <h3 style={{ margin: '32px 0 16px', fontSize: '1rem', fontWeight: '700', color: '#111827' }}>
+      <h3 style={{ margin: '32px 0 16px', fontSize: '1rem', fontWeight: '700', color: 'var(--m-text)' }}>
         Especificaciones de Diseño
       </h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
@@ -190,7 +190,7 @@ function Tab1Content() {
           <div
             key={card.title}
             style={{
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'var(--m-surface)',
               borderRadius: '14px',
               border: '1px solid #E5E7EB',
               padding: '20px',
@@ -201,14 +201,14 @@ function Tab1Content() {
                 style={{
                   width: '28px', height: '28px',
                   borderRadius: '6px',
-                  backgroundColor: '#FFF4EC',
+                  backgroundColor: 'var(--m-primary-10)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '0.8rem',
                 }}
               >
                 🔲
               </div>
-              <span style={{ fontWeight: '700', color: '#111827', fontSize: '0.9rem' }}>{card.title}</span>
+              <span style={{ fontWeight: '700', color: 'var(--m-text)', fontSize: '0.9rem' }}>{card.title}</span>
             </div>
             {card.specs.map(([k, v]) => (
               <div
@@ -219,7 +219,7 @@ function Tab1Content() {
                   marginBottom: '6px',
                 }}
               >
-                <span style={{ color: '#6B7280', fontSize: '0.78rem' }}>{k}</span>
+                <span style={{ color: 'var(--m-text-muted)', fontSize: '0.78rem' }}>{k}</span>
                 {card.palette ? (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div
@@ -229,10 +229,10 @@ function Tab1Content() {
                         border: '1px solid #E5E7EB',
                       }}
                     />
-                    <span style={{ color: '#374151', fontSize: '0.78rem', fontFamily: 'monospace' }}>{v}</span>
+                    <span style={{ color: 'var(--m-text-secondary)', fontSize: '0.78rem', fontFamily: 'monospace' }}>{v}</span>
                   </div>
                 ) : (
-                  <span style={{ color: '#374151', fontSize: '0.78rem', fontWeight: '600' }}>{v}</span>
+                  <span style={{ color: 'var(--m-text-secondary)', fontSize: '0.78rem', fontWeight: '600' }}>{v}</span>
                 )}
               </div>
             ))}
@@ -249,7 +249,7 @@ function Tab1Content() {
 function Tab2Departamentos() {
   return (
     <div>
-      <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: '0 0 20px' }}>
+      <p style={{ color: 'var(--m-text-muted)', fontSize: '0.875rem', margin: '0 0 20px' }}>
         Vista #2 — Departamentos en vista de tarjetas
       </p>
       <div
@@ -263,7 +263,7 @@ function Tab2Departamentos() {
           <div
             key={dep.id}
             style={{
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'var(--m-surface)',
               borderRadius: '16px',
               border: '1px solid #E5E7EB',
               padding: '22px',
@@ -283,7 +283,7 @@ function Tab2Departamentos() {
                 style={{
                   width: '44px', height: '44px',
                   borderRadius: '12px',
-                  backgroundColor: '#FFF4EC',
+                  backgroundColor: 'var(--m-primary-10)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '1.25rem',
                 }}
@@ -296,30 +296,30 @@ function Tab2Departamentos() {
                   borderRadius: '8px',
                   fontSize: '0.72rem',
                   fontWeight: '700',
-                  backgroundColor: dep.estado === 'Activo' ? '#D1FAE5' : '#FEE2E2',
-                  color: dep.estado === 'Activo' ? '#065F46' : '#991B1B',
+                  backgroundColor: dep.estado === 'Activo' ? '#D1FAE5' : 'var(--m-danger-bg)',
+                  color: dep.estado === 'Activo' ? '#065F46' : 'var(--m-danger-text)',
                 }}
               >
                 {dep.estado}
               </span>
             </div>
-            <p style={{ margin: '0 0 4px', fontWeight: '700', color: '#111827', fontSize: '0.9rem' }}>
+            <p style={{ margin: '0 0 4px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.9rem' }}>
               {dep.nombre}
             </p>
-            <p style={{ margin: '0 0 14px', color: '#6B7280', fontSize: '0.78rem' }}>
+            <p style={{ margin: '0 0 14px', color: 'var(--m-text-muted)', fontSize: '0.78rem' }}>
               Jefe: {dep.jefe}
             </p>
             <div style={{ display: 'flex', gap: '16px' }}>
               <div>
-                <p style={{ margin: 0, color: '#9CA3AF', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <p style={{ margin: 0, color: 'var(--m-text-muted)', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Empleados
                 </p>
-                <p style={{ margin: 0, color: '#111827', fontWeight: '700', fontSize: '0.95rem' }}>
+                <p style={{ margin: 0, color: 'var(--m-text)', fontWeight: '700', fontSize: '0.95rem' }}>
                   {dep.empleados}
                 </p>
               </div>
               <div>
-                <p style={{ margin: 0, color: '#9CA3AF', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <p style={{ margin: 0, color: 'var(--m-text-muted)', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Presupuesto
                 </p>
                 <p style={{ margin: 0, color: ORANGE, fontWeight: '700', fontSize: '0.95rem' }}>
@@ -346,15 +346,15 @@ function Tab3Articulos() {
   );
 
   const getStatus = (estado: string) => {
-    if (estado === 'Sin Stock') return { bg: '#FEE2E2', text: '#991B1B' };
-    if (estado === 'Crítico')   return { bg: '#FEF3C7', text: '#92400E' };
-    return { bg: '#D1FAE5', text: '#065F46' };
+    if (estado === 'Sin Stock') return { bg: 'var(--m-danger-bg)', text: 'var(--m-danger-text)' };
+    if (estado === 'Crítico')   return { bg: 'var(--m-warning-bg)', text: 'var(--m-warning-text)' };
+    return { bg: 'var(--m-success-bg)', text: 'var(--m-success-text)' };
   };
 
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-        <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: 0 }}>
+        <p style={{ color: 'var(--m-text-muted)', fontSize: '0.875rem', margin: 0 }}>
           Vista #3 — Artículos en vista de lista
         </p>
         <div style={{ flex: 1 }} />
@@ -374,7 +374,7 @@ function Tab3Articulos() {
               fontSize: '0.8rem',
               outline: 'none',
               width: '240px',
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'var(--m-surface)',
             }}
           />
         </div>
@@ -382,7 +382,7 @@ function Tab3Articulos() {
 
       <div
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--m-surface)',
           borderRadius: '14px',
           border: '1px solid #E5E7EB',
           overflow: 'hidden',
@@ -390,7 +390,7 @@ function Tab3Articulos() {
       >
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
+            <tr style={{ backgroundColor: 'var(--m-surface-2)', borderBottom: '1px solid #E5E7EB' }}>
               {['Artículo', 'SKU', 'Categoría', 'Precio', 'Stock', 'Estado', ''].map((h) => (
                 <th
                   key={h}
@@ -399,7 +399,7 @@ function Tab3Articulos() {
                     textAlign: 'left',
                     fontSize: '0.7rem',
                     fontWeight: '700',
-                    color: '#6B7280',
+                    color: 'var(--m-text-muted)',
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
                   }}
@@ -417,27 +417,27 @@ function Tab3Articulos() {
                   key={art.id}
                   style={{
                     borderBottom: idx < filtered.length - 1 ? '1px solid #F3F4F6' : 'none',
-                    backgroundColor: idx % 2 === 0 ? '#FFFFFF' : '#FAFAFA',
+                    backgroundColor: idx % 2 === 0 ? '#FFFFFF' : 'var(--m-surface-2)',
                   }}
                 >
                   <td style={{ padding: '12px 16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <span style={{ fontSize: '1.05rem' }}>{art.icon}</span>
-                      <span style={{ fontWeight: '600', color: '#111827', fontSize: '0.85rem' }}>
+                      <span style={{ fontWeight: '600', color: 'var(--m-text)', fontSize: '0.85rem' }}>
                         {art.nombre}
                       </span>
                     </div>
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#6B7280', fontSize: '0.75rem', fontFamily: 'monospace' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--m-text-muted)', fontSize: '0.75rem', fontFamily: 'monospace' }}>
                     {art.sku}
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#374151', fontSize: '0.8rem' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>
                     {art.cat}
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#111827', fontSize: '0.85rem', fontWeight: '700' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--m-text)', fontSize: '0.85rem', fontWeight: '700' }}>
                     ${art.precio.toFixed(2)}
                   </td>
-                  <td style={{ padding: '12px 16px', color: '#374151', fontSize: '0.8rem' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>
                     {art.stock > 0 ? `${art.stock} uds` : '—'}
                   </td>
                   <td style={{ padding: '12px 16px' }}>
@@ -463,7 +463,7 @@ function Tab3Articulos() {
                             padding: '5px',
                             borderRadius: '6px',
                             border: '1px solid #E5E7EB',
-                            backgroundColor: '#FFFFFF',
+                            backgroundColor: 'var(--m-surface)',
                             cursor: 'pointer',
                             fontSize: '0.72rem',
                           }}
@@ -489,7 +489,7 @@ function Tab3Articulos() {
 function Tab4Herramientas() {
   return (
     <div>
-      <p style={{ color: '#6B7280', fontSize: '0.875rem', margin: '0 0 20px' }}>
+      <p style={{ color: 'var(--m-text-muted)', fontSize: '0.875rem', margin: '0 0 20px' }}>
         Vista #4 — Suite de herramientas con IA integrada
       </p>
       <ModuleCardGrid cards={tab4Cards} columns={2} />

@@ -10,7 +10,7 @@ import { OrangeHeader } from '../OrangeHeader';
 interface Props { onNavigate: (s: MainSection) => void; }
 
 const CARD_STYLE: React.CSSProperties = {
-  backgroundColor: '#fff', borderRadius: '16px', border: '1px solid #E5E7EB',
+  backgroundColor: 'var(--m-surface)', borderRadius: '16px', border: '1px solid #E5E7EB',
   padding: '24px', cursor: 'pointer', transition: 'all 0.2s',
   boxShadow: '0 2px 8px rgba(0,0,0,0.04)', width: '300px',
 };
@@ -21,7 +21,7 @@ const CARDS = [
     icon: Blocks,
     label: 'Constructor',
     description: 'Generador de proyectos Charlie. Seleccioná módulos, configurá el frontstore y exportá el proyecto listo para deployar.',
-    color: '#FF6835',
+    color: 'var(--m-primary)',
     gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)',
   },
   {
@@ -29,7 +29,7 @@ const CARDS = [
     icon: Hammer,
     label: 'Constructor Módulos',
     description: 'Crear, actualizar y reparar módulos Charlie. Genera código Charlie-compliant con C1–C8 cumplidos desde el primer commit.',
-    color: '#8B5CF6',
+    color: 'var(--m-purple)',
     gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)',
   },
 ];
@@ -46,7 +46,7 @@ export function ConstruccionView({ onNavigate }: Props) {
         onBackClick={() => onNavigate('dashboard')}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA', padding: '32px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)', padding: '32px' }}>
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
           {CARDS.map(card => {
             const Icon = card.icon;
@@ -65,9 +65,9 @@ export function ConstruccionView({ onNavigate }: Props) {
                   <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: card.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Icon size={22} color="#fff" />
                   </div>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#111', margin: 0 }}>{card.label}</h3>
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--m-text)', margin: 0 }}>{card.label}</h3>
                 </div>
-                <p style={{ fontSize: '13px', color: '#6B7280', margin: '0 0 16px', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '13px', color: 'var(--m-text-muted)', margin: '0 0 16px', lineHeight: '1.5' }}>
                   {card.description}
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: card.color, fontSize: '13px', fontWeight: 700 }}>

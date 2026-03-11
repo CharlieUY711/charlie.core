@@ -29,21 +29,21 @@ const ROLE_CONFIG: Record<RolKey, {
   activity: { icon: React.ElementType; text: string; time: string }[];
 }> = {
   Cliente: {
-    color: '#6B7280',
-    bg: '#F9FAFB',
+    color: 'var(--m-text-muted)',
+    bg: 'var(--m-surface-2)',
     greeting: '¡Hola, Luis!',
     tagline: 'Tus pedidos y compras en un solo lugar',
     kpis: [
       { icon: ShoppingCart, label: 'Mis pedidos',     value: '12',    color: ORANGE      },
-      { icon: Package,      label: 'En camino',        value: '2',     color: '#3B82F6'   },
-      { icon: Star,         label: 'Puntos acumulados',value: '1.240', color: '#F59E0B'   },
+      { icon: Package,      label: 'En camino',        value: '2',     color: 'var(--m-info)'   },
+      { icon: Star,         label: 'Puntos acumulados',value: '1.240', color: 'var(--m-warning)'   },
       { icon: Heart,        label: 'Favoritos',        value: '8',     color: '#EC4899'   },
     ],
     modules: [
       { id: 'pedidos',   icon: ShoppingCart, label: 'Mis Pedidos',   desc: 'Estado de tus compras',       color: ORANGE    },
-      { id: 'ecommerce', icon: Package,      label: 'Catálogo',      desc: 'Explorar productos',           color: '#3B82F6' },
-      { id: 'pagos',     icon: DollarSign,   label: 'Mis Pagos',     desc: 'Historial de pagos',           color: '#10B981' },
-      { id: 'envios',    icon: Truck,        label: 'Mis Envíos',    desc: 'Seguimiento de pedidos',       color: '#8B5CF6' },
+      { id: 'ecommerce', icon: Package,      label: 'Catálogo',      desc: 'Explorar productos',           color: 'var(--m-info)' },
+      { id: 'pagos',     icon: DollarSign,   label: 'Mis Pagos',     desc: 'Historial de pagos',           color: 'var(--m-success)' },
+      { id: 'envios',    icon: Truck,        label: 'Mis Envíos',    desc: 'Seguimiento de pedidos',       color: 'var(--m-purple)' },
     ],
     activity: [
       { icon: Package,      text: 'Pedido #8834 enviado — ETA mañana',  time: 'Hoy 10:30'   },
@@ -53,21 +53,21 @@ const ROLE_CONFIG: Record<RolKey, {
   },
 
   Colaborador: {
-    color: '#10B981',
-    bg: '#F0FDF4',
+    color: 'var(--m-success)',
+    bg: 'var(--m-success-bg)',
     greeting: '¡Hola, Ana!',
     tagline: 'Tu espacio de trabajo colaborativo',
     kpis: [
-      { icon: CheckCircle,  label: 'Tareas completadas', value: '28',    color: '#10B981' },
-      { icon: Clock,        label: 'Tareas pendientes',  value: '5',     color: '#F59E0B' },
-      { icon: FileText,     label: 'Documentos creados', value: '14',    color: '#3B82F6' },
+      { icon: CheckCircle,  label: 'Tareas completadas', value: '28',    color: 'var(--m-success)' },
+      { icon: Clock,        label: 'Tareas pendientes',  value: '5',     color: 'var(--m-warning)' },
+      { icon: FileText,     label: 'Documentos creados', value: '14',    color: 'var(--m-info)' },
       { icon: MessageSquare,label: 'Mensajes hoy',       value: '7',     color: ORANGE    },
     ],
     modules: [
       { id: 'pedidos',       icon: ShoppingCart, label: 'Pedidos',        desc: 'Gestión de órdenes',        color: ORANGE    },
-      { id: 'clientes',      icon: Users,        label: 'Clientes',       desc: 'Base de clientes',          color: '#3B82F6' },
-      { id: 'herramientas',  icon: Wrench,       label: 'Herramientas',   desc: 'Suite de trabajo',          color: '#8B5CF6' },
-      { id: 'gen-documentos',icon: FileText,     label: 'Documentos',     desc: 'Generar documentos',        color: '#10B981' },
+      { id: 'clientes',      icon: Users,        label: 'Clientes',       desc: 'Base de clientes',          color: 'var(--m-info)' },
+      { id: 'herramientas',  icon: Wrench,       label: 'Herramientas',   desc: 'Suite de trabajo',          color: 'var(--m-purple)' },
+      { id: 'gen-documentos',icon: FileText,     label: 'Documentos',     desc: 'Generar documentos',        color: 'var(--m-success)' },
     ],
     activity: [
       { icon: CheckCircle,  text: 'Tarea "Actualizar catálogo" completada', time: 'Hoy 11:00'   },
@@ -77,22 +77,22 @@ const ROLE_CONFIG: Record<RolKey, {
   },
 
   Editor: {
-    color: '#3B82F6',
-    bg: '#EFF6FF',
+    color: 'var(--m-info)',
+    bg: 'var(--m-info-bg)',
     greeting: '¡Hola, Diego!',
     tagline: 'Tu panel de edición y contenido',
     kpis: [
-      { icon: FileText,    label: 'Contenidos publicados', value: '43',  color: '#3B82F6' },
+      { icon: FileText,    label: 'Contenidos publicados', value: '43',  color: 'var(--m-info)' },
       { icon: Eye,         label: 'Vistas totales',        value: '8.2k',color: ORANGE    },
       { icon: Megaphone,   label: 'Campañas activas',      value: '3',   color: '#EC4899' },
-      { icon: TrendingUp,  label: 'CTR promedio',          value: '4.2%',color: '#10B981' },
+      { icon: TrendingUp,  label: 'CTR promedio',          value: '4.2%',color: 'var(--m-success)' },
     ],
     modules: [
       { id: 'marketing',     icon: Megaphone,  label: 'Marketing',       desc: 'Campañas y contenido',      color: '#EC4899' },
       { id: 'rrss',          icon: Star,       label: 'RRSS',            desc: 'Redes sociales',            color: '#E1306C' },
-      { id: 'seo',           icon: TrendingUp, label: 'SEO',             desc: 'Posicionamiento web',       color: '#10B981' },
-      { id: 'mailing',       icon: Zap,        label: 'Mailing',         desc: 'Email marketing',           color: '#3B82F6' },
-      { id: 'herramientas',  icon: Wrench,     label: 'Herramientas',    desc: 'Suite de trabajo',          color: '#8B5CF6' },
+      { id: 'seo',           icon: TrendingUp, label: 'SEO',             desc: 'Posicionamiento web',       color: 'var(--m-success)' },
+      { id: 'mailing',       icon: Zap,        label: 'Mailing',         desc: 'Email marketing',           color: 'var(--m-info)' },
+      { id: 'herramientas',  icon: Wrench,     label: 'Herramientas',    desc: 'Suite de trabajo',          color: 'var(--m-purple)' },
       { id: 'storefront',    icon: Eye,        label: 'Storefront',      desc: 'Vista pública',             color: ORANGE    },
     ],
     activity: [
@@ -104,22 +104,22 @@ const ROLE_CONFIG: Record<RolKey, {
 
   Administrador: {
     color: ORANGE,
-    bg: '#FFF7ED',
+    bg: 'var(--m-warning-bg)',
     greeting: '¡Hola, María!',
     tagline: 'Panel de administración del sistema',
     kpis: [
-      { icon: Users,        label: 'Usuarios activos', value: '153',   color: '#7C3AED' },
-      { icon: BarChart2,    label: 'Ventas del mes',   value: '$67k',  color: '#10B981' },
+      { icon: Users,        label: 'Usuarios activos', value: '153',   color: 'var(--m-purple)' },
+      { icon: BarChart2,    label: 'Ventas del mes',   value: '$67k',  color: 'var(--m-success)' },
       { icon: Zap,          label: 'Módulos activos',  value: '68',    color: ORANGE    },
-      { icon: CheckCircle,  label: 'Uptime',           value: '99.9%', color: '#3B82F6' },
+      { icon: CheckCircle,  label: 'Uptime',           value: '99.9%', color: 'var(--m-info)' },
     ],
     modules: [
       { id: 'ecommerce',     icon: ShoppingCart, label: 'eCommerce',   desc: 'Gestión completa',          color: ORANGE    },
-      { id: 'gestion',       icon: BarChart2,    label: 'Gestión ERP', desc: 'ERP completo',              color: '#3B82F6' },
-      { id: 'personas',      icon: Users,        label: 'Usuarios',    desc: 'Gestión de personas',       color: '#7C3AED' },
-      { id: 'integraciones', icon: Zap,          label: 'Integraciones','desc': 'Conectores activos',     color: '#14B8A6' },
-      { id: 'sistema',       icon: Settings,     label: 'Sistema',     desc: 'Configuración',             color: '#6B7280' },
-      { id: 'auditoria',     icon: Eye,          label: 'Auditoría',   desc: 'Logs y diagnóstico',        color: '#F59E0B' },
+      { id: 'gestion',       icon: BarChart2,    label: 'Gestión ERP', desc: 'ERP completo',              color: 'var(--m-info)' },
+      { id: 'personas',      icon: Users,        label: 'Usuarios',    desc: 'Gestión de personas',       color: 'var(--m-purple)' },
+      { id: 'integraciones', icon: Zap,          label: 'Integraciones','desc': 'Conectores activos',     color: 'var(--m-success)' },
+      { id: 'sistema',       icon: Settings,     label: 'Sistema',     desc: 'Configuración',             color: 'var(--m-text-muted)' },
+      { id: 'auditoria',     icon: Eye,          label: 'Auditoría',   desc: 'Logs y diagnóstico',        color: 'var(--m-warning)' },
     ],
     activity: [
       { icon: Users,    text: '2 nuevos usuarios registrados hoy',  time: 'Hoy 08:30'   },
@@ -129,23 +129,23 @@ const ROLE_CONFIG: Record<RolKey, {
   },
 
   SuperAdmin: {
-    color: '#7C3AED',
-    bg: '#F5F3FF',
+    color: 'var(--m-purple)',
+    bg: 'var(--m-purple-bg)',
     greeting: '¡Hola, Carlos!',
     tagline: 'Control total del sistema Charlie v1.5',
     kpis: [
-      { icon: Users,      label: 'Total usuarios',    value: '153',   color: '#7C3AED' },
+      { icon: Users,      label: 'Total usuarios',    value: '153',   color: 'var(--m-purple)' },
       { icon: BarChart2,  label: 'Ventas del mes',    value: '$67k',  color: ORANGE    },
-      { icon: Award,      label: 'Módulos totales',   value: '68',    color: '#3B82F6' },
-      { icon: Calendar,   label: 'Días de uptime',    value: '342',   color: '#10B981' },
+      { icon: Award,      label: 'Módulos totales',   value: '68',    color: 'var(--m-info)' },
+      { icon: Calendar,   label: 'Días de uptime',    value: '342',   color: 'var(--m-success)' },
     ],
     modules: [
       { id: 'sistema',       icon: Settings,     label: 'Sistema',       desc: 'Config. global',          color: ORANGE    },
-      { id: 'constructor',   icon: Zap,          label: 'Constructor',   desc: 'Builder de módulos',      color: '#7C3AED' },
-      { id: 'auditoria',     icon: Eye,          label: 'Auditoría',     desc: 'Control total',           color: '#F59E0B' },
-      { id: 'integraciones', icon: Package,      label: 'Integraciones', desc: 'Todos los conectores',    color: '#14B8A6' },
+      { id: 'constructor',   icon: Zap,          label: 'Constructor',   desc: 'Builder de módulos',      color: 'var(--m-purple)' },
+      { id: 'auditoria',     icon: Eye,          label: 'Auditoría',     desc: 'Control total',           color: 'var(--m-warning)' },
+      { id: 'integraciones', icon: Package,      label: 'Integraciones', desc: 'Todos los conectores',    color: 'var(--m-success)' },
       { id: 'config-vistas', icon: Users,        label: 'Config. Vistas','desc': 'Permisos por rol',     color: '#EC4899' },
-      { id: 'documentacion', icon: FileText,     label: 'Documentación', desc: 'Docs técnicas y usuario', color: '#6B7280' },
+      { id: 'documentacion', icon: FileText,     label: 'Documentación', desc: 'Docs técnicas y usuario', color: 'var(--m-text-muted)' },
     ],
     activity: [
       { icon: Award,    text: 'Deploy v1.5 completado sin errores',  time: 'Hoy 02:00'   },
@@ -163,14 +163,14 @@ export function UserDashboardView({ onNavigate }: Props) {
   const cfg = ROLE_CONFIG[activeRole];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       <OrangeHeader
         icon={LayoutDashboard}
         title="Dashboard de Usuario"
         subtitle="Vista personalizada por rol · Datos de ejemplo"
         rightSlot={
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: '500', border: '1px solid #E5E7EB', borderRadius: 8, padding: '5px 11px', backgroundColor: '#fff' }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--m-text-muted)', fontWeight: '500', border: '1px solid #E5E7EB', borderRadius: 8, padding: '5px 11px', backgroundColor: 'var(--m-surface)' }}>
             Simulador de rol activo
           </span>
         }
@@ -179,8 +179,8 @@ export function UserDashboardView({ onNavigate }: Props) {
       <div style={{ flex: 1, overflowY: 'auto', padding: '24px 28px' }}>
 
         {/* ── Selector de Rol ── */}
-        <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '18px 22px', marginBottom: 24 }}>
-          <p style={{ margin: '0 0 12px', fontSize: '0.72rem', fontWeight: '800', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+        <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '18px 22px', marginBottom: 24 }}>
+          <p style={{ margin: '0 0 12px', fontSize: '0.72rem', fontWeight: '800', color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
             Simular vista como rol →
           </p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -216,7 +216,7 @@ export function UserDashboardView({ onNavigate }: Props) {
           boxShadow: `0 8px 32px ${cfg.color}40`,
         }}>
           <div>
-            <p style={{ margin: '0 0 6px', fontSize: '1.6rem', fontWeight: '900', color: '#fff' }}>
+            <p style={{ margin: '0 0 6px', fontSize: '1.6rem', fontWeight: '900', color: 'var(--m-surface)' }}>
               {cfg.greeting}
             </p>
             <p style={{ margin: 0, fontSize: '1rem', color: 'rgba(255,255,255,0.85)' }}>
@@ -230,7 +230,7 @@ export function UserDashboardView({ onNavigate }: Props) {
             <p style={{ margin: 0, fontSize: '0.7rem', color: 'rgba(255,255,255,0.75)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               Rol activo
             </p>
-            <p style={{ margin: '4px 0 0', fontSize: '1.1rem', fontWeight: '900', color: '#fff' }}>
+            <p style={{ margin: '4px 0 0', fontSize: '1.1rem', fontWeight: '900', color: 'var(--m-surface)' }}>
               {activeRole}
             </p>
           </div>
@@ -239,12 +239,12 @@ export function UserDashboardView({ onNavigate }: Props) {
         {/* ── KPIs de rol ── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
           {cfg.kpis.map((kpi, i) => (
-            <div key={i} style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '18px 20px' }}>
+            <div key={i} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '18px 20px' }}>
               <div style={{ width: 36, height: 36, borderRadius: 9, backgroundColor: `${kpi.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
                 <kpi.icon size={16} color={kpi.color} strokeWidth={2.2} />
               </div>
-              <p style={{ margin: '0 0 4px', fontSize: '0.75rem', color: '#6B7280' }}>{kpi.label}</p>
-              <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: '800', color: '#111827', lineHeight: 1 }}>{kpi.value}</p>
+              <p style={{ margin: '0 0 4px', fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>{kpi.label}</p>
+              <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: '800', color: 'var(--m-text)', lineHeight: 1 }}>{kpi.value}</p>
             </div>
           ))}
         </div>
@@ -253,12 +253,12 @@ export function UserDashboardView({ onNavigate }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 16 }}>
 
           {/* Módulos accesibles para este rol */}
-          <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>
+              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>
                 Módulos disponibles
               </h3>
-              <span style={{ fontSize: '0.72rem', color: '#9CA3AF', fontWeight: '600' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)', fontWeight: '600' }}>
                 {cfg.modules.length} módulos
               </span>
             </div>
@@ -292,8 +292,8 @@ export function UserDashboardView({ onNavigate }: Props) {
                     <mod.icon size={16} color={mod.color} strokeWidth={2.2} />
                   </div>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', color: '#111827' }}>{mod.label}</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: '#9CA3AF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{mod.desc}</p>
+                    <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', color: 'var(--m-text)' }}>{mod.label}</p>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: 'var(--m-text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{mod.desc}</p>
                   </div>
                 </button>
               ))}
@@ -301,8 +301,8 @@ export function UserDashboardView({ onNavigate }: Props) {
           </div>
 
           {/* Actividad reciente de este rol */}
-          <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
-            <h3 style={{ margin: '0 0 18px', fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
+            <h3 style={{ margin: '0 0 18px', fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>
               Actividad reciente
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -312,8 +312,8 @@ export function UserDashboardView({ onNavigate }: Props) {
                     <a.icon size={13} color={cfg.color} />
                   </div>
                   <div>
-                    <p style={{ margin: '0 0 3px', fontSize: '0.78rem', color: '#374151', lineHeight: 1.4 }}>{a.text}</p>
-                    <p style={{ margin: 0, fontSize: '0.68rem', color: '#9CA3AF' }}>{a.time}</p>
+                    <p style={{ margin: '0 0 3px', fontSize: '0.78rem', color: 'var(--m-text-secondary)', lineHeight: 1.4 }}>{a.text}</p>
+                    <p style={{ margin: 0, fontSize: '0.68rem', color: 'var(--m-text-muted)' }}>{a.time}</p>
                   </div>
                 </div>
               ))}
@@ -325,7 +325,7 @@ export function UserDashboardView({ onNavigate }: Props) {
                 <Bell size={13} color={cfg.color} />
                 <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '700', color: cfg.color }}>Notificaciones</p>
               </div>
-              <p style={{ margin: 0, fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.5 }}>
+              <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--m-text-muted)', lineHeight: 1.5 }}>
                 {activeRole === 'Cliente'       && '1 pedido en camino · Tus puntos vencen en 30 días'}
                 {activeRole === 'Colaborador'   && '5 tareas pendientes hoy · 2 comentarios sin leer'}
                 {activeRole === 'Editor'        && '3 campañas activas · Reporte semanal disponible'}

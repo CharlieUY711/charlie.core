@@ -48,17 +48,17 @@ const ORANGE = '#FF6835';
 
 /* -- Colores de conectores -- */
 export const EDGE_COLORS = [
-  { id: 'general', label: 'General',   color: '#9CA3AF' },
-  { id: 'depends', label: 'Depende de', color: '#FF6835' },
-  { id: 'blocks',  label: 'Bloquea',   color: '#EF4444' },
-  { id: 'enables', label: 'Habilita',  color: '#10B981' },
-  { id: 'part_of', label: 'Parte de',  color: '#3B82F6' },
+  { id: 'general', label: 'General',   color: 'var(--m-text-muted)' },
+  { id: 'depends', label: 'Depende de', color: 'var(--m-primary)' },
+  { id: 'blocks',  label: 'Bloquea',   color: 'var(--m-danger)' },
+  { id: 'enables', label: 'Habilita',  color: 'var(--m-success)' },
+  { id: 'part_of', label: 'Parte de',  color: 'var(--m-info)' },
 ];
 
 /* -- Familias de modulos (espejo del sidebar) -- */
 const FAMILIES = [
   {
-    id: 'ecommerce', label: 'eCommerce', emoji: '🛒', color: '#3B82F6',
+    id: 'ecommerce', label: 'eCommerce', emoji: '🛒', color: 'var(--m-info)',
     modules: [
       { id: 'ecommerce', label: 'eCommerce' },
       { id: 'pedidos', label: 'Pedidos' },
@@ -70,7 +70,7 @@ const FAMILIES = [
     ],
   },
   {
-    id: 'logistica', label: 'Logística', emoji: '🚚', color: '#10B981',
+    id: 'logistica', label: 'Logística', emoji: '🚚', color: 'var(--m-success)',
     modules: [
       { id: 'logistica', label: 'Hub Logístico' },
       { id: 'envios', label: 'Envíos' },
@@ -84,7 +84,7 @@ const FAMILIES = [
     ],
   },
   {
-    id: 'marketing', label: 'Marketing', emoji: '📣', color: '#F59E0B',
+    id: 'marketing', label: 'Marketing', emoji: '📣', color: 'var(--m-warning)',
     modules: [
       { id: 'marketing', label: 'Dashboard Marketing' },
       { id: 'mailing', label: 'Email / Mailing' },
@@ -103,7 +103,7 @@ const FAMILIES = [
     ],
   },
   {
-    id: 'gestion', label: 'Gestión', emoji: '🗃️', color: '#6B7280',
+    id: 'gestion', label: 'Gestión', emoji: '🗃️', color: 'var(--m-text-muted)',
     modules: [
       { id: 'gestion', label: 'Resumen ERP' },
       { id: 'erp-inventario', label: 'Inventario' },
@@ -118,14 +118,14 @@ const FAMILIES = [
     ],
   },
   {
-    id: 'herramientas', label: 'Herramientas', emoji: '🔧', color: '#8B5CF6',
+    id: 'herramientas', label: 'Herramientas', emoji: '🔧', color: 'var(--m-purple)',
     modules: [
       { id: 'qr-generator', label: 'Generador QR' },
       { id: 'herramientas', label: 'Hub Herramientas' },
     ],
   },
   {
-    id: 'sistema', label: 'Sistema', emoji: '⚙️', color: '#1F2937',
+    id: 'sistema', label: 'Sistema', emoji: '⚙️', color: 'var(--m-text)',
     modules: [
       { id: 'sistema', label: 'Configuración' },
       { id: 'metodos-pago', label: 'Métodos de Pago' },
@@ -145,10 +145,10 @@ function getModuleStatus(sectionId: string): 'completed-db' | 'ui-only' | 'pendi
 }
 
 const STATUS_DOT: Record<string, { color: string; label: string }> = {
-  'completed-db': { color: '#10B981', label: '🟢 DB' },
-  'ui-only':      { color: '#3B82F6', label: '🔵 UI' },
-  'pending':      { color: '#9CA3AF', label: '⚫ Pend.' },
-  'idea':         { color: '#FF6835', label: '💡 Idea' },
+  'completed-db': { color: 'var(--m-success)', label: '🟢 DB' },
+  'ui-only':      { color: 'var(--m-info)', label: '🔵 UI' },
+  'pending':      { color: 'var(--m-text-muted)', label: '⚫ Pend.' },
+  'idea':         { color: 'var(--m-primary)', label: '💡 Idea' },
 };
 
 /* -- Tipos de nodos -- */
@@ -219,7 +219,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
       style={{
         width: 180,
         minHeight: 90,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--m-surface)',
         borderRadius: 10,
         border: selected ? `2px solid ${ORANGE}` : '1.5px solid #E5E7EB',
         boxShadow: selected ? `0 0 0 3px ${ORANGE}33` : '0 2px 8px rgba(0,0,0,0.08)',
@@ -231,10 +231,10 @@ function StickerNode({ id, data, selected }: NodeProps) {
       {/* Top accent bar */}
       <div style={{ height: 4, backgroundColor: d.familyColor ?? ORANGE }} />
 
-      <Handle type="target" position={Position.Top}    style={{ background: '#9CA3AF', width: 8, height: 8 }} />
-      <Handle type="source" position={Position.Bottom} style={{ background: '#9CA3AF', width: 8, height: 8 }} />
-      <Handle type="target" position={Position.Left}   style={{ background: '#9CA3AF', width: 8, height: 8 }} />
-      <Handle type="source" position={Position.Right}  style={{ background: '#9CA3AF', width: 8, height: 8 }} />
+      <Handle type="target" position={Position.Top}    style={{ background: 'var(--m-text-muted)', width: 8, height: 8 }} />
+      <Handle type="source" position={Position.Bottom} style={{ background: 'var(--m-text-muted)', width: 8, height: 8 }} />
+      <Handle type="target" position={Position.Left}   style={{ background: 'var(--m-text-muted)', width: 8, height: 8 }} />
+      <Handle type="source" position={Position.Right}  style={{ background: 'var(--m-text-muted)', width: 8, height: 8 }} />
 
       <div style={{ padding: '8px 10px' }}>
         {/* Family tag */}
@@ -255,7 +255,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
           margin: '0 0 5px',
           fontSize: '0.78rem',
           fontWeight: '700',
-          color: '#111827',
+          color: 'var(--m-text)',
           lineHeight: 1.3,
         }}>
           {d.label}
@@ -287,7 +287,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
                 marginTop: 3,
                 padding: '2px 8px',
                 backgroundColor: ORANGE,
-                color: '#fff',
+                color: 'var(--m-surface)',
                 border: 'none',
                 borderRadius: 5,
                 fontSize: '0.68rem',
@@ -304,7 +304,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
             <p style={{
               margin: '0 0 5px',
               fontSize: '0.72rem',
-              color: '#6B7280',
+              color: 'var(--m-text-muted)',
               lineHeight: 1.4,
             }}>
               {d.text}
@@ -350,7 +350,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
                   border: 'none',
                   cursor: 'pointer',
                   padding: '2px 4px',
-                  color: '#9CA3AF',
+                  color: 'var(--m-text-muted)',
                   display: 'flex',
                   alignItems: 'center',
                 }}
@@ -359,7 +359,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
               </button>
             )}
             {d.timestamp && (
-              <span style={{ fontSize: '0.58rem', color: '#D1D5DB' }}>
+              <span style={{ fontSize: '0.58rem', color: 'var(--m-border)' }}>
                 {new Date(d.timestamp).toLocaleDateString('es-UY', { day: '2-digit', month: '2-digit' })}
               </span>
             )}
@@ -382,21 +382,21 @@ function StickerNode({ id, data, selected }: NodeProps) {
           zIndex: 1000,
         }} onClick={() => setShowPromoteModal(false)}>
           <div style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--m-surface)',
             borderRadius: 12,
             padding: 24,
             maxWidth: 400,
             width: '90%',
             boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
           }} onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '1.1rem', fontWeight: '700', color: '#111827' }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '1.1rem', fontWeight: '700', color: 'var(--m-text)' }}>
               Promover a modulo
             </h3>
-            <p style={{ margin: '0 0 16px', fontSize: '0.875rem', color: '#6B7280' }}>
+            <p style={{ margin: '0 0 16px', fontSize: '0.875rem', color: 'var(--m-text-muted)' }}>
               {d.text}
             </p>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', marginBottom: 6, fontSize: '0.8rem', fontWeight: '600', color: '#374151' }}>
+              <label style={{ display: 'block', marginBottom: 6, fontSize: '0.8rem', fontWeight: '600', color: 'var(--m-text-secondary)' }}>
                 Area / Categoria
               </label>
               <input
@@ -414,7 +414,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
               />
             </div>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', marginBottom: 6, fontSize: '0.8rem', fontWeight: '600', color: '#374151' }}>
+              <label style={{ display: 'block', marginBottom: 6, fontSize: '0.8rem', fontWeight: '600', color: 'var(--m-text-secondary)' }}>
                 Notas (opcional)
               </label>
               <textarea
@@ -439,8 +439,8 @@ function StickerNode({ id, data, selected }: NodeProps) {
                   padding: '8px 16px',
                   border: '1px solid #D1D5DB',
                   borderRadius: 6,
-                  backgroundColor: '#FFFFFF',
-                  color: '#374151',
+                  backgroundColor: 'var(--m-surface)',
+                  color: 'var(--m-text-secondary)',
                   fontSize: '0.875rem',
                   fontWeight: '600',
                   cursor: 'pointer',
@@ -455,7 +455,7 @@ function StickerNode({ id, data, selected }: NodeProps) {
                   border: 'none',
                   borderRadius: 6,
                   backgroundColor: ORANGE,
-                  color: '#FFFFFF',
+                  color: 'var(--m-surface)',
                   fontSize: '0.875rem',
                   fontWeight: '600',
                   cursor: 'pointer',
@@ -489,7 +489,7 @@ function CanvasLinkNode({ data }: NodeProps) {
         height: 44,
         borderRadius: '50%',
         border: `2.5px solid ${ORANGE}`,
-        backgroundColor: hovered ? `${ORANGE}22` : '#FFFFFF',
+        backgroundColor: hovered ? `${ORANGE}22` : 'var(--m-surface)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -527,8 +527,8 @@ function CanvasLinkNode({ data }: NodeProps) {
           bottom: 50,
           left: '50%',
           transform: 'translateX(-50%)',
-          backgroundColor: '#1F2937',
-          color: '#fff',
+          backgroundColor: 'var(--m-text)',
+          color: 'var(--m-surface)',
           fontSize: '0.68rem',
           fontWeight: '600',
           padding: '4px 8px',
@@ -564,7 +564,7 @@ function ModulePanel({ canvasNodes, onDragStart, onAddIdea }: ModulePanelProps) 
   return (
     <div style={{
       width: 220,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: 'var(--m-surface)',
       borderRight: '1px solid #E5E7EB',
       display: 'flex',
       flexDirection: 'column',
@@ -575,12 +575,12 @@ function ModulePanel({ canvasNodes, onDragStart, onAddIdea }: ModulePanelProps) 
       <div style={{
         padding: '12px 14px',
         borderBottom: '1px solid #E5E7EB',
-        backgroundColor: '#F9FAFB',
+        backgroundColor: 'var(--m-surface-2)',
       }}>
-        <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: '800', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: '800', color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
           Módulos del Sistema
         </p>
-        <p style={{ margin: '2px 0 0', fontSize: '0.65rem', color: '#9CA3AF' }}>
+        <p style={{ margin: '2px 0 0', fontSize: '0.65rem', color: 'var(--m-text-muted)' }}>
           Arrastrá al canvas
         </p>
       </div>
@@ -630,10 +630,10 @@ function ModulePanel({ canvasNodes, onDragStart, onAddIdea }: ModulePanelProps) 
               }}
             >
               <span style={{ fontSize: '0.85rem' }}>{fam.emoji}</span>
-              <span style={{ flex: 1, fontSize: '0.75rem', fontWeight: '700', color: '#374151' }}>
+              <span style={{ flex: 1, fontSize: '0.75rem', fontWeight: '700', color: 'var(--m-text-secondary)' }}>
                 {fam.label}
               </span>
-              <span style={{ fontSize: '0.65rem', color: '#9CA3AF', marginRight: 2 }}>
+              <span style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)', marginRight: 2 }}>
                 {fam.modules.filter(m => canvasIds.has(m.id)).length}/{fam.modules.length}
               </span>
               {open[fam.id]
@@ -673,10 +673,10 @@ function ModulePanel({ canvasNodes, onDragStart, onAddIdea }: ModulePanelProps) 
                         backgroundColor: dot.color,
                         flexShrink: 0,
                       }} />
-                      <span style={{ fontSize: '0.72rem', color: '#374151', flex: 1, lineHeight: 1.3 }}>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--m-text-secondary)', flex: 1, lineHeight: 1.3 }}>
                         {mod.label}
                       </span>
-                      {inCanvas && <span style={{ fontSize: '0.58rem', color: '#D1D5DB' }}>✓</span>}
+                      {inCanvas && <span style={{ fontSize: '0.58rem', color: 'var(--m-border)' }}>✓</span>}
                     </div>
                   );
                 })}
@@ -712,7 +712,7 @@ function IdeaModal({ onClose, onSave, ideas }: IdeaModalProps) {
       top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      backgroundColor: '#FFFFFF',
+      backgroundColor: 'var(--m-surface)',
       borderRadius: 14,
       border: '1.5px solid #E5E7EB',
       boxShadow: '0 20px 60px rgba(0,0,0,0.18)',
@@ -730,7 +730,7 @@ function IdeaModal({ onClose, onSave, ideas }: IdeaModalProps) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Lightbulb size={16} color="#fff" />
-          <span style={{ color: '#fff', fontWeight: '800', fontSize: '0.9rem' }}>Nueva Idea</span>
+          <span style={{ color: 'var(--m-surface)', fontWeight: '800', fontSize: '0.9rem' }}>Nueva Idea</span>
         </div>
         <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', display: 'flex' }}>
           <X size={16} />
@@ -739,7 +739,7 @@ function IdeaModal({ onClose, onSave, ideas }: IdeaModalProps) {
 
       <div style={{ padding: '16px 18px' }}>
         {/* Area */}
-        <label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#374151', display: 'block', marginBottom: 5 }}>
+        <label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-text-secondary)', display: 'block', marginBottom: 5 }}>
           Area
         </label>
         <select
@@ -753,14 +753,14 @@ function IdeaModal({ onClose, onSave, ideas }: IdeaModalProps) {
             fontSize: '0.82rem',
             outline: 'none',
             marginBottom: 12,
-            color: '#111827',
+            color: 'var(--m-text)',
           }}
         >
           {AREAS.map(a => <option key={a} value={a}>{a}</option>)}
         </select>
 
         {/* Idea text */}
-        <label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#374151', display: 'block', marginBottom: 5 }}>
+        <label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-text-secondary)', display: 'block', marginBottom: 5 }}>
           Idea
         </label>
         <textarea
@@ -777,7 +777,7 @@ function IdeaModal({ onClose, onSave, ideas }: IdeaModalProps) {
             resize: 'none',
             outline: 'none',
             fontFamily: 'inherit',
-            color: '#111827',
+            color: 'var(--m-text)',
             boxSizing: 'border-box',
           }}
           onFocus={e => (e.target.style.borderColor = ORANGE)}
@@ -787,21 +787,21 @@ function IdeaModal({ onClose, onSave, ideas }: IdeaModalProps) {
         {/* Recientes del area */}
         {recent.length > 0 && (
           <div style={{ marginTop: 12 }}>
-            <p style={{ fontSize: '0.68rem', fontWeight: '700', color: '#9CA3AF', margin: '0 0 6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <p style={{ fontSize: '0.68rem', fontWeight: '700', color: 'var(--m-text-muted)', margin: '0 0 6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Recientes en {area}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
               {recent.map(idea => (
                 <div key={idea.id} style={{
                   padding: '6px 9px',
-                  backgroundColor: '#F9FAFB',
+                  backgroundColor: 'var(--m-surface-2)',
                   borderRadius: 7,
                   border: '1px solid #E5E7EB',
                 }}>
-                  <p style={{ margin: 0, fontSize: '0.72rem', color: '#374151', lineHeight: 1.4 }}>
+                  <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-secondary)', lineHeight: 1.4 }}>
                     {idea.text.length > 60 ? idea.text.slice(0, 60) + '…' : idea.text}
                   </p>
-                  <p style={{ margin: '2px 0 0', fontSize: '0.62rem', color: '#9CA3AF' }}>
+                  <p style={{ margin: '2px 0 0', fontSize: '0.62rem', color: 'var(--m-text-muted)' }}>
                     {new Date(idea.timestamp).toLocaleString('es-UY', {
                       day: '2-digit', month: '2-digit',
                       hour: '2-digit', minute: '2-digit',
@@ -821,8 +821,8 @@ function IdeaModal({ onClose, onSave, ideas }: IdeaModalProps) {
             marginTop: 14,
             width: '100%',
             padding: '10px',
-            backgroundColor: text.trim() ? ORANGE : '#E5E7EB',
-            color: text.trim() ? '#fff' : '#9CA3AF',
+            backgroundColor: text.trim() ? ORANGE : 'var(--m-border)',
+            color: text.trim() ? '#fff' : 'var(--m-text-muted)',
             border: 'none',
             borderRadius: 8,
             fontSize: '0.85rem',
@@ -1044,7 +1044,7 @@ function IdeasBoardInner({
       {/* -- Top Bar -- */}
       <div style={{
         height: 54,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--m-surface)',
         borderBottom: '1px solid #E5E7EB',
         display: 'flex',
         alignItems: 'center',
@@ -1064,11 +1064,11 @@ function IdeasBoardInner({
               padding: '6px 12px',
               border: '1.5px solid #E5E7EB',
               borderRadius: 8,
-              backgroundColor: '#F9FAFB',
+              backgroundColor: 'var(--m-surface-2)',
               cursor: 'pointer',
               fontSize: '0.82rem',
               fontWeight: '700',
-              color: '#111827',
+              color: 'var(--m-text)',
             }}
           >
             <Layers size={14} color={ORANGE} />
@@ -1090,7 +1090,7 @@ function IdeasBoardInner({
               position: 'absolute',
               top: 40,
               left: 0,
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'var(--m-surface)',
               border: '1px solid #E5E7EB',
               borderRadius: 10,
               boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
@@ -1111,11 +1111,11 @@ function IdeasBoardInner({
                     background: c.id === activeCanvas?.id ? `${ORANGE}12` : 'none',
                     cursor: 'pointer',
                     fontSize: '0.8rem',
-                    color: '#111827',
+                    color: 'var(--m-text)',
                     textAlign: 'left',
                   }}
                 >
-                  <Layers size={13} color={c.id === activeCanvas?.id ? ORANGE : '#9CA3AF'} />
+                  <Layers size={13} color={c.id === activeCanvas?.id ? ORANGE : 'var(--m-text-muted)'} />
                   {c.name}
                   {c.id === activeCanvas?.id && <span style={{ marginLeft: 'auto', color: ORANGE, fontSize: '0.65rem' }}>Activo</span>}
                 </button>
@@ -1148,12 +1148,12 @@ function IdeasBoardInner({
         <button
           onClick={() => { setDraftName(canvasName); setRenaming(true); setShowCanvasMenu(false); }}
           title="Renombrar canvas"
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', display: 'flex', padding: 5 }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-text-muted)', display: 'flex', padding: 5 }}
         >
           <Edit3 size={14} />
         </button>
 
-        <div style={{ width: 1, height: 24, backgroundColor: '#E5E7EB' }} />
+        <div style={{ width: 1, height: 24, backgroundColor: 'var(--m-border)' }} />
 
         {/* Navegacion jerarquica */}
         {parentCanvas && (
@@ -1194,7 +1194,7 @@ function IdeasBoardInner({
               border: `1.5px solid #3B82F666`,
               borderRadius: 20,
               backgroundColor: '#3B82F60D',
-              color: '#3B82F6',
+              color: 'var(--m-info)',
               fontSize: '0.72rem',
               fontWeight: '700',
               cursor: 'pointer',
@@ -1224,8 +1224,8 @@ function IdeasBoardInner({
               padding: '6px 10px',
               border: '1.5px solid #FECACA',
               borderRadius: 7,
-              backgroundColor: '#FFF5F5',
-              color: '#EF4444',
+              backgroundColor: 'var(--m-danger-bg)',
+              color: 'var(--m-danger)',
               fontSize: '0.75rem',
               fontWeight: '600',
               cursor: 'pointer',
@@ -1242,7 +1242,7 @@ function IdeasBoardInner({
               border: 'none',
               borderRadius: 7,
               backgroundColor: ORANGE,
-              color: '#fff',
+              color: 'var(--m-surface)',
               fontSize: '0.75rem',
               fontWeight: '700',
               cursor: 'pointer',
@@ -1286,7 +1286,7 @@ function IdeasBoardInner({
                 const d = n.data as StickerData;
                 return d?.familyColor ?? ORANGE;
               }}
-              style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB' }}
+              style={{ backgroundColor: 'var(--m-surface-2)', border: '1px solid #E5E7EB' }}
             />
 
             {/* Edge color picker */}
@@ -1295,13 +1295,13 @@ function IdeasBoardInner({
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
-                backgroundColor: '#FFFFFF',
+                backgroundColor: 'var(--m-surface)',
                 border: '1px solid #E5E7EB',
                 borderRadius: 30,
                 padding: '6px 14px',
                 boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
               }}>
-                <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#9CA3AF', marginRight: 4 }}>
+                <span style={{ fontSize: '0.68rem', fontWeight: '700', color: 'var(--m-text-muted)', marginRight: 4 }}>
                   Conector:
                 </span>
                 {EDGE_COLORS.map(ec => (
@@ -1322,7 +1322,7 @@ function IdeasBoardInner({
                     }}
                   />
                 ))}
-                <div style={{ width: 1, height: 18, backgroundColor: '#E5E7EB', margin: '0 4px' }} />
+                <div style={{ width: 1, height: 18, backgroundColor: 'var(--m-border)', margin: '0 4px' }} />
                 <span style={{ fontSize: '0.68rem', color: activeEdgeColor.color, fontWeight: '700' }}>
                   {activeEdgeColor.label}
                 </span>
@@ -1335,16 +1335,16 @@ function IdeasBoardInner({
                 <div style={{
                   marginTop: 60,
                   textAlign: 'center',
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: 'var(--m-surface)',
                   border: '1.5px dashed #E5E7EB',
                   borderRadius: 14,
                   padding: '28px 40px',
                 }}>
                   <p style={{ fontSize: '2rem', margin: '0 0 8px' }}>🗺️</p>
-                  <p style={{ fontSize: '0.9rem', fontWeight: '700', color: '#374151', margin: '0 0 4px' }}>
+                  <p style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--m-text-secondary)', margin: '0 0 4px' }}>
                     Canvas vacío
                   </p>
-                  <p style={{ fontSize: '0.78rem', color: '#9CA3AF', margin: 0 }}>
+                  <p style={{ fontSize: '0.78rem', color: 'var(--m-text-muted)', margin: 0 }}>
                     Arrastrá módulos desde el panel izquierdo<br />o creá una nueva idea
                   </p>
                 </div>
@@ -1514,10 +1514,10 @@ export function IdeasBoardView({ onNavigate }: Props) {
 
   if (loading) {
     return (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--m-bg)' }}>
         <div style={{ textAlign: 'center' }}>
           <RefreshCw size={32} color={ORANGE} style={{ animation: 'spin 1s linear infinite' }} />
-          <p style={{ color: '#6B7280', marginTop: 12, fontSize: '0.875rem' }}>Cargando Registro de Ideas…</p>
+          <p style={{ color: 'var(--m-text-muted)', marginTop: 12, fontSize: '0.875rem' }}>Cargando Registro de Ideas…</p>
         </div>
       </div>
     );

@@ -26,24 +26,24 @@ interface LogEntry {
 }
 
 const LEVEL_META: Record<LogLevel, { label: string; color: string; bg: string; border: string; icon: any }> = {
-  info:    { label: 'INFO',    color: '#3B82F6', bg: '#EFF6FF', border: '#BFDBFE', icon: Info        },
-  warn:    { label: 'WARN',    color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', icon: AlertTriangle },
-  error:   { label: 'ERROR',   color: '#EF4444', bg: '#FEF2F2', border: '#FECACA', icon: XCircle      },
-  success: { label: 'OK',      color: '#059669', bg: '#F0FDF8', border: '#A7F3D0', icon: CheckCircle2 },
-  debug:   { label: 'DEBUG',   color: '#9CA3AF', bg: '#F9FAFB', border: '#E5E7EB', icon: Cpu          },
+  info:    { label: 'INFO',    color: 'var(--m-info)', bg: 'var(--m-info-bg)', border: 'var(--m-info-bg)', icon: Info        },
+  warn:    { label: 'WARN',    color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', border: 'var(--m-warning-bg)', icon: AlertTriangle },
+  error:   { label: 'ERROR',   color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', border: 'var(--m-danger-border)', icon: XCircle      },
+  success: { label: 'OK',      color: 'var(--m-success)', bg: 'var(--m-success-bg)', border: 'var(--m-success-bg)', icon: CheckCircle2 },
+  debug:   { label: 'DEBUG',   color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', border: 'var(--m-border)', icon: Cpu          },
 };
 
 const MODULE_META: Record<LogModule, { label: string; color: string; icon: any }> = {
-  system:        { label: 'Sistema',       color: '#6B7280', icon: Server     },
-  auth:          { label: 'Auth',          color: '#8B5CF6', icon: Shield     },
-  database:      { label: 'Database',      color: '#059669', icon: Database   },
-  api:           { label: 'API',           color: '#3B82F6', icon: Globe      },
-  edge:          { label: 'Edge',          color: '#FF6835', icon: Zap        },
-  storage:       { label: 'Storage',       color: '#F59E0B', icon: Cpu        },
-  roadmap:       { label: 'Roadmap',       color: '#6366F1', icon: CheckCircle2 },
+  system:        { label: 'Sistema',       color: 'var(--m-text-muted)', icon: Server     },
+  auth:          { label: 'Auth',          color: 'var(--m-purple)', icon: Shield     },
+  database:      { label: 'Database',      color: 'var(--m-success)', icon: Database   },
+  api:           { label: 'API',           color: 'var(--m-info)', icon: Globe      },
+  edge:          { label: 'Edge',          color: 'var(--m-primary)', icon: Zap        },
+  storage:       { label: 'Storage',       color: 'var(--m-warning)', icon: Cpu        },
+  roadmap:       { label: 'Roadmap',       color: 'var(--m-purple)', icon: CheckCircle2 },
   integraciones: { label: 'Integraciones', color: '#EC4899', icon: Globe      },
-  herramientas:  { label: 'Herramientas',  color: '#10B981', icon: Activity   },
-  ecommerce:     { label: 'eCommerce',     color: '#FF6835', icon: Activity   },
+  herramientas:  { label: 'Herramientas',  color: 'var(--m-success)', icon: Activity   },
+  ecommerce:     { label: 'eCommerce',     color: 'var(--m-primary)', icon: Activity   },
 };
 
 // ─── Mock log data ────────────────────────────────────────────────────────────
@@ -127,23 +127,23 @@ export function SystemLogsView({ onNavigate }: Props) {
         ]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: 'var(--m-bg)' }}>
 
         {/* Summary */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
           {[
-            { label: 'Errores',         value: counts.error, color: '#EF4444', icon: XCircle      },
-            { label: 'Advertencias',    value: counts.warn,  color: '#D97706', icon: AlertTriangle },
-            { label: 'Info / Success',  value: counts.info,  color: '#059669', icon: CheckCircle2 },
-            { label: 'Debug',           value: counts.debug, color: '#9CA3AF', icon: Cpu          },
+            { label: 'Errores',         value: counts.error, color: 'var(--m-danger)', icon: XCircle      },
+            { label: 'Advertencias',    value: counts.warn,  color: 'var(--m-warning)', icon: AlertTriangle },
+            { label: 'Info / Success',  value: counts.info,  color: 'var(--m-success)', icon: CheckCircle2 },
+            { label: 'Debug',           value: counts.debug, color: 'var(--m-text-muted)', icon: Cpu          },
           ].map(({ label, value, color, icon: Icon }) => (
-            <div key={label} style={{ backgroundColor: '#fff', borderRadius: 12, padding: '14px 18px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div key={label} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, padding: '14px 18px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ width: 36, height: 36, borderRadius: 9, backgroundColor: `${color}12`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size={15} color={color} />
               </div>
               <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: '#111827', lineHeight: 1 }}>{value}</div>
-                <div style={{ fontSize: '0.68rem', color: '#9CA3AF', marginTop: 2 }}>{label}</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--m-text)', lineHeight: 1 }}>{value}</div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)', marginTop: 2 }}>{label}</div>
               </div>
             </div>
           ))}
@@ -154,23 +154,23 @@ export function SystemLogsView({ onNavigate }: Props) {
           <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
             <Search size={13} color="#9CA3AF" style={{ position: 'absolute', left: 9, top: '50%', transform: 'translateY(-50%)' }} />
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar en logs..."
-              style={{ width: '100%', paddingLeft: 30, paddingRight: 10, paddingTop: 8, paddingBottom: 8, border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.8rem', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }} />
+              style={{ width: '100%', paddingLeft: 30, paddingRight: 10, paddingTop: 8, paddingBottom: 8, border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.8rem', outline: 'none', backgroundColor: 'var(--m-surface)', boxSizing: 'border-box' }} />
           </div>
           <select value={levelFilter} onChange={e => setLevel(e.target.value as any)}
-            style={{ padding: '8px 10px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.8rem', outline: 'none', backgroundColor: '#fff', cursor: 'pointer' }}>
+            style={{ padding: '8px 10px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.8rem', outline: 'none', backgroundColor: 'var(--m-surface)', cursor: 'pointer' }}>
             <option value="all">Todos los niveles</option>
             {Object.entries(LEVEL_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
           <select value={moduleFilter} onChange={e => setModule(e.target.value as any)}
-            style={{ padding: '8px 10px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.8rem', outline: 'none', backgroundColor: '#fff', cursor: 'pointer' }}>
+            style={{ padding: '8px 10px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.8rem', outline: 'none', backgroundColor: 'var(--m-surface)', cursor: 'pointer' }}>
             <option value="all">Todos los módulos</option>
             {Object.entries(MODULE_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
           <button onClick={() => { setSearch(''); setLevel('all'); setModule('all'); setRefresh(r => r+1); }}
-            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: 8, backgroundColor: '#fff', fontSize: '0.8rem', color: '#6B7280', cursor: 'pointer' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: 8, backgroundColor: 'var(--m-surface)', fontSize: '0.8rem', color: 'var(--m-text-muted)', cursor: 'pointer' }}>
             <RefreshCw size={12} /> Limpiar
           </button>
-          <span style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>{filtered.length} entradas</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{filtered.length} entradas</span>
         </div>
 
         {/* Log list */}
@@ -183,7 +183,7 @@ export function SystemLogsView({ onNavigate }: Props) {
             const MIcon  = mm.icon;
 
             return (
-              <div key={log.id} style={{ backgroundColor: '#fff', borderRadius: 8, border: `1px solid ${log.level === 'error' ? '#FECACA' : log.level === 'warn' ? '#FDE68A' : '#E5E7EB'}`, overflow: 'hidden' }}>
+              <div key={log.id} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 8, border: `1px solid ${log.level === 'error' ? '#FECACA' : log.level === 'warn' ? '#FDE68A' : 'var(--m-border)'}`, overflow: 'hidden' }}>
                 <button
                   onClick={() => log.detail ? setExpandedId(isExp ? null : log.id) : null}
                   style={{ width: '100%', padding: '9px 12px', display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: log.detail ? 'pointer' : 'default', textAlign: 'left' }}>
@@ -195,7 +195,7 @@ export function SystemLogsView({ onNavigate }: Props) {
                   </div>
 
                   {/* Timestamp */}
-                  <span style={{ fontSize: '0.68rem', color: '#9CA3AF', flexShrink: 0, minWidth: 110 }}>{fmt(log.ts)}</span>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)', flexShrink: 0, minWidth: 110 }}>{fmt(log.ts)}</span>
 
                   {/* Module badge */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
@@ -204,11 +204,11 @@ export function SystemLogsView({ onNavigate }: Props) {
                   </div>
 
                   {/* Message */}
-                  <span style={{ flex: 1, fontSize: '0.76rem', color: '#374151', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{log.message}</span>
+                  <span style={{ flex: 1, fontSize: '0.76rem', color: 'var(--m-text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{log.message}</span>
 
                   {/* Duration */}
                   {log.duration && (
-                    <span style={{ fontSize: '0.65rem', color: '#9CA3AF', flexShrink: 0 }}>{log.duration}ms</span>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)', flexShrink: 0 }}>{log.duration}ms</span>
                   )}
 
                   {/* Expand if detail */}
@@ -221,7 +221,7 @@ export function SystemLogsView({ onNavigate }: Props) {
                 {/* Detail */}
                 {isExp && log.detail && (
                   <div style={{ borderTop: `1px dashed ${lm.border}`, padding: '8px 12px 10px 12px', backgroundColor: lm.bg }}>
-                    <pre style={{ margin: 0, fontSize: '0.72rem', color: '#374151', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.5 }}>{log.detail}</pre>
+                    <pre style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-secondary)', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.5 }}>{log.detail}</pre>
                   </div>
                 )}
               </div>
@@ -229,15 +229,15 @@ export function SystemLogsView({ onNavigate }: Props) {
           })}
 
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+            <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
               <Activity size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />
               <p style={{ margin: 0, fontWeight: '600' }}>No hay logs que coincidan con los filtros</p>
             </div>
           )}
         </div>
 
-        <div style={{ marginTop: 16, padding: '10px 14px', backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 8 }}>
-          <p style={{ margin: 0, fontSize: '0.7rem', color: '#9CA3AF' }}>
+        <div style={{ marginTop: 16, padding: '10px 14px', backgroundColor: 'var(--m-surface-2)', border: '1px solid #E5E7EB', borderRadius: 8 }}>
+          <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>
             💡 Logs simulados para demostración. En producción se integraría con <strong>Supabase Logs</strong> o un servicio como <strong>Logflare / Logtail</strong>.
           </p>
         </div>

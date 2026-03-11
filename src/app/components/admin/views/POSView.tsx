@@ -73,9 +73,9 @@ const PRODUCTS: Product[] = [
 ];
 
 const PAYMENT_METHODS = [
-  { id: 'efectivo',  label: 'Efectivo',       icon: Banknote,         color: '#10B981' },
-  { id: 'tarjeta',   label: 'Tarjeta',         icon: CreditCard,       color: '#3B82F6' },
-  { id: 'qr',        label: 'QR / Transfer',   icon: QrCode,           color: '#8B5CF6' },
+  { id: 'efectivo',  label: 'Efectivo',       icon: Banknote,         color: 'var(--m-success)' },
+  { id: 'tarjeta',   label: 'Tarjeta',         icon: CreditCard,       color: 'var(--m-info)' },
+  { id: 'qr',        label: 'QR / Transfer',   icon: QrCode,           color: 'var(--m-purple)' },
   { id: 'cuenta',    label: 'Cuenta Cte.',      icon: BookUser,         color: ORANGE    },
 ];
 
@@ -119,7 +119,7 @@ function Kbd({
         padding: '14px 4px',
         border: '1px solid #E5E7EB',
         borderRadius: 10,
-        backgroundColor: pressed ? '#F3F4F6' : '#FFFFFF',
+        backgroundColor: pressed ? '#F3F4F6' : 'var(--m-surface)',
         color: color ?? '#111827',
         fontSize: fontSize ?? '1.1rem',
         fontWeight: '700',
@@ -267,11 +267,11 @@ export function POSView({ onNavigate }: Props) {
     return (
       <div style={{
         flex: 1, display: 'flex', flexDirection: 'column',
-        backgroundColor: '#F8F9FA', overflow: 'hidden',
+        backgroundColor: 'var(--m-bg)', overflow: 'hidden',
       }}>
         {/* Header */}
         <div style={{
-          padding: '18px 28px', backgroundColor: '#fff',
+          padding: '18px 28px', backgroundColor: 'var(--m-surface)',
           borderBottom: '1px solid #E9ECEF',
           display: 'flex', alignItems: 'center', gap: 16,
         }}>
@@ -283,10 +283,10 @@ export function POSView({ onNavigate }: Props) {
             <ReceiptText size={20} color="#fff" strokeWidth={2.5} />
           </div>
           <div>
-            <h1 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#1A1A2E' }}>
+            <h1 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: 'var(--m-text)' }}>
               Venta Completada ✓
             </h1>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#6C757D' }}>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>
               Ticket #{ticketNo} · {time.toLocaleString('es-UY')}
             </p>
           </div>
@@ -296,7 +296,7 @@ export function POSView({ onNavigate }: Props) {
               style={{
                 padding: '10px 22px', borderRadius: 10, border: 'none',
                 background: `linear-gradient(135deg, ${ORANGE} 0%, #ff8c42 100%)`,
-                color: '#fff', fontWeight: '800', fontSize: '0.9rem',
+                color: 'var(--m-surface)', fontWeight: '800', fontSize: '0.9rem',
                 cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
               }}
             >
@@ -308,7 +308,7 @@ export function POSView({ onNavigate }: Props) {
         {/* Ticket imprimible */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '32px', display: 'flex', justifyContent: 'center' }}>
           <div style={{
-            width: 420, backgroundColor: '#fff', borderRadius: 16,
+            width: 420, backgroundColor: 'var(--m-surface)', borderRadius: 16,
             border: '1px solid #E9ECEF', padding: '32px',
             boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
           }}>
@@ -322,14 +322,14 @@ export function POSView({ onNavigate }: Props) {
               }}>
                 <ReceiptText size={24} color="#fff" />
               </div>
-              <p style={{ margin: 0, fontWeight: '800', fontSize: '1.1rem', color: '#111' }}>CHARLIE MARKETPLACE</p>
-              <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#9CA3AF' }}>Punto de Venta · Caja #1</p>
-              <p style={{ margin: '6px 0 0', fontSize: '0.78rem', color: '#6B7280' }}>
+              <p style={{ margin: 0, fontWeight: '800', fontSize: '1.1rem', color: 'var(--m-text)' }}>CHARLIE MARKETPLACE</p>
+              <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>Punto de Venta · Caja #1</p>
+              <p style={{ margin: '6px 0 0', fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>
                 {time.toLocaleString('es-UY', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
               </p>
-              <p style={{ margin: '2px 0 0', fontSize: '0.78rem', fontWeight: '700', color: '#111' }}>TICKET #{ticketNo}</p>
+              <p style={{ margin: '2px 0 0', fontSize: '0.78rem', fontWeight: '700', color: 'var(--m-text)' }}>TICKET #{ticketNo}</p>
               {customerName && (
-                <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: '#6B7280' }}>Cliente: {customerName}</p>
+                <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>Cliente: {customerName}</p>
               )}
             </div>
 
@@ -344,15 +344,15 @@ export function POSView({ onNavigate }: Props) {
                     alignItems: 'flex-start', gap: 8,
                   }}>
                     <div style={{ flex: 1 }}>
-                      <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: '#111' }}>
+                      <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: 'var(--m-text)' }}>
                         {item.product.emoji} {item.product.name}
                       </p>
-                      <p style={{ margin: '1px 0 0', fontSize: '0.7rem', color: '#9CA3AF' }}>
+                      <p style={{ margin: '1px 0 0', fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>
                         {item.qty} {item.product.unit} × ${fmt(item.product.price)}
                         {item.discount > 0 && ` (−${item.discount}%)`}
                       </p>
                     </div>
-                    <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: '#111', whiteSpace: 'nowrap' }}>
+                    <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: 'var(--m-text)', whiteSpace: 'nowrap' }}>
                       ${fmt(line)}
                     </p>
                   </div>
@@ -364,12 +364,12 @@ export function POSView({ onNavigate }: Props) {
             <div style={{ borderTop: '1px dashed #D1D5DB', paddingTop: 16, marginBottom: 20 }}>
               {globalDiscount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                  <span style={{ fontSize: '0.8rem', color: '#6B7280' }}>Descuento general ({globalDiscount}%)</span>
-                  <span style={{ fontSize: '0.8rem', color: '#EF4444', fontWeight: '700' }}>−${fmt(subtotal * globalDiscount / 100)}</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>Descuento general ({globalDiscount}%)</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--m-danger)', fontWeight: '700' }}>−${fmt(subtotal * globalDiscount / 100)}</span>
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '1rem', fontWeight: '800', color: '#111' }}>TOTAL</span>
+                <span style={{ fontSize: '1rem', fontWeight: '800', color: 'var(--m-text)' }}>TOTAL</span>
                 <span style={{ fontSize: '1.3rem', fontWeight: '900', color: ORANGE }}>${fmt(lastTotal)}</span>
               </div>
             </div>
@@ -387,7 +387,7 @@ export function POSView({ onNavigate }: Props) {
               </div>
               {paymentMethod === 'efectivo' && parseFloat(cashReceived) > 0 && (
                 <div style={{ marginTop: 8 }}>
-                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#6B7280' }}>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>
                     Recibido: ${fmt(parseFloat(cashReceived))} · Vuelto: <strong>${fmt(change)}</strong>
                   </p>
                 </div>
@@ -396,8 +396,8 @@ export function POSView({ onNavigate }: Props) {
 
             {/* Pie */}
             <div style={{ textAlign: 'center', paddingTop: 16, borderTop: '1px dashed #D1D5DB' }}>
-              <p style={{ margin: 0, fontSize: '0.75rem', color: '#9CA3AF' }}>¡Gracias por su compra!</p>
-              <p style={{ margin: '2px 0 0', fontSize: '0.68rem', color: '#D1D5DB' }}>www.charliemarketplace.com</p>
+              <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>¡Gracias por su compra!</p>
+              <p style={{ margin: '2px 0 0', fontSize: '0.68rem', color: 'var(--m-border)' }}>www.charliemarketplace.com</p>
             </div>
 
             {/* Botón imprimir */}
@@ -406,7 +406,7 @@ export function POSView({ onNavigate }: Props) {
               style={{
                 marginTop: 20, width: '100%', padding: '11px',
                 border: '1.5px solid #E5E7EB', borderRadius: 10,
-                backgroundColor: '#F9FAFB', color: '#374151',
+                backgroundColor: 'var(--m-surface-2)', color: 'var(--m-text-secondary)',
                 fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
               }}
@@ -423,13 +423,13 @@ export function POSView({ onNavigate }: Props) {
   return (
     <div style={{
       flex: 1, display: 'flex', flexDirection: 'column',
-      backgroundColor: '#F0F2F5', overflow: 'hidden',
+      backgroundColor: 'var(--m-surface-2)', overflow: 'hidden',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     }}>
 
       {/* ── TOP BAR ── */}
       <div style={{
-        height: 56, backgroundColor: '#1A1A2E',
+        height: 56, backgroundColor: 'var(--m-text)',
         display: 'flex', alignItems: 'center', padding: '0 20px', gap: 16,
         flexShrink: 0,
       }}>
@@ -456,7 +456,7 @@ export function POSView({ onNavigate }: Props) {
         }}>
           <ScanLine size={15} color="#fff" strokeWidth={2.5} />
         </div>
-        <span style={{ color: '#fff', fontWeight: '800', fontSize: '0.95rem' }}>
+        <span style={{ color: 'var(--m-surface)', fontWeight: '800', fontSize: '0.95rem' }}>
           POS Terminal
         </span>
         <span style={{
@@ -477,7 +477,7 @@ export function POSView({ onNavigate }: Props) {
           </div>
           <div style={{
             padding: '4px 10px', borderRadius: 6, fontSize: '0.72rem', fontWeight: '700',
-            backgroundColor: '#10B98120', color: '#10B981', border: '1px solid #10B98140',
+            backgroundColor: '#10B98120', color: 'var(--m-success)', border: '1px solid #10B98140',
           }}>
             ● EN LÍNEA
           </div>
@@ -490,14 +490,14 @@ export function POSView({ onNavigate }: Props) {
         {/* ══════════════ PANEL IZQUIERDO: Productos ══════════════ */}
         <div style={{
           flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden',
-          backgroundColor: '#F0F2F5', borderRight: '1px solid #E5E7EB',
+          backgroundColor: 'var(--m-surface-2)', borderRight: '1px solid #E5E7EB',
         }}>
 
           {/* Search bar */}
-          <div style={{ padding: '14px 16px 10px', backgroundColor: '#fff', borderBottom: '1px solid #E9ECEF' }}>
+          <div style={{ padding: '14px 16px 10px', backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E9ECEF' }}>
             <div style={{
               display: 'flex', alignItems: 'center', gap: 10,
-              backgroundColor: '#F3F4F6', borderRadius: 12, padding: '10px 14px',
+              backgroundColor: 'var(--m-surface-2)', borderRadius: 12, padding: '10px 14px',
               border: '1.5px solid transparent',
             }}
               onFocus={() => {}}
@@ -510,7 +510,7 @@ export function POSView({ onNavigate }: Props) {
                 placeholder="Buscar producto o código de barras…"
                 style={{
                   flex: 1, border: 'none', background: 'none', outline: 'none',
-                  fontSize: '0.88rem', color: '#111827',
+                  fontSize: '0.88rem', color: 'var(--m-text)',
                 }}
               />
               {search && (
@@ -518,7 +518,7 @@ export function POSView({ onNavigate }: Props) {
                   <X size={14} color="#9CA3AF" />
                 </button>
               )}
-              <div style={{ width: 1, height: 18, backgroundColor: '#D1D5DB' }} />
+              <div style={{ width: 1, height: 18, backgroundColor: 'var(--m-border)' }} />
               <ScanLine size={16} color={ORANGE} style={{ cursor: 'pointer' }} title="Escanear código" />
             </div>
           </div>
@@ -526,7 +526,7 @@ export function POSView({ onNavigate }: Props) {
           {/* Category pills */}
           <div style={{
             display: 'flex', gap: 8, padding: '10px 16px',
-            overflowX: 'auto', backgroundColor: '#fff',
+            overflowX: 'auto', backgroundColor: 'var(--m-surface)',
             borderBottom: '1px solid #E9ECEF', flexShrink: 0,
           }}>
             {CATEGORIES.map(cat => (
@@ -536,8 +536,8 @@ export function POSView({ onNavigate }: Props) {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 5,
                   padding: '6px 14px', borderRadius: 20, border: 'none',
-                  backgroundColor: category === cat.id ? ORANGE : '#F3F4F6',
-                  color: category === cat.id ? '#fff' : '#374151',
+                  backgroundColor: category === cat.id ? ORANGE : 'var(--m-surface-2)',
+                  color: category === cat.id ? '#fff' : 'var(--m-text-secondary)',
                   fontWeight: '700', fontSize: '0.78rem', cursor: 'pointer',
                   whiteSpace: 'nowrap', transition: 'all 0.12s', flexShrink: 0,
                 }}
@@ -550,7 +550,7 @@ export function POSView({ onNavigate }: Props) {
           {/* Product grid */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '14px 16px' }}>
             {filtered.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '60px 20px', color: '#9CA3AF' }}>
+              <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--m-text-muted)' }}>
                 <Package size={40} style={{ marginBottom: 12, opacity: 0.3 }} />
                 <p style={{ margin: 0, fontWeight: '700' }}>Sin resultados</p>
               </div>
@@ -567,7 +567,7 @@ export function POSView({ onNavigate }: Props) {
                       key={product.id}
                       onClick={() => addToCart(product)}
                       style={{
-                        backgroundColor: '#fff', border: inCart ? `2px solid ${ORANGE}` : '1.5px solid #E5E7EB',
+                        backgroundColor: 'var(--m-surface)', border: inCart ? `2px solid ${ORANGE}` : '1.5px solid #E5E7EB',
                         borderRadius: 12, padding: '12px 10px', cursor: 'pointer',
                         textAlign: 'left', transition: 'all 0.12s',
                         boxShadow: inCart ? `0 0 0 3px ${ORANGE}20` : '0 1px 4px rgba(0,0,0,0.05)',
@@ -587,7 +587,7 @@ export function POSView({ onNavigate }: Props) {
                         <div style={{
                           position: 'absolute', top: 6, right: 6,
                           width: 20, height: 20, borderRadius: '50%',
-                          backgroundColor: ORANGE, color: '#fff',
+                          backgroundColor: ORANGE, color: 'var(--m-surface)',
                           fontSize: '0.65rem', fontWeight: '800',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
@@ -595,18 +595,18 @@ export function POSView({ onNavigate }: Props) {
                         </div>
                       )}
                       <div style={{ fontSize: '1.8rem', marginBottom: 6 }}>{product.emoji}</div>
-                      <p style={{ margin: '0 0 4px', fontSize: '0.75rem', fontWeight: '700', color: '#111827', lineHeight: 1.3 }}>
+                      <p style={{ margin: '0 0 4px', fontSize: '0.75rem', fontWeight: '700', color: 'var(--m-text)', lineHeight: 1.3 }}>
                         {product.name}
                       </p>
-                      <p style={{ margin: 0, fontSize: '0.7rem', color: '#9CA3AF', marginBottom: 6 }}>
+                      <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--m-text-muted)', marginBottom: 6 }}>
                         {product.code}
                       </p>
                       <p style={{ margin: 0, fontSize: '1rem', fontWeight: '900', color: ORANGE }}>
                         ${fmt(product.price)}
-                        <span style={{ fontSize: '0.62rem', fontWeight: '500', color: '#9CA3AF', marginLeft: 3 }}>/{product.unit}</span>
+                        <span style={{ fontSize: '0.62rem', fontWeight: '500', color: 'var(--m-text-muted)', marginLeft: 3 }}>/{product.unit}</span>
                       </p>
                       {product.stock <= 10 && (
-                        <p style={{ margin: '4px 0 0', fontSize: '0.62rem', color: '#F59E0B', fontWeight: '700' }}>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.62rem', color: 'var(--m-warning)', fontWeight: '700' }}>
                           ⚠ Stock: {product.stock}
                         </p>
                       )}
@@ -621,7 +621,7 @@ export function POSView({ onNavigate }: Props) {
         {/* ══════════════ PANEL DERECHO: Ticket + Cobro ══════════════ */}
         <div style={{
           width: 420, display: 'flex', flexDirection: 'column',
-          backgroundColor: '#fff', overflow: 'hidden', flexShrink: 0,
+          backgroundColor: 'var(--m-surface)', overflow: 'hidden', flexShrink: 0,
         }}>
 
           {/* Header del ticket */}
@@ -630,16 +630,16 @@ export function POSView({ onNavigate }: Props) {
             display: 'flex', alignItems: 'center', gap: 10,
           }}>
             <ShoppingCart size={18} color={ORANGE} />
-            <span style={{ fontWeight: '800', color: '#111827', flex: 1 }}>
+            <span style={{ fontWeight: '800', color: 'var(--m-text)', flex: 1 }}>
               Ticket #{ticketNo}
             </span>
-            <span style={{ fontSize: '0.72rem', color: '#9CA3AF', fontWeight: '600' }}>
+            <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)', fontWeight: '600' }}>
               {cart.length} {cart.length === 1 ? 'ítem' : 'ítems'}
             </span>
             {cart.length > 0 && (
               <button
                 onClick={() => { setCart([]); setSelectedItemId(null); }}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EF4444', display: 'flex', padding: 4 }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-danger)', display: 'flex', padding: 4 }}
                 title="Vaciar carrito"
               >
                 <Trash2 size={15} />
@@ -659,7 +659,7 @@ export function POSView({ onNavigate }: Props) {
                   autoFocus
                   style={{
                     flex: 1, border: 'none', outline: 'none',
-                    fontSize: '0.82rem', color: '#111827',
+                    fontSize: '0.82rem', color: 'var(--m-text)',
                   }}
                 />
                 <button onClick={() => setShowCustomer(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}>
@@ -673,22 +673,22 @@ export function POSView({ onNavigate }: Props) {
                   width: '100%', padding: '8px 12px',
                   display: 'flex', alignItems: 'center', gap: 8,
                   border: 'none', background: 'none', cursor: 'pointer',
-                  color: customerName ? '#111827' : '#9CA3AF',
+                  color: customerName ? '#111827' : 'var(--m-text-muted)',
                   fontSize: '0.78rem', fontWeight: customerName ? '700' : '500',
                   textAlign: 'left',
                 }}
               >
-                <User size={13} color={customerName ? ORANGE : '#9CA3AF'} />
+                <User size={13} color={customerName ? ORANGE : 'var(--m-text-muted)'} />
                 {customerName || 'Cliente anónimo — Toca para asignar'}
-                <ChevronDown size={12} style={{ marginLeft: 'auto', color: '#9CA3AF' }} />
+                <ChevronDown size={12} style={{ marginLeft: 'auto', color: 'var(--m-text-muted)' }} />
               </button>
             )}
           </div>
 
           {/* Lista de items */}
-          <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#FAFAFA' }}>
+          <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-surface-2)' }}>
             {cart.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '40px 20px', color: '#D1D5DB' }}>
+              <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--m-border)' }}>
                 <ShoppingCart size={36} style={{ opacity: 0.3, marginBottom: 10 }} />
                 <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600' }}>Carrito vacío</p>
                 <p style={{ margin: '4px 0 0', fontSize: '0.72rem' }}>Seleccioná productos</p>
@@ -713,43 +713,43 @@ export function POSView({ onNavigate }: Props) {
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                         <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{item.product.emoji}</span>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', color: 'var(--m-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {item.product.name}
                           </p>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                             {/* Qty controls */}
                             <button
                               onClick={e => { e.stopPropagation(); setCart(p => p.map(i => i.product.id === item.product.id ? { ...i, qty: Math.max(0.5, i.qty - 1) } : i)); }}
-                              style={{ width: 22, height: 22, borderRadius: 6, border: '1px solid #E5E7EB', backgroundColor: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                              style={{ width: 22, height: 22, borderRadius: 6, border: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                             >
                               <Minus size={11} color="#374151" />
                             </button>
-                            <span style={{ fontSize: '0.82rem', fontWeight: '800', minWidth: 28, textAlign: 'center', color: '#111' }}>
+                            <span style={{ fontSize: '0.82rem', fontWeight: '800', minWidth: 28, textAlign: 'center', color: 'var(--m-text)' }}>
                               {item.qty}
                             </span>
                             <button
                               onClick={e => { e.stopPropagation(); setCart(p => p.map(i => i.product.id === item.product.id ? { ...i, qty: i.qty + 1 } : i)); }}
-                              style={{ width: 22, height: 22, borderRadius: 6, border: '1px solid #E5E7EB', backgroundColor: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                              style={{ width: 22, height: 22, borderRadius: 6, border: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                             >
                               <Plus size={11} color="#374151" />
                             </button>
-                            <span style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>
+                            <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
                               × ${fmt(item.product.price)}
                             </span>
                             {item.discount > 0 && (
-                              <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#EF4444', backgroundColor: '#FEF2F2', padding: '1px 5px', borderRadius: 4 }}>
+                              <span style={{ fontSize: '0.68rem', fontWeight: '700', color: 'var(--m-danger)', backgroundColor: 'var(--m-danger-bg)', padding: '1px 5px', borderRadius: 4 }}>
                                 −{item.discount}%
                               </span>
                             )}
                           </div>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
-                          <span style={{ fontSize: '0.92rem', fontWeight: '900', color: '#111' }}>
+                          <span style={{ fontSize: '0.92rem', fontWeight: '900', color: 'var(--m-text)' }}>
                             ${fmt(lineTotal)}
                           </span>
                           <button
                             onClick={e => { e.stopPropagation(); removeItem(item.product.id); }}
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', color: '#EF4444', padding: 0, opacity: 0.6 }}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', color: 'var(--m-danger)', padding: 0, opacity: 0.6 }}
                           >
                             <X size={13} />
                           </button>
@@ -763,7 +763,7 @@ export function POSView({ onNavigate }: Props) {
           </div>
 
           {/* ── Teclado numérico ── */}
-          <div style={{ padding: '10px 12px', borderTop: '1px solid #E9ECEF', backgroundColor: '#F9FAFB' }}>
+          <div style={{ padding: '10px 12px', borderTop: '1px solid #E9ECEF', backgroundColor: 'var(--m-surface-2)' }}>
             {/* Modo selector */}
             <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
               {(['qty', 'discount', 'cash'] as const).map(mode => {
@@ -776,8 +776,8 @@ export function POSView({ onNavigate }: Props) {
                     style={{
                       flex: 1, padding: '5px 4px', borderRadius: 7,
                       border: numMode === mode ? `1.5px solid ${ORANGE}` : '1.5px solid #E5E7EB',
-                      backgroundColor: numMode === mode ? ORANGE_LIGHT : '#fff',
-                      color: numMode === mode ? ORANGE : '#6B7280',
+                      backgroundColor: numMode === mode ? ORANGE_LIGHT : 'var(--m-surface)',
+                      color: numMode === mode ? ORANGE : 'var(--m-text-muted)',
                       fontWeight: '700', fontSize: '0.65rem', cursor: 'pointer',
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3,
                     }}
@@ -790,7 +790,7 @@ export function POSView({ onNavigate }: Props) {
 
             {/* Display */}
             <div style={{
-              backgroundColor: '#1A1A2E', borderRadius: 8,
+              backgroundColor: 'var(--m-text)', borderRadius: 8,
               padding: '8px 14px', marginBottom: 8,
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
@@ -798,7 +798,7 @@ export function POSView({ onNavigate }: Props) {
                 {numMode === 'qty' ? 'CANT.' : numMode === 'discount' ? 'DESC. %' : 'EFECTIVO $'}
                 {numMode !== 'cash' && selectedItem ? ` · ${selectedItem.product.name.slice(0, 20)}` : ''}
               </span>
-              <span style={{ fontSize: '1.3rem', fontWeight: '900', color: '#fff', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '1.3rem', fontWeight: '900', color: 'var(--m-surface)', letterSpacing: '0.05em' }}>
                 {numMode === 'cash'
                   ? (cashReceived || '0.00')
                   : (numBuffer || (numMode === 'qty' ? (selectedItem?.qty ?? '—') : (selectedItem?.discount ?? '0')))}
@@ -819,16 +819,16 @@ export function POSView({ onNavigate }: Props) {
           </div>
 
           {/* ── Totales ── */}
-          <div style={{ padding: '12px 16px', borderTop: '2px solid #E9ECEF', backgroundColor: '#fff' }}>
+          <div style={{ padding: '12px 16px', borderTop: '2px solid #E9ECEF', backgroundColor: 'var(--m-surface)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontSize: '0.78rem', color: '#6B7280' }}>Subtotal</span>
-              <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#111' }}>${fmt(subtotal)}</span>
+              <span style={{ fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>Subtotal</span>
+              <span style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--m-text)' }}>${fmt(subtotal)}</span>
             </div>
 
             {/* Descuento global */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: '0.78rem', color: '#6B7280' }}>Desc. general</span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>Desc. general</span>
                 <div style={{ display: 'flex', gap: 4 }}>
                   {[0, 5, 10, 15, 20].map(d => (
                     <button
@@ -836,8 +836,8 @@ export function POSView({ onNavigate }: Props) {
                       onClick={() => setGlobalDiscount(d)}
                       style={{
                         padding: '2px 6px', borderRadius: 5, border: 'none',
-                        backgroundColor: globalDiscount === d ? ORANGE : '#F3F4F6',
-                        color: globalDiscount === d ? '#fff' : '#6B7280',
+                        backgroundColor: globalDiscount === d ? ORANGE : 'var(--m-surface-2)',
+                        color: globalDiscount === d ? '#fff' : 'var(--m-text-muted)',
                         fontSize: '0.65rem', fontWeight: '700', cursor: 'pointer',
                       }}
                     >
@@ -847,20 +847,20 @@ export function POSView({ onNavigate }: Props) {
                 </div>
               </div>
               {globalDiscount > 0 && (
-                <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#EF4444' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--m-danger)' }}>
                   −${fmt(discountAmt)}
                 </span>
               )}
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8, borderTop: '2px solid #E9ECEF' }}>
-              <span style={{ fontSize: '1.05rem', fontWeight: '800', color: '#111' }}>TOTAL</span>
+              <span style={{ fontSize: '1.05rem', fontWeight: '800', color: 'var(--m-text)' }}>TOTAL</span>
               <span style={{ fontSize: '1.6rem', fontWeight: '900', color: ORANGE }}>${fmt(totalFinal)}</span>
             </div>
           </div>
 
           {/* ── Método de pago ── */}
-          <div style={{ padding: '10px 12px', borderTop: '1px solid #E9ECEF', backgroundColor: '#F9FAFB' }}>
+          <div style={{ padding: '10px 12px', borderTop: '1px solid #E9ECEF', backgroundColor: 'var(--m-surface-2)' }}>
             <div style={{ display: 'flex', gap: 6 }}>
               {PAYMENT_METHODS.map(m => (
                 <button
@@ -869,8 +869,8 @@ export function POSView({ onNavigate }: Props) {
                   style={{
                     flex: 1, padding: '8px 4px', borderRadius: 9,
                     border: paymentMethod === m.id ? `2px solid ${m.color}` : '1.5px solid #E5E7EB',
-                    backgroundColor: paymentMethod === m.id ? `${m.color}12` : '#fff',
-                    color: paymentMethod === m.id ? m.color : '#9CA3AF',
+                    backgroundColor: paymentMethod === m.id ? `${m.color}12` : 'var(--m-surface)',
+                    color: paymentMethod === m.id ? m.color : 'var(--m-text-muted)',
                     cursor: 'pointer', transition: 'all 0.12s',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
                   }}
@@ -884,16 +884,16 @@ export function POSView({ onNavigate }: Props) {
             {/* Vuelto si es efectivo */}
             {paymentMethod === 'efectivo' && (
               <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: '0.72rem', color: '#6B7280', whiteSpace: 'nowrap' }}>Recibido $</span>
+                <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)', whiteSpace: 'nowrap' }}>Recibido $</span>
                 <div style={{
-                  flex: 1, backgroundColor: '#fff', border: '1.5px solid #E5E7EB',
+                  flex: 1, backgroundColor: 'var(--m-surface)', border: '1.5px solid #E5E7EB',
                   borderRadius: 8, padding: '5px 10px', display: 'flex', justifyContent: 'space-between',
                 }}>
-                  <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#111' }}>
+                  <span style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--m-text)' }}>
                     {cashReceived || '—'}
                   </span>
                   {cashReceived && parseFloat(cashReceived) > totalFinal && (
-                    <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#10B981' }}>
+                    <span style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--m-success)' }}>
                       Vuelto: ${fmt(change)}
                     </span>
                   )}
@@ -902,8 +902,8 @@ export function POSView({ onNavigate }: Props) {
                   onClick={() => { setNumMode('cash'); setCashReceived(fmt(totalFinal).replace(',', '').replace('.', '')); }}
                   style={{
                     padding: '5px 8px', borderRadius: 7,
-                    border: '1px solid #E5E7EB', backgroundColor: '#fff',
-                    fontSize: '0.65rem', fontWeight: '700', color: '#374151', cursor: 'pointer',
+                    border: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)',
+                    fontSize: '0.65rem', fontWeight: '700', color: 'var(--m-text-secondary)', cursor: 'pointer',
                   }}
                 >
                   Exacto
@@ -922,8 +922,8 @@ export function POSView({ onNavigate }: Props) {
                 borderRadius: 14, border: 'none',
                 background: cart.length > 0
                   ? `linear-gradient(135deg, ${ORANGE} 0%, #ff8c42 100%)`
-                  : '#E5E7EB',
-                color: cart.length > 0 ? '#fff' : '#9CA3AF',
+                  : 'var(--m-border)',
+                color: cart.length > 0 ? '#fff' : 'var(--m-text-muted)',
                 fontSize: '1.05rem', fontWeight: '900', cursor: cart.length > 0 ? 'pointer' : 'not-allowed',
                 letterSpacing: '0.03em', transition: 'all 0.15s',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,

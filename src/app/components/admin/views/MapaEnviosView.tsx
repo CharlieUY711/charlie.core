@@ -36,11 +36,11 @@ const DEFAULT_ZOOM = 12;
 
 
 const TIPO_CFG: Record<string, { color: string; label: string; icon: React.ElementType; size: number }> = {
-  deposito:    { color: '#374151', label: 'Depósito',     icon: Package,      size: 18 },
-  en_transito: { color: '#7C3AED', label: 'En tránsito',  icon: Truck,        size: 14 },
+  deposito:    { color: 'var(--m-text-secondary)', label: 'Depósito',     icon: Package,      size: 18 },
+  en_transito: { color: 'var(--m-purple)', label: 'En tránsito',  icon: Truck,        size: 14 },
   en_reparto:  { color: ORANGE,    label: 'En reparto',   icon: Navigation,   size: 14 },
-  entregado:   { color: '#059669', label: 'Entregado',    icon: CheckCircle2, size: 13 },
-  fallido:     { color: '#DC2626', label: 'Fallido',      icon: AlertCircle,  size: 14 },
+  entregado:   { color: 'var(--m-success)', label: 'Entregado',    icon: CheckCircle2, size: 13 },
+  fallido:     { color: 'var(--m-danger)', label: 'Fallido',      icon: AlertCircle,  size: 14 },
 };
 
 // Función SVG mapa removida - ahora usamos Google Maps
@@ -140,12 +140,12 @@ export function MapaEnviosView({ onNavigate }: Props) {
         ]}
       />
 
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
         {/* Panel lateral izquierdo */}
-        <div style={{ width: '260px', flexShrink: 0, backgroundColor: '#fff', borderRight: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ width: '260px', flexShrink: 0, backgroundColor: 'var(--m-surface)', borderRight: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {/* Filtros */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid #E5E7EB' }}>
-            <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Filtrar por estado</p>
+            <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: 700, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Filtrar por estado</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {[
                 { id: 'todos',       label: 'Todos los envíos', count: PUNTOS.filter(p=>p.tipo!=='deposito').length },
@@ -154,14 +154,14 @@ export function MapaEnviosView({ onNavigate }: Props) {
                 { id: 'entregado',   label: 'Entregados',      count: counts.entregado   },
                 { id: 'fallido',     label: 'Fallidos',        count: counts.fallido     },
               ].map(f => {
-                const cfg = f.id !== 'todos' ? TIPO_CFG[f.id] : { color: '#374151' };
+                const cfg = f.id !== 'todos' ? TIPO_CFG[f.id] : { color: 'var(--m-text-secondary)' };
                 const isActive = filtroTipo === f.id;
                 return (
                   <button key={f.id} onClick={() => setFiltroTipo(f.id)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 10px', border: `1px solid ${isActive ? cfg.color : '#E5E7EB'}`, borderRadius: '8px', backgroundColor: isActive ? `${cfg.color}12` : '#fff', cursor: 'pointer', transition: 'all 0.15s' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 10px', border: `1px solid ${isActive ? cfg.color : 'var(--m-border)'}`, borderRadius: '8px', backgroundColor: isActive ? `${cfg.color}12` : 'var(--m-surface)', cursor: 'pointer', transition: 'all 0.15s' }}>
                     <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: cfg.color, flexShrink: 0 }} />
-                    <span style={{ fontSize: '12px', fontWeight: isActive ? 700 : 500, color: isActive ? cfg.color : '#374151', flex: 1, textAlign: 'left' }}>{f.label}</span>
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#6B7280', backgroundColor: '#F3F4F6', padding: '1px 6px', borderRadius: '8px' }}>{f.count}</span>
+                    <span style={{ fontSize: '12px', fontWeight: isActive ? 700 : 500, color: isActive ? cfg.color : 'var(--m-text-secondary)', flex: 1, textAlign: 'left' }}>{f.label}</span>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--m-text-muted)', backgroundColor: 'var(--m-surface-2)', padding: '1px 6px', borderRadius: '8px' }}>{f.count}</span>
                   </button>
                 );
               })}
@@ -170,7 +170,7 @@ export function MapaEnviosView({ onNavigate }: Props) {
 
           {/* Leyenda */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid #E5E7EB' }}>
-            <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Leyenda</p>
+            <p style={{ margin: '0 0 10px', fontSize: '11px', fontWeight: 700, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Leyenda</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {Object.entries(TIPO_CFG).filter(([k])=>k!=='deposito').map(([tipo, cfg]) => {
                 const Icon = cfg.icon;
@@ -179,19 +179,19 @@ export function MapaEnviosView({ onNavigate }: Props) {
                     <div style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: cfg.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Icon size={10} color="#fff" />
                     </div>
-                    <span style={{ fontSize: '12px', color: '#374151' }}>{cfg.label}</span>
+                    <span style={{ fontSize: '12px', color: 'var(--m-text-secondary)' }}>{cfg.label}</span>
                   </div>
                 );
               })}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'var(--m-text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Package size={10} color="#fff" />
                 </div>
-                <span style={{ fontSize: '12px', color: '#374151' }}>Depósito / origen</span>
+                <span style={{ fontSize: '12px', color: 'var(--m-text-secondary)' }}>Depósito / origen</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: ORANGE, boxShadow: `0 0 0 4px ${ORANGE}30`, flexShrink: 0, marginLeft: '5px' }} />
-                <span style={{ fontSize: '11px', color: '#9CA3AF', marginLeft: '5px' }}>Pulso = en reparto activo</span>
+                <span style={{ fontSize: '11px', color: 'var(--m-text-muted)', marginLeft: '5px' }}>Pulso = en reparto activo</span>
               </div>
             </div>
           </div>
@@ -208,8 +208,8 @@ export function MapaEnviosView({ onNavigate }: Props) {
                     <cfg.icon size={11} color="#fff" />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{punto.numero}</div>
-                    <div style={{ fontSize: '10px', color: '#9CA3AF' }}>{punto.localidad} · {punto.carrier}</div>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--m-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{punto.numero}</div>
+                    <div style={{ fontSize: '10px', color: 'var(--m-text-muted)' }}>{punto.localidad} · {punto.carrier}</div>
                   </div>
                 </div>
               );
@@ -247,7 +247,7 @@ export function MapaEnviosView({ onNavigate }: Props) {
                 lat: p.lat!,
                 lng: p.lng!,
                 title: `Depósito ${p.numero}`,
-                color: '#374151',
+                color: 'var(--m-text-secondary)',
                 onClick: () => setSelectedPunto(p),
               });
             });
@@ -299,18 +299,18 @@ export function MapaEnviosView({ onNavigate }: Props) {
           {selectedPunto && selectedPunto.tipo !== 'deposito' && (
             <div style={{
               position: 'absolute', bottom: '20px', right: '20px',
-              backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB',
+              backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB',
               padding: '16px', width: '240px', boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                 <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: TIPO_CFG[selectedPunto.tipo].color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {React.createElement(TIPO_CFG[selectedPunto.tipo].icon, { size: 13, color: '#fff' })}
+                  {React.createElement(TIPO_CFG[selectedPunto.tipo].icon, { size: 13, color: 'var(--m-surface)' })}
                 </div>
                 <div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#111' }}>{selectedPunto.numero}</div>
-                  <div style={{ fontSize: '10px', color: '#9CA3AF' }}>{TIPO_CFG[selectedPunto.tipo].label}</div>
+                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text)' }}>{selectedPunto.numero}</div>
+                  <div style={{ fontSize: '10px', color: 'var(--m-text-muted)' }}>{TIPO_CFG[selectedPunto.tipo].label}</div>
                 </div>
-                <button onClick={() => setSelectedPunto(null)} style={{ marginLeft: 'auto', border: 'none', background: 'none', cursor: 'pointer', color: '#9CA3AF', fontSize: '16px', lineHeight: 1 }}>×</button>
+                <button onClick={() => setSelectedPunto(null)} style={{ marginLeft: 'auto', border: 'none', background: 'none', cursor: 'pointer', color: 'var(--m-text-muted)', fontSize: '16px', lineHeight: 1 }}>×</button>
               </div>
               {[
                 ['Cliente', selectedPunto.cliente],
@@ -319,8 +319,8 @@ export function MapaEnviosView({ onNavigate }: Props) {
                 ['Provincia', selectedPunto.provincia],
               ].map(([k,v]) => (
                 <div key={k} style={{ display: 'flex', gap: '8px', fontSize: '11px', marginBottom: '5px' }}>
-                  <span style={{ color: '#9CA3AF', width: '65px', flexShrink: 0 }}>{k}</span>
-                  <span style={{ color: '#111', fontWeight: 500 }}>{v}</span>
+                  <span style={{ color: 'var(--m-text-muted)', width: '65px', flexShrink: 0 }}>{k}</span>
+                  <span style={{ color: 'var(--m-text)', fontWeight: 500 }}>{v}</span>
                 </div>
               ))}
               <button onClick={() => onNavigate('envios')} style={{ marginTop: '10px', width: '100%', padding: '8px', border: `1.5px solid ${ORANGE}`, borderRadius: '8px', backgroundColor: 'transparent', color: ORANGE, fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
@@ -338,7 +338,7 @@ export function MapaEnviosView({ onNavigate }: Props) {
                 <div key={tipo} style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(255,255,255,0.92)', padding: '5px 10px', borderRadius: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', border: `1px solid ${cfg.color}30` }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: cfg.color }} />
                   <span style={{ fontSize: '11px', fontWeight: 700, color: cfg.color }}>{cnt}</span>
-                  <span style={{ fontSize: '11px', color: '#374151' }}>{cfg.label}</span>
+                  <span style={{ fontSize: '11px', color: 'var(--m-text-secondary)' }}>{cfg.label}</span>
                 </div>
               );
             })}

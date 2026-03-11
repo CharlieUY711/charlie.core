@@ -15,42 +15,42 @@ export function EcommerceView({ onNavigate }: Props) {
   const cards: HubCardDef[] = [
     {
       id: 'pedidos', icon: ShoppingCart, onClick: nav('pedidos'),
-      gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)', color: '#FF6835',
+      gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)', color: 'var(--m-primary)',
       badge: 'Operaciones', label: 'Pedidos',
       description: 'Árbol madre → hijos, flujo de estados, documentos y seguimiento integral de cada orden.',
       stats: [{ icon: ShoppingCart, value: '—', label: 'Total órdenes' }, { icon: Clock, value: '—', label: 'Pendientes' }, { icon: Truck, value: '—', label: 'En camino' }],
     },
     {
       id: 'pagos', icon: DollarSign, onClick: nav('pagos'),
-      gradient: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: '#10B981',
+      gradient: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: 'var(--m-success)',
       badge: 'Finanzas', label: 'Pagos & Transacciones',
       description: 'Intentos de pago, estados, cobros, reembolsos y conciliación vinculados al pedido.',
       stats: [{ icon: DollarSign, value: '—', label: 'Cobros' }, { icon: RefreshCw, value: '—', label: 'Reembolsos' }, { icon: TrendingUp, value: '—', label: 'Tasa éxito' }],
     },
     {
       id: 'envios', icon: Truck, onClick: nav('envios'),
-      gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)', color: '#8B5CF6',
+      gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)', color: 'var(--m-purple)',
       badge: 'Logística', label: 'Seguimiento de Envíos',
       description: 'Despacho, tránsito y entrega. Tracking multi-tramo con acuse de recibo.',
       stats: [{ icon: Truck, value: '—', label: 'Activos' }, { icon: CheckCircle, value: '—', label: 'Entregados' }, { icon: AlertCircle, value: '—', label: 'Devoluciones' }],
     },
     {
       id: 'erp-inventario', icon: Package, onClick: nav('erp-inventario'),
-      gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: '#F59E0B',
+      gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', color: 'var(--m-warning)',
       badge: 'Catálogo', label: 'Catálogo de Artículos',
       description: 'Gestión de productos, stock, lotes, variantes y movimientos de inventario en tiempo real.',
       stats: [{ icon: Box, value: '—', label: 'Productos' }, { icon: Tag, value: '—', label: 'Sin stock' }, { icon: BarChart2, value: '—', label: 'Categorías' }],
     },
     {
       id: 'departamentos', icon: FolderTree, onClick: nav('departamentos'),
-      gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)', color: '#0EA5E9',
+      gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)', color: 'var(--m-info)',
       badge: 'Estructura', label: 'Departamentos y Categorías',
       description: 'Árbol jerárquico de departamentos, categorías y subcategorías con iconos y SEO.',
       stats: [{ icon: FolderTree, value: '—', label: 'Deptos' }, { icon: Tag, value: '—', label: 'Categorías' }, { icon: CheckCircle, value: '—', label: 'Activos' }],
     },
     {
       id: 'clientes', icon: ShoppingBag, onClick: nav('clientes'),
-      gradient: 'linear-gradient(135deg, #6366F1 0%, #4338CA 100%)', color: '#6366F1',
+      gradient: 'linear-gradient(135deg, #6366F1 0%, #4338CA 100%)', color: 'var(--m-purple)',
       badge: 'Clientes', label: 'Clientes',
       description: 'Compradores con historial de pedidos, saldo, etiquetas y segmentación por comportamiento.',
       stats: [{ icon: Users, value: '—', label: 'Total' }, { icon: TrendingUp, value: '—', label: 'Activos' }, { icon: ShoppingBag, value: '—', label: 'Nuevos' }],
@@ -66,9 +66,9 @@ export function EcommerceView({ onNavigate }: Props) {
 
   const quickLinks: HubQuickLink[] = [
     { label: 'Métodos de Pago',  icon: CreditCard,  color: '#EC4899', onClick: nav('metodos-pago')     },
-    { label: 'Métodos de Envío', icon: MapPin,       color: '#14B8A6', onClick: nav('metodos-envio')    },
-    { label: 'Facturación',      icon: BarChart2,    color: '#3B82F6', onClick: nav('erp-facturacion')  },
-    { label: 'SEO',              icon: TrendingUp,   color: '#8B5CF6', onClick: nav('seo')              },
+    { label: 'Métodos de Envío', icon: MapPin,       color: 'var(--m-success)', onClick: nav('metodos-envio')    },
+    { label: 'Facturación',      icon: BarChart2,    color: 'var(--m-info)', onClick: nav('erp-facturacion')  },
+    { label: 'SEO',              icon: TrendingUp,   color: 'var(--m-purple)', onClick: nav('seo')              },
   ];
 
   const comingSoon: HubComingSoonItem[] = [

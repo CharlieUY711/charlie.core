@@ -20,10 +20,10 @@ type TipoRuta = 'standard' | 'proyecto';
 type EstadoRuta = 'activa' | 'pausada' | 'completada' | 'planificada';
 
 const ESTADO_CFG: Record<EstadoRuta, { label: string; color: string; bg: string }> = {
-  activa:       { label: 'Activa',       color: '#059669', bg: '#ECFDF5' },
-  pausada:      { label: 'Pausada',      color: '#D97706', bg: '#FFFBEB' },
-  planificada:  { label: 'Planificada',  color: '#2563EB', bg: '#EFF6FF' },
-  completada:   { label: 'Completada',   color: '#6B7280', bg: '#F3F4F6' },
+  activa:       { label: 'Activa',       color: 'var(--m-success)', bg: 'var(--m-success-bg)' },
+  pausada:      { label: 'Pausada',      color: 'var(--m-warning)', bg: 'var(--m-warning-bg)' },
+  planificada:  { label: 'Planificada',  color: 'var(--m-info)', bg: 'var(--m-info-bg)' },
+  completada:   { label: 'Completada',   color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)' },
 };
 
 type Tab = 'todas' | 'standard' | 'proyecto';
@@ -133,9 +133,9 @@ export function RutasView({ onNavigate }: Props) {
         ]}
       />
 
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
         {/* Lista de rutas */}
-        <div style={{ width: '380px', flexShrink: 0, display: 'flex', flexDirection: 'column', borderRight: '1px solid #E5E7EB', backgroundColor: '#fff' }}>
+        <div style={{ width: '380px', flexShrink: 0, display: 'flex', flexDirection: 'column', borderRight: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)' }}>
           {/* Tabs + búsqueda */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid #E5E7EB' }}>
             <div style={{ position: 'relative', marginBottom: '10px' }}>
@@ -143,10 +143,10 @@ export function RutasView({ onNavigate }: Props) {
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar ruta o zona..."
                 style={{ width: '100%', paddingLeft: '30px', paddingRight: '10px', paddingTop: '8px', paddingBottom: '8px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }} />
             </div>
-            <div style={{ display: 'flex', gap: '0', borderRadius: '8px', backgroundColor: '#F3F4F6', padding: '3px' }}>
+            <div style={{ display: 'flex', gap: '0', borderRadius: '8px', backgroundColor: 'var(--m-surface-2)', padding: '3px' }}>
               {([['todas','Todas'],['standard','Standard'],['proyecto','Proyecto']] as [Tab,string][]).map(([id, label]) => (
                 <button key={id} onClick={() => setTab(id)}
-                  style={{ flex: 1, padding: '6px 4px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', fontWeight: 700, backgroundColor: tab === id ? '#fff' : 'transparent', color: tab === id ? '#111' : '#6B7280', boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none', transition: 'all 0.15s' }}>
+                  style={{ flex: 1, padding: '6px 4px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '11px', fontWeight: 700, backgroundColor: tab === id ? '#fff' : 'transparent', color: tab === id ? '#111' : 'var(--m-text-muted)', boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none', transition: 'all 0.15s' }}>
                   {label}
                 </button>
               ))}
@@ -155,15 +155,15 @@ export function RutasView({ onNavigate }: Props) {
           {/* Lista */}
           <div style={{ flex: 1, overflowY: 'auto' }}>
             {loading ? (
-              <div style={{ padding: '20px', textAlign: 'center', color: '#6B7280', fontSize: '12px' }}>
+              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--m-text-muted)', fontSize: '12px' }}>
                 Cargando rutas...
               </div>
             ) : error ? (
-              <div style={{ padding: '20px', textAlign: 'center', color: '#DC2626', fontSize: '12px' }}>
+              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--m-danger)', fontSize: '12px' }}>
                 {error}
               </div>
             ) : filtered.length === 0 ? (
-              <div style={{ padding: '20px', textAlign: 'center', color: '#6B7280', fontSize: '12px' }}>
+              <div style={{ padding: '20px', textAlign: 'center', color: 'var(--m-text-muted)', fontSize: '12px' }}>
                 No hay rutas {search ? 'que coincidan con la búsqueda' : ''}
               </div>
             ) : (
@@ -176,26 +176,26 @@ export function RutasView({ onNavigate }: Props) {
                 <div key={ruta.id} onClick={() => setSelected(ruta)}
                   style={{ padding: '14px 16px', borderBottom: '1px solid #F3F4F6', cursor: 'pointer', backgroundColor: isSelected ? '#FFF4EC' : 'transparent', borderLeft: isSelected ? `3px solid ${ORANGE}` : '3px solid transparent', transition: 'all 0.1s' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '8px' }}>
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: ruta.tipo === 'proyecto' ? '#EFF6FF' : '#FFF4EC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: ruta.tipo === 'proyecto' ? '#EFF6FF' : 'var(--m-primary-10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       {ruta.tipo === 'proyecto' ? <Layers size={14} color="#2563EB" /> : <Navigation size={14} color={ORANGE} />}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#111', lineHeight: 1.3, marginBottom: '3px' }}>{ruta.nombre}</div>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text)', lineHeight: 1.3, marginBottom: '3px' }}>{ruta.nombre}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '10px', fontWeight: 700, color: estadoCfg.color, backgroundColor: estadoCfg.bg, padding: '1px 6px', borderRadius: '8px' }}>{estadoCfg.label}</span>
-                        <span style={{ fontSize: '10px', color: '#9CA3AF' }}>{ruta.carrier}</span>
+                        <span style={{ fontSize: '10px', color: 'var(--m-text-muted)' }}>{ruta.carrier}</span>
                       </div>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: '#6B7280', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: 'var(--m-text-muted)', marginBottom: '8px' }}>
                     <span>📍 {ruta.paradas.length} paradas</span>
                     <span>📦 {ruta.enviosTotales} envíos</span>
                     <span>🛣 {ruta.kmsEstimados} km</span>
                   </div>
-                  <div style={{ width: '100%', height: '4px', backgroundColor: '#F3F4F6', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--m-surface-2)', borderRadius: '2px', overflow: 'hidden' }}>
                     <div style={{ width: `${pct}%`, height: '100%', backgroundColor: pct === 100 ? '#059669' : ORANGE, borderRadius: '2px', transition: 'width 0.3s' }} />
                   </div>
-                  <div style={{ fontSize: '10px', color: '#9CA3AF', marginTop: '4px' }}>{entregados}/{ruta.paradas.length} entregados ({pct}%)</div>
+                  <div style={{ fontSize: '10px', color: 'var(--m-text-muted)', marginTop: '4px' }}>{entregados}/{ruta.paradas.length} entregados ({pct}%)</div>
                 </div>
               );
               })
@@ -207,19 +207,19 @@ export function RutasView({ onNavigate }: Props) {
         {selected ? (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             {/* Header detalle */}
-            <div style={{ backgroundColor: '#fff', padding: '20px 24px', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
+            <div style={{ backgroundColor: 'var(--m-surface)', padding: '20px 24px', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                    <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#111' }}>{selected.nombre}</h2>
+                    <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: 'var(--m-text)' }}>{selected.nombre}</h2>
                     <span style={{ fontSize: '10px', fontWeight: 700, color: ESTADO_CFG[selected.estado].color, backgroundColor: ESTADO_CFG[selected.estado].bg, padding: '3px 8px', borderRadius: '10px' }}>
                       {ESTADO_CFG[selected.estado].label}
                     </span>
-                    <span style={{ fontSize: '10px', fontWeight: 700, color: selected.tipo === 'proyecto' ? '#2563EB' : ORANGE, backgroundColor: selected.tipo === 'proyecto' ? '#EFF6FF' : '#FFF4EC', padding: '3px 8px', borderRadius: '10px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: selected.tipo === 'proyecto' ? '#2563EB' : ORANGE, backgroundColor: selected.tipo === 'proyecto' ? '#EFF6FF' : 'var(--m-primary-10)', padding: '3px 8px', borderRadius: '10px' }}>
                       {selected.tipo === 'proyecto' ? '📋 Proyecto' : '🔄 Standard'}
                     </span>
                   </div>
-                  <div style={{ display: 'flex', gap: '20px', fontSize: '12px', color: '#6B7280', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '20px', fontSize: '12px', color: 'var(--m-text-muted)', flexWrap: 'wrap' }}>
                     <span>🚚 {selected.carrier}</span>
                     <span>📍 {selected.zona}</span>
                     <span>🛣 {selected.kmsEstimados} km</span>
@@ -228,7 +228,7 @@ export function RutasView({ onNavigate }: Props) {
                     {selected.fechaProxima && <span style={{ color: ORANGE, fontWeight: 700 }}>📆 Próxima: {selected.fechaProxima}</span>}
                   </div>
                   {selected.observaciones && (
-                    <div style={{ marginTop: '8px', padding: '8px 12px', backgroundColor: '#FFFBEB', borderRadius: '8px', fontSize: '12px', color: '#92400E', border: '1px solid #FDE68A' }}>
+                    <div style={{ marginTop: '8px', padding: '8px 12px', backgroundColor: 'var(--m-warning-bg)', borderRadius: '8px', fontSize: '12px', color: 'var(--m-warning-text)', border: '1px solid #FDE68A' }}>
                       ⚠ {selected.observaciones}
                     </div>
                   )}
@@ -237,11 +237,11 @@ export function RutasView({ onNavigate }: Props) {
                   <button onClick={() => handleEditRuta(selected)} style={{ padding: '8px 16px', border: `1.5px solid ${ORANGE}`, borderRadius: '8px', backgroundColor: 'transparent', color: ORANGE, fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                     Editar
                   </button>
-                  <button onClick={() => handleDeleteRuta(selected.id)} style={{ padding: '8px 16px', border: 'none', borderRadius: '8px', backgroundColor: '#DC2626', color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                  <button onClick={() => handleDeleteRuta(selected.id)} style={{ padding: '8px 16px', border: 'none', borderRadius: '8px', backgroundColor: 'var(--m-danger)', color: 'var(--m-surface)', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                     Eliminar
                   </button>
                   {selected.estado !== 'activa' && (
-                    <button style={{ padding: '8px 16px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                    <button style={{ padding: '8px 16px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                       ▶ Iniciar ruta
                     </button>
                   )}
@@ -251,7 +251,7 @@ export function RutasView({ onNavigate }: Props) {
 
             {/* Paradas */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
-              <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Paradas ({selected.paradas?.length || 0})
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -271,24 +271,24 @@ export function RutasView({ onNavigate }: Props) {
                           {isDone ? '✓' : parada.orden}
                         </div>
                         {idx < selected.paradas.length - 1 && (
-                          <div style={{ width: '2px', height: '20px', backgroundColor: isDone ? '#A7F3D0' : '#E5E7EB', margin: '3px 0' }} />
+                          <div style={{ width: '2px', height: '20px', backgroundColor: isDone ? '#A7F3D0' : 'var(--m-border)', margin: '3px 0' }} />
                         )}
                       </div>
                       {/* Contenido */}
                       <div style={{
                         flex: 1, padding: '12px 16px', borderRadius: '10px', border: '1px solid #E5E7EB',
-                        backgroundColor: isDone ? '#F0FDF4' : isFail ? '#FFF5F5' : '#fff',
+                        backgroundColor: isDone ? '#F0FDF4' : isFail ? '#FFF5F5' : 'var(--m-surface)',
                         marginBottom: idx < selected.paradas.length - 1 ? '0' : '0',
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                           <div>
-                            <div style={{ fontSize: '13px', fontWeight: 700, color: '#111', marginBottom: '3px' }}>{parada.direccion}</div>
-                            <div style={{ fontSize: '11px', color: '#6B7280' }}>{parada.localidad} · {parada.envios} envío{parada.envios > 1 ? 's' : ''}</div>
+                            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--m-text)', marginBottom: '3px' }}>{parada.direccion}</div>
+                            <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>{parada.localidad} · {parada.envios} envío{parada.envios > 1 ? 's' : ''}</div>
                           </div>
                           <span style={{
                             fontSize: '10px', fontWeight: 700, padding: '3px 8px', borderRadius: '10px',
-                            color: isDone ? '#059669' : isFail ? '#DC2626' : '#D97706',
-                            backgroundColor: isDone ? '#D1FAE5' : isFail ? '#FEE2E2' : '#FFFBEB',
+                            color: isDone ? '#059669' : isFail ? '#DC2626' : 'var(--m-warning)',
+                            backgroundColor: isDone ? '#D1FAE5' : isFail ? '#FEE2E2' : 'var(--m-warning-bg)',
                           }}>
                             {isDone ? '✓ Entregado' : isFail ? '✗ Fallido' : '⏳ Pendiente'}
                           </span>
@@ -297,7 +297,7 @@ export function RutasView({ onNavigate }: Props) {
                     </div>
                   );
                 }) : (
-                  <div style={{ padding: '20px', textAlign: 'center', color: '#6B7280', fontSize: '12px' }}>
+                  <div style={{ padding: '20px', textAlign: 'center', color: 'var(--m-text-muted)', fontSize: '12px' }}>
                     No hay paradas asignadas a esta ruta
                   </div>
                 )}
@@ -305,7 +305,7 @@ export function RutasView({ onNavigate }: Props) {
             </div>
           </div>
         ) : (
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '14px' }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--m-text-muted)', fontSize: '14px' }}>
             Seleccioná una ruta para ver el detalle
           </div>
         )}

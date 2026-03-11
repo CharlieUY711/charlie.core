@@ -224,48 +224,48 @@ export function ERPInventarioView({ onNavigate }: Props) {
 
       {/* Mensajes */}
       {error && (
-        <div style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '10px 24px', fontSize: '0.85rem', fontWeight: '600', borderBottom: '1px solid #FECACA' }}>
+        <div style={{ backgroundColor: 'var(--m-danger-bg)', color: 'var(--m-danger)', padding: '10px 24px', fontSize: '0.85rem', fontWeight: '600', borderBottom: '1px solid #FECACA' }}>
           âš  {error}
         </div>
       )}
       {successMsg && (
-        <div style={{ backgroundColor: '#DCFCE7', color: '#15803D', padding: '10px 24px', fontSize: '0.85rem', fontWeight: '600', borderBottom: '1px solid #BBF7D0' }}>
+        <div style={{ backgroundColor: 'var(--m-success-bg)', color: 'var(--m-success)', padding: '10px 24px', fontSize: '0.85rem', fontWeight: '600', borderBottom: '1px solid #BBF7D0' }}>
           âœ“ {successMsg}
         </div>
       )}
 
       {/* Tabs */}
-      <div style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
         <div style={{ display: 'flex', padding: '0 28px', alignItems: 'center' }}>
           {[
             { id: 'articulos' as ViewTab,   label: 'ðŸ“¦ ArtÃ­culos' },
             { id: 'alertas' as ViewTab,     label: `âš ï¸ Inactivos (${inactivos.length})` },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              style={{ padding: '14px 18px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: tab === t.id ? ORANGE : '#6B7280', fontWeight: tab === t.id ? '700' : '500', fontSize: '0.875rem', borderBottom: tab === t.id ? `2px solid ${ORANGE}` : '2px solid transparent' }}>
+              style={{ padding: '14px 18px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: tab === t.id ? ORANGE : 'var(--m-text-muted)', fontWeight: tab === t.id ? '700' : '500', fontSize: '0.875rem', borderBottom: tab === t.id ? `2px solid ${ORANGE}` : '2px solid transparent' }}>
               {t.label}
             </button>
           ))}
           <div style={{ flex: 1 }} />
-          <button onClick={fetchProducts} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: '8px' }} title="Recargar">
+          <button onClick={fetchProducts} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-text-muted)', padding: '8px' }} title="Recargar">
             <RefreshCw size={15} />
           </button>
         </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)' }}>
         <div style={{ padding: '24px 28px', maxWidth: '1300px' }}>
 
           {/* KPIs */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Total ArtÃ­culos', value: products.length.toString(), Icon: Package, color: '#111827' },
-              { label: 'Activos',         value: products.filter(p => p.estado === 'activo').length.toString(), Icon: BarChart2, color: '#16A34A' },
-              { label: 'Inactivos',       value: inactivos.length.toString(), Icon: AlertTriangle, color: '#DC2626' },
+              { label: 'Total ArtÃ­culos', value: products.length.toString(), Icon: Package, color: 'var(--m-text)' },
+              { label: 'Activos',         value: products.filter(p => p.estado === 'activo').length.toString(), Icon: BarChart2, color: 'var(--m-success)' },
+              { label: 'Inactivos',       value: inactivos.length.toString(), Icon: AlertTriangle, color: 'var(--m-danger)' },
             ].map((s, i) => (
-              <div key={i} style={{ backgroundColor: '#FFFFFF', border: `1px solid ${s.color}22`, borderRadius: '10px', padding: '16px 20px' }}>
+              <div key={i} style={{ backgroundColor: 'var(--m-surface)', border: `1px solid ${s.color}22`, borderRadius: '10px', padding: '16px 20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.78rem', color: '#6B7280' }}>{s.label}</span>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>{s.label}</span>
                   <s.Icon size={15} color={s.color} />
                 </div>
                 <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: '900', color: s.color }}>{s.value}</p>
@@ -283,77 +283,77 @@ export function ERPInventarioView({ onNavigate }: Props) {
                     style={{ width: '100%', padding: '9px 12px 9px 32px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.82rem', outline: 'none', boxSizing: 'border-box' }} />
                 </div>
                 <select value={catFilter} onChange={e => setCatFilter(e.target.value)}
-                  style={{ padding: '9px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.82rem', outline: 'none', backgroundColor: '#FFF' }}>
+                  style={{ padding: '9px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '0.82rem', outline: 'none', backgroundColor: 'var(--m-surface)' }}>
                   {categories.map(c => <option key={c} value={c}>{c === 'all' ? 'Todas las categorÃ­as' : c}</option>)}
                 </select>
               </div>
 
               {loading ? (
-                <div style={{ textAlign: 'center', padding: '60px', color: '#9CA3AF' }}>
+                <div style={{ textAlign: 'center', padding: '60px', color: 'var(--m-text-muted)' }}>
                   <RefreshCw size={24} style={{ animation: 'spin 1s linear infinite' }} />
                   <p style={{ marginTop: '12px' }}>Cargando productos...</p>
                 </div>
               ) : products.length === 0 ? (
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '60px', textAlign: 'center', color: '#9CA3AF' }}>
+                <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '60px', textAlign: 'center', color: 'var(--m-text-muted)' }}>
                   <p style={{ fontSize: '2rem', margin: '0 0 12px' }}>📦</p>
-                  <p style={{ margin: '0 0 16px', fontWeight: '600', color: '#374151' }}>No hay productos todavía</p>
+                  <p style={{ margin: '0 0 16px', fontWeight: '600', color: 'var(--m-text-secondary)' }}>No hay productos todavía</p>
                   <button onClick={() => { setSelectedProduct(null); setShowModal(true); }}
-                    style={{ padding: '10px 20px', backgroundColor: ORANGE, color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>
+                    style={{ padding: '10px 20px', backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>
                     + Cargar primer producto
                   </button>
                 </div>
               ) : filtered.length === 0 ? (
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '60px', textAlign: 'center', color: '#9CA3AF' }}>
+                <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '60px', textAlign: 'center', color: 'var(--m-text-muted)' }}>
                   <p style={{ fontSize: '2rem', margin: '0 0 12px' }}>🔍</p>
-                  <p style={{ margin: '0 0 8px', fontWeight: '600', color: '#374151' }}>No se encontraron productos</p>
-                  <p style={{ margin: '0 0 16px', fontSize: '0.875rem', color: '#6B7280' }}>
+                  <p style={{ margin: '0 0 8px', fontWeight: '600', color: 'var(--m-text-secondary)' }}>No se encontraron productos</p>
+                  <p style={{ margin: '0 0 16px', fontSize: '0.875rem', color: 'var(--m-text-muted)' }}>
                     {search || catFilter !== 'all' 
                       ? 'Intenta ajustar los filtros de búsqueda o categoría'
                       : 'Hay productos pero no coinciden con los filtros aplicados'}
                   </p>
                   {(search || catFilter !== 'all') && (
                     <button onClick={() => { setSearch(''); setCatFilter('all'); }}
-                      style={{ padding: '10px 20px', backgroundColor: '#6B7280', color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>
+                      style={{ padding: '10px 20px', backgroundColor: 'var(--m-text-muted)', color: 'var(--m-surface)', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>
                       Limpiar filtros
                     </button>
                   )}
                 </div>
               ) : (
-                <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden' }}>
+                <div style={{ backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                      <tr style={{ backgroundColor: '#F9FAFB' }}>
+                      <tr style={{ backgroundColor: 'var(--m-surface-2)' }}>
                         {['Imagen', 'Nombre', 'CategorÃ­a', 'Precio', 'Estado', ''].map(h => (
-                          <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontSize: '0.72rem', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
+                          <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {filtered.map((p, i) => (
-                        <tr key={p.id} style={{ borderTop: '1px solid #F3F4F6', backgroundColor: i % 2 === 0 ? '#FFF' : '#FAFAFA' }}>
+                        <tr key={p.id} style={{ borderTop: '1px solid #F3F4F6', backgroundColor: i % 2 === 0 ? '#FFF' : 'var(--m-surface-2)' }}>
                           <td style={{ padding: '10px 14px' }}>
                             {p.imagen_principal
                               ? <img src={p.imagen_principal} alt={p.nombre} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: '6px', border: '1px solid #E5E7EB' }} />
-                              : <div style={{ width: 40, height: 40, borderRadius: '6px', backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              : <div style={{ width: 40, height: 40, borderRadius: '6px', backgroundColor: 'var(--m-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                   <Package size={16} color="#D1D5DB" />
                                 </div>
                             }
                           </td>
                           <td style={{ padding: '12px 14px' }}>
-                            <span style={{ fontWeight: '600', color: '#111827', fontSize: '0.875rem' }}>{p.nombre}</span>
-                            {p.descripcion && <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#9CA3AF', maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.descripcion}</p>}
+                            <span style={{ fontWeight: '600', color: 'var(--m-text)', fontSize: '0.875rem' }}>{p.nombre}</span>
+                            {p.descripcion && <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'var(--m-text-muted)', maxWidth: '240px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.descripcion}</p>}
                           </td>
-                          <td style={{ padding: '12px 14px', color: '#6B7280', fontSize: '0.8rem' }}>{p.departamento ?? 'â€”'}</td>
-                          <td style={{ padding: '12px 14px', fontWeight: '700', color: '#111827', fontSize: '0.875rem' }}>${p.precio?.toFixed(2)}</td>
+                          <td style={{ padding: '12px 14px', color: 'var(--m-text-muted)', fontSize: '0.8rem' }}>{p.departamento ?? 'â€”'}</td>
+                          <td style={{ padding: '12px 14px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.875rem' }}>${p.precio?.toFixed(2)}</td>
                           <td style={{ padding: '12px 14px' }}>
-                            <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '0.72rem', fontWeight: '700', backgroundColor: p.estado === 'activo' ? '#DCFCE7' : '#F3F4F6', color: p.estado === 'activo' ? '#15803D' : '#6B7280' }}>
+                            <span style={{ padding: '2px 8px', borderRadius: '12px', fontSize: '0.72rem', fontWeight: '700', backgroundColor: p.estado === 'activo' ? '#DCFCE7' : 'var(--m-surface-2)', color: p.estado === 'activo' ? '#15803D' : 'var(--m-text-muted)' }}>
                               {p.estado === 'activo' ? 'Activo' : 'Inactivo'}
                             </span>
                           </td>
                           <td style={{ padding: '12px 14px' }}>
                             <div style={{ display: 'flex', gap: '5px' }}>
-                              <button onClick={() => { setSelectedProduct(p); setShowModal(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280' }} title="Editar"><Edit2 size={13} /></button>
-                              <button onClick={() => handleDelete(p.id, p.nombre)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EF4444' }} title="Eliminar"><Trash2 size={13} /></button>
+                              <button onClick={() => { setSelectedProduct(p); setShowModal(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-text-muted)' }} title="Editar"><Edit2 size={13} /></button>
+                              <button onClick={() => handleDelete(p.id, p.nombre)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-danger)' }} title="Eliminar"><Trash2 size={13} /></button>
                             </div>
                           </td>
                         </tr>
@@ -369,19 +369,19 @@ export function ERPInventarioView({ onNavigate }: Props) {
           {tab === 'alertas' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {inactivos.length === 0 ? (
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '50px', textAlign: 'center', color: '#9CA3AF' }}>
+                <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '50px', textAlign: 'center', color: 'var(--m-text-muted)' }}>
                   <p style={{ fontSize: '2rem', margin: '0 0 12px' }}>âœ…</p>
                   <p style={{ margin: 0, fontWeight: '600' }}>Todos los productos estÃ¡n activos</p>
                 </div>
               ) : inactivos.map(p => (
-                <div key={p.id} style={{ backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '10px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div key={p.id} style={{ backgroundColor: 'var(--m-warning-bg)', border: '1px solid #FDE68A', borderRadius: '10px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <AlertTriangle size={20} color="#D97706" />
                   <div style={{ flex: 1 }}>
-                    <p style={{ margin: '0 0 2px', fontWeight: '700', color: '#111827', fontSize: '0.9rem' }}>{p.nombre}</p>
-                    <p style={{ margin: 0, color: '#6B7280', fontSize: '0.78rem' }}>Estado: <strong style={{ color: '#D97706' }}>{p.estado}</strong></p>
+                    <p style={{ margin: '0 0 2px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.9rem' }}>{p.nombre}</p>
+                    <p style={{ margin: 0, color: 'var(--m-text-muted)', fontSize: '0.78rem' }}>Estado: <strong style={{ color: 'var(--m-warning)' }}>{p.estado}</strong></p>
                   </div>
                   <button onClick={() => { setSelectedProduct(p); setShowModal(true); }}
-                    style={{ padding: '8px 16px', backgroundColor: ORANGE, color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.78rem' }}>
+                    style={{ padding: '8px 16px', backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.78rem' }}>
                     Editar
                   </button>
                 </div>

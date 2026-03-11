@@ -127,16 +127,16 @@ export function CargaMasivaView({ onNavigate }: Props) {
   const errorCount    = queue.filter(q => q.status === 'error').length;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       {/* Top Bar */}
       <div style={{
-        height: '56px', flexShrink: 0, backgroundColor: '#fff',
+        height: '56px', flexShrink: 0, backgroundColor: 'var(--m-surface)',
         borderBottom: '1px solid #E5E7EB',
         display: 'flex', alignItems: 'center', padding: '0 28px', gap: '14px',
       }}>
         <Upload size={20} color={ORANGE} />
-        <h1 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#111' }}>
+        <h1 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: 'var(--m-text)' }}>
           Carga Masiva de Archivos
         </h1>
         <div style={{ flex: 1 }} />
@@ -145,7 +145,7 @@ export function CargaMasivaView({ onNavigate }: Props) {
             padding: '6px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
             fontSize: '0.82rem', fontWeight: '600',
             backgroundColor: tab === t ? ORANGE : 'transparent',
-            color: tab === t ? '#fff' : '#6B7280',
+            color: tab === t ? '#fff' : 'var(--m-text-muted)',
           }}>
             {t === 'upload' ? '⬆ Subir archivos' : '📁 Mis archivos'}
           </button>
@@ -163,9 +163,9 @@ export function CargaMasivaView({ onNavigate }: Props) {
             onDrop={onDrop}
             onClick={() => inputRef.current?.click()}
             style={{
-              border: `2px dashed ${isDragging ? ORANGE : '#D1D5DB'}`,
+              border: `2px dashed ${isDragging ? ORANGE : 'var(--m-border)'}`,
               borderRadius: '16px',
-              backgroundColor: isDragging ? `${ORANGE}08` : '#fff',
+              backgroundColor: isDragging ? `${ORANGE}08` : 'var(--m-surface)',
               padding: '48px 24px',
               textAlign: 'center',
               cursor: 'pointer',
@@ -175,16 +175,16 @@ export function CargaMasivaView({ onNavigate }: Props) {
           >
             <div style={{
               width: '56px', height: '56px', borderRadius: '14px',
-              backgroundColor: isDragging ? `${ORANGE}20` : '#F3F4F6',
+              backgroundColor: isDragging ? `${ORANGE}20` : 'var(--m-surface-2)',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               marginBottom: '16px',
             }}>
-              <Upload size={24} color={isDragging ? ORANGE : '#9CA3AF'} />
+              <Upload size={24} color={isDragging ? ORANGE : 'var(--m-text-muted)'} />
             </div>
-            <p style={{ margin: '0 0 6px', fontSize: '1rem', fontWeight: '700', color: '#111' }}>
+            <p style={{ margin: '0 0 6px', fontSize: '1rem', fontWeight: '700', color: 'var(--m-text)' }}>
               {isDragging ? 'Soltá los archivos aquí' : 'Arrastrá archivos o hacé clic para seleccionar'}
             </p>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#9CA3AF' }}>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>
               Imágenes, PDF, CSV, XLSX, DOCX · Sin límite de cantidad
             </p>
             <input ref={inputRef} type="file" multiple hidden onChange={e => addFiles(e.target.files)} />
@@ -195,25 +195,25 @@ export function CargaMasivaView({ onNavigate }: Props) {
             <div style={{
               display: 'flex', alignItems: 'center', gap: '16px',
               marginBottom: '16px',
-              padding: '12px 16px', backgroundColor: '#fff',
+              padding: '12px 16px', backgroundColor: 'var(--m-surface)',
               borderRadius: '10px', border: '1px solid #E5E7EB',
             }}>
-              <span style={{ fontSize: '0.82rem', color: '#6B7280' }}>
-                <b style={{ color: '#111' }}>{queue.length}</b> archivo{queue.length !== 1 ? 's' : ''} en cola
+              <span style={{ fontSize: '0.82rem', color: 'var(--m-text-muted)' }}>
+                <b style={{ color: 'var(--m-text)' }}>{queue.length}</b> archivo{queue.length !== 1 ? 's' : ''} en cola
               </span>
-              {pendingCount > 0 && <span style={{ fontSize: '0.75rem', color: '#F59E0B', fontWeight: '600' }}>· {pendingCount} pendientes</span>}
+              {pendingCount > 0 && <span style={{ fontSize: '0.75rem', color: 'var(--m-warning)', fontWeight: '600' }}>· {pendingCount} pendientes</span>}
               {doneCount > 0    && <span style={{ fontSize: '0.75rem', color: '#22C55E', fontWeight: '600' }}>· {doneCount} subidos</span>}
-              {errorCount > 0   && <span style={{ fontSize: '0.75rem', color: '#EF4444', fontWeight: '600' }}>· {errorCount} con error</span>}
+              {errorCount > 0   && <span style={{ fontSize: '0.75rem', color: 'var(--m-danger)', fontWeight: '600' }}>· {errorCount} con error</span>}
               <div style={{ flex: 1 }} />
               {doneCount > 0 && (
-                <button onClick={clearDone} style={{ fontSize: '0.75rem', color: '#9CA3AF', background: 'none', border: 'none', cursor: 'pointer' }}>
+                <button onClick={clearDone} style={{ fontSize: '0.75rem', color: 'var(--m-text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
                   Limpiar completados
                 </button>
               )}
               {pendingCount > 0 && (
                 <button onClick={uploadAll} style={{
                   padding: '7px 18px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                  backgroundColor: ORANGE, color: '#fff',
+                  backgroundColor: ORANGE, color: 'var(--m-surface)',
                   fontSize: '0.82rem', fontWeight: '700',
                   display: 'flex', alignItems: 'center', gap: '6px',
                 }}>
@@ -228,29 +228,29 @@ export function CargaMasivaView({ onNavigate }: Props) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {queue.map(item => (
                 <div key={item.id} style={{
-                  backgroundColor: '#fff', borderRadius: '10px', padding: '12px 14px',
+                  backgroundColor: 'var(--m-surface)', borderRadius: '10px', padding: '12px 14px',
                   border: `1.5px solid ${
                     item.status === 'done'     ? '#86EFAC' :
                     item.status === 'error'    ? '#FCA5A5' :
-                    item.status === 'uploading'? `${ORANGE}50` : '#E5E7EB'
+                    item.status === 'uploading'? `${ORANGE}50` : 'var(--m-border)'
                   }`,
                   display: 'flex', alignItems: 'center', gap: '12px',
                 }}>
                   {fileIcon(item.file.type)}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: '#111', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: 'var(--m-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {item.file.name}
                     </p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: '#9CA3AF' }}>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>
                       {formatSize(item.file.size)} · {item.file.type || 'desconocido'}
                     </p>
                     {item.status === 'uploading' && (
-                      <div style={{ marginTop: '6px', height: '4px', backgroundColor: '#E5E7EB', borderRadius: '2px' }}>
+                      <div style={{ marginTop: '6px', height: '4px', backgroundColor: 'var(--m-border)', borderRadius: '2px' }}>
                         <div style={{ height: '100%', width: '60%', backgroundColor: ORANGE, borderRadius: '2px', transition: 'width 0.3s' }} />
                       </div>
                     )}
                     {item.status === 'error' && (
-                      <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: '#EF4444' }}>{item.errorMsg}</p>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: 'var(--m-danger)' }}>{item.errorMsg}</p>
                     )}
                   </div>
 
@@ -276,7 +276,7 @@ export function CargaMasivaView({ onNavigate }: Props) {
           )}
 
           {queue.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#9CA3AF' }}>
+            <div style={{ textAlign: 'center', padding: '40px', color: 'var(--m-text-muted)' }}>
               <HardDrive size={36} style={{ marginBottom: '12px', opacity: 0.3 }} />
               <p style={{ margin: 0, fontSize: '0.85rem' }}>La cola está vacía. Arrastrá archivos para comenzar.</p>
             </div>
@@ -288,27 +288,27 @@ export function CargaMasivaView({ onNavigate }: Props) {
       {tab === 'files' && (
         <div style={{ flex: 1, overflowY: 'auto', padding: '28px' }}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '18px', gap: '12px' }}>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: '#6B7280' }}>
-              <b style={{ color: '#111' }}>{remotes.length}</b> archivos almacenados en Supabase Storage
+            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--m-text-muted)' }}>
+              <b style={{ color: 'var(--m-text)' }}>{remotes.length}</b> archivos almacenados en Supabase Storage
             </p>
             <div style={{ flex: 1 }} />
             <button onClick={loadRemotes} style={{
               display: 'flex', alignItems: 'center', gap: '6px',
               padding: '7px 14px', borderRadius: '8px',
-              border: '1.5px solid #E5E7EB', backgroundColor: '#fff',
-              fontSize: '0.78rem', fontWeight: '600', color: '#374151', cursor: 'pointer',
+              border: '1.5px solid #E5E7EB', backgroundColor: 'var(--m-surface)',
+              fontSize: '0.78rem', fontWeight: '600', color: 'var(--m-text-secondary)', cursor: 'pointer',
             }}>
               <RefreshCw size={13} /> Actualizar
             </button>
           </div>
 
           {loadingRemotes ? (
-            <div style={{ textAlign: 'center', padding: '60px', color: '#9CA3AF' }}>
+            <div style={{ textAlign: 'center', padding: '60px', color: 'var(--m-text-muted)' }}>
               <RefreshCw size={28} style={{ animation: 'spin 1s linear infinite', marginBottom: '12px' }} />
               <p style={{ margin: 0 }}>Cargando archivos...</p>
             </div>
           ) : remotes.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '60px', color: '#9CA3AF' }}>
+            <div style={{ textAlign: 'center', padding: '60px', color: 'var(--m-text-muted)' }}>
               <FolderOpen size={36} style={{ marginBottom: '12px', opacity: 0.3 }} />
               <p style={{ margin: 0, fontSize: '0.85rem' }}>No hay archivos subidos aún.</p>
             </div>
@@ -316,20 +316,20 @@ export function CargaMasivaView({ onNavigate }: Props) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {remotes.map(f => (
                 <div key={f.id} style={{
-                  backgroundColor: '#fff', borderRadius: '10px', padding: '12px 16px',
+                  backgroundColor: 'var(--m-surface)', borderRadius: '10px', padding: '12px 16px',
                   border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '12px',
                 }}>
                   {fileIcon(f.mimeType)}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: '#111', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: 'var(--m-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {f.name}
                     </p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: '#9CA3AF' }}>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>
                       {formatSize(f.size)} · {new Date(f.createdAt).toLocaleDateString('es-UY')}
                     </p>
                   </div>
                   {f.signedUrl && (
-                    <a href={f.signedUrl} download target="_blank" rel="noreferrer" style={{ color: '#6B7280', display: 'flex' }}>
+                    <a href={f.signedUrl} download target="_blank" rel="noreferrer" style={{ color: 'var(--m-text-muted)', display: 'flex' }}>
                       <Download size={15} />
                     </a>
                   )}

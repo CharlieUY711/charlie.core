@@ -35,7 +35,7 @@ export function GoogleMapsTestView() {
         lat: result.lat,
         lng: result.lng,
         title: result.address,
-        color: '#FF6835',
+        color: 'var(--m-primary)',
       },
     ]);
     toast.success('Dirección seleccionada');
@@ -65,7 +65,7 @@ export function GoogleMapsTestView() {
             lat: result.lat,
             lng: result.lng,
             title: result.formatted_address,
-            color: '#10B981',
+            color: 'var(--m-success)',
           },
         ]);
         toast.success('Geocodificación exitosa');
@@ -121,7 +121,7 @@ export function GoogleMapsTestView() {
         <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' }}>
           🗺️ Prueba de Google Maps API
         </h1>
-        <p style={{ color: '#6B7280', fontSize: '16px' }}>
+        <p style={{ color: 'var(--m-text-muted)', fontSize: '16px' }}>
           Probá los componentes de geolocalización de Google Maps
         </p>
       </div>
@@ -154,13 +154,13 @@ export function GoogleMapsTestView() {
             <div style={{ 
               marginTop: '16px', 
               padding: '12px', 
-              background: '#F3F4F6', 
+              background: 'var(--m-surface-2)', 
               borderRadius: '6px',
               fontSize: '14px'
             }}>
               <div style={{ fontWeight: '600', marginBottom: '8px' }}>Dirección seleccionada:</div>
-              <div style={{ color: '#6B7280' }}>{selectedAddress.address}</div>
-              <div style={{ marginTop: '8px', fontSize: '12px', color: '#9CA3AF' }}>
+              <div style={{ color: 'var(--m-text-muted)' }}>{selectedAddress.address}</div>
+              <div style={{ marginTop: '8px', fontSize: '12px', color: 'var(--m-text-muted)' }}>
                 Lat: {selectedAddress.lat.toFixed(6)}, Lng: {selectedAddress.lng.toFixed(6)}
               </div>
             </div>
@@ -203,7 +203,7 @@ export function GoogleMapsTestView() {
             style={{
               width: '100%',
               padding: '10px',
-              background: isGeocoding ? '#9CA3AF' : '#FF6835',
+              background: isGeocoding ? '#9CA3AF' : 'var(--m-primary)',
               color: 'white',
               border: 'none',
               borderRadius: '6px',
@@ -236,7 +236,7 @@ export function GoogleMapsTestView() {
                 width: '100%',
                 marginTop: '8px',
                 padding: '10px',
-                background: isGeocoding ? '#9CA3AF' : '#10B981',
+                background: isGeocoding ? '#9CA3AF' : 'var(--m-success)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '6px',
@@ -256,7 +256,7 @@ export function GoogleMapsTestView() {
         <div style={{ 
           marginBottom: '24px', 
           padding: '16px', 
-          background: '#F3F4F6', 
+          background: 'var(--m-surface-2)', 
           borderRadius: '8px',
           whiteSpace: 'pre-line',
           fontSize: '14px',
@@ -293,14 +293,14 @@ export function GoogleMapsTestView() {
       <div style={{ 
         marginTop: '24px', 
         padding: '16px', 
-        background: '#EFF6FF', 
+        background: 'var(--m-info-bg)', 
         borderRadius: '8px',
         border: '1px solid #BFDBFE'
       }}>
         <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>
           📝 Instrucciones de prueba:
         </h3>
-        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: '#1E40AF' }}>
+        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: 'var(--m-info-text)' }}>
           <li>Usá el autocompletado para buscar una dirección (aparecerán sugerencias mientras escribís)</li>
           <li>Seleccioná una dirección y verás el marcador en el mapa</li>
           <li>Probá la geocodificación manual ingresando una dirección y haciendo clic en "Obtener Coordenadas"</li>

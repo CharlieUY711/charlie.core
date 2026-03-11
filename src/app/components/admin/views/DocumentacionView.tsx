@@ -89,7 +89,7 @@ Fecha de release: 21 de febrero de 2026
     id: 'guia-inicio',
     label: 'Guía de inicio rápido',
     icon: Zap,
-    color: '#10B981',
+    color: 'var(--m-success)',
     tecnica: false,
     currentVersion: 'v1.5.0',
     lastModified: '21 Feb 2026',
@@ -134,7 +134,7 @@ Ve a **Sistema → Dashboard de Usuario** para ver tu vista personalizada y ajus
     id: 'modulos',
     label: 'Módulos del sistema',
     icon: Package,
-    color: '#3B82F6',
+    color: 'var(--m-info)',
     tecnica: false,
     currentVersion: 'v1.5.0',
     lastModified: '21 Feb 2026',
@@ -192,7 +192,7 @@ Configuración y control del sistema.
     id: 'integraciones-doc',
     label: 'Integraciones & Pasarelas',
     icon: Plug,
-    color: '#14B8A6',
+    color: 'var(--m-success)',
     tecnica: false,
     currentVersion: 'v1.5.0',
     lastModified: '21 Feb 2026',
@@ -247,7 +247,7 @@ Orquestador de pagos multi-adquirente para Uruguay.
     id: 'faq',
     label: 'Preguntas frecuentes',
     icon: Users,
-    color: '#8B5CF6',
+    color: 'var(--m-purple)',
     tecnica: false,
     currentVersion: 'v1.5.0',
     lastModified: '21 Feb 2026',
@@ -302,7 +302,7 @@ Backup automático diario a las 03:00 AM. También podés ejecutar backup manual
     id: 'arquitectura',
     label: 'Arquitectura del sistema',
     icon: Code,
-    color: '#1F2937',
+    color: 'var(--m-text)',
     badge: 'Técnico',
     tecnica: true,
     currentVersion: 'v1.5.0',
@@ -379,7 +379,7 @@ Deploy:      Vercel / Netlify (frontend) + Supabase (backend)
     id: 'api-endpoints',
     label: 'API & Endpoints',
     icon: Globe,
-    color: '#3B82F6',
+    color: 'var(--m-info)',
     badge: 'Técnico',
     tecnica: true,
     currentVersion: 'v1.5.0',
@@ -458,7 +458,7 @@ Access-Control-Allow-Headers: Authorization, Content-Type
     id: 'auth-config',
     label: 'Autenticación & Roles',
     icon: Shield,
-    color: '#7C3AED',
+    color: 'var(--m-purple)',
     badge: 'Técnico',
     tecnica: true,
     currentVersion: 'v1.5.0',
@@ -544,7 +544,7 @@ SUPABASE_DB_URL=postgresql://...
     id: 'changelog',
     label: 'Changelog & Versiones',
     icon: History,
-    color: '#F59E0B',
+    color: 'var(--m-warning)',
     badge: 'Técnico',
     tecnica: true,
     currentVersion: 'v1.5.0',
@@ -696,7 +696,7 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       <OrangeHeader
         icon={BookOpen}
@@ -704,16 +704,16 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
         subtitle={`${clienteNombre} · Sistema de Gestión`}
         rightSlot={
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <span style={{ fontSize: '0.72rem', color: '#9CA3AF', fontWeight: '500' }}>Vista como:</span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)', fontWeight: '500' }}>Vista como:</span>
             {(['usuario', 'tecnico'] as const).map(r => (
               <button
                 key={r}
                 onClick={() => setSimulRole(r)}
                 style={{
                   padding: '5px 12px', borderRadius: 7,
-                  border: `1.5px solid ${simulRole === r ? ORANGE : '#E5E7EB'}`,
-                  backgroundColor: simulRole === r ? `${ORANGE}10` : '#fff',
-                  color: simulRole === r ? ORANGE : '#6B7280',
+                  border: `1.5px solid ${simulRole === r ? ORANGE : 'var(--m-border)'}`,
+                  backgroundColor: simulRole === r ? `${ORANGE}10` : 'var(--m-surface)',
+                  color: simulRole === r ? ORANGE : 'var(--m-text-muted)',
                   fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer',
                 }}
               >
@@ -725,7 +725,7 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
       />
 
       {/* ── Tabs de tipo de doc ── */}
-      <div style={{ backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', padding: '0 28px', display: 'flex', gap: 0, flexShrink: 0 }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', padding: '0 28px', display: 'flex', gap: 0, flexShrink: 0 }}>
         {([['usuario', BookOpen, 'Documentación de Usuario', 'Todos los roles'], ['tecnica', Code, 'Documentación Técnica', 'Admin · Editor · SuperAdmin']] as const).map(([tab, Icon, label, desc]) => {
           const active = tab === activeTab;
           const locked = tab === 'tecnica' && simulRole === 'usuario';
@@ -743,17 +743,17 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
                 padding: '14px 22px', border: 'none',
                 borderBottom: active ? `3px solid ${ORANGE}` : '3px solid transparent',
                 backgroundColor: 'transparent',
-                color: active ? ORANGE : locked ? '#D1D5DB' : '#6B7280',
+                color: active ? ORANGE : locked ? '#D1D5DB' : 'var(--m-text-muted)',
                 fontSize: '0.85rem', fontWeight: active ? '800' : '600',
                 cursor: locked ? 'not-allowed' : 'pointer',
                 display: 'flex', alignItems: 'center', gap: 8,
                 transition: 'all 0.15s',
               }}
             >
-              {locked ? <Lock size={13} color='#D1D5DB' /> : <Icon size={14} color={active ? ORANGE : '#9CA3AF'} />}
+              {locked ? <Lock size={13} color='#D1D5DB' /> : <Icon size={14} color={active ? ORANGE : 'var(--m-text-muted)'} />}
               <div style={{ textAlign: 'left' }}>
                 <div>{label}</div>
-                <div style={{ fontSize: '0.68rem', color: '#9CA3AF', fontWeight: '400' }}>{desc}</div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)', fontWeight: '400' }}>{desc}</div>
               </div>
             </button>
           );
@@ -764,9 +764,9 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
 
         {/* Sidebar de secciones */}
-        <div style={{ width: 240, borderRight: '1px solid #E5E7EB', backgroundColor: '#fff', overflowY: 'auto', flexShrink: 0 }}>
+        <div style={{ width: 240, borderRight: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)', overflowY: 'auto', flexShrink: 0 }}>
           <div style={{ padding: '16px 16px 8px' }}>
-            <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '800', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '800', color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               Secciones
             </p>
           </div>
@@ -785,13 +785,13 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
                   transition: 'all 0.12s',
                 }}
               >
-                <sec.icon size={14} color={active ? sec.color : '#9CA3AF'} />
+                <sec.icon size={14} color={active ? sec.color : 'var(--m-text-muted)'} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: active ? '700' : '500', color: active ? sec.color : '#374151', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: active ? '700' : '500', color: active ? sec.color : 'var(--m-text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {sec.label}
                   </p>
                   {sec.badge && (
-                    <span style={{ fontSize: '0.62rem', fontWeight: '700', color: '#9CA3AF', backgroundColor: '#F3F4F6', padding: '1px 5px', borderRadius: 4 }}>
+                    <span style={{ fontSize: '0.62rem', fontWeight: '700', color: 'var(--m-text-muted)', backgroundColor: 'var(--m-surface-2)', padding: '1px 5px', borderRadius: 4 }}>
                       {sec.badge}
                     </span>
                   )}
@@ -812,12 +812,12 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
                 <currentSec.icon size={18} color={currentSec.color} />
               </div>
               <div>
-                <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: '#1A1A2E' }}>{currentSec.label}</h2>
+                <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: 'var(--m-text)' }}>{currentSec.label}</h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                   <span style={{ fontSize: '0.7rem', fontWeight: '700', color: currentSec.color, backgroundColor: `${currentSec.color}15`, padding: '2px 8px', borderRadius: 5 }}>
                     {currentSec.currentVersion}
                   </span>
-                  <span style={{ fontSize: '0.7rem', color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: 3 }}>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Clock size={11} /> {currentSec.lastModified}
                   </span>
                 </div>
@@ -830,8 +830,8 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
                   padding: '8px 14px', borderRadius: 8,
-                  border: '1.5px solid #E5E7EB', backgroundColor: showHistory ? '#F3F4F6' : '#fff',
-                  color: '#6B7280', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer',
+                  border: '1.5px solid #E5E7EB', backgroundColor: showHistory ? '#F3F4F6' : 'var(--m-surface)',
+                  color: 'var(--m-text-muted)', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer',
                 }}
               >
                 <History size={13} /> Historial
@@ -843,7 +843,7 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
                     display: 'flex', alignItems: 'center', gap: 6,
                     padding: '8px 14px', borderRadius: 8,
                     border: 'none', backgroundColor: ORANGE,
-                    color: '#fff', fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer',
+                    color: 'var(--m-surface)', fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer',
                   }}
                 >
                   <Edit2 size={13} /> Editar
@@ -853,13 +853,13 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
                 <>
                   <button
                     onClick={handleCancel}
-                    style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: '1.5px solid #E5E7EB', backgroundColor: '#fff', color: '#6B7280', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: '1.5px solid #E5E7EB', backgroundColor: 'var(--m-surface)', color: 'var(--m-text-muted)', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer' }}
                   >
                     <X size={13} /> Cancelar
                   </button>
                   <button
                     onClick={handleSave}
-                    style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none', backgroundColor: '#10B981', color: '#fff', fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none', backgroundColor: 'var(--m-success)', color: 'var(--m-surface)', fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer' }}
                   >
                     <Save size={13} /> Guardar
                   </button>
@@ -870,22 +870,22 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
 
           {/* Historial de versiones */}
           {showHistory && (
-            <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '18px 20px', marginBottom: 24 }}>
-              <h3 style={{ margin: '0 0 14px', fontSize: '0.88rem', fontWeight: '700', color: '#111827', display: 'flex', alignItems: 'center', gap: 7 }}>
+            <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', padding: '18px 20px', marginBottom: 24 }}>
+              <h3 style={{ margin: '0 0 14px', fontSize: '0.88rem', fontWeight: '700', color: 'var(--m-text)', display: 'flex', alignItems: 'center', gap: 7 }}>
                 <History size={15} color={ORANGE} /> Historial de versiones — {currentSec.label}
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {currentSec.versions.map((v, i) => (
                   <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '10px 0', borderBottom: i < currentSec.versions.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
-                    <span style={{ fontSize: '0.72rem', fontWeight: '800', color: i === 0 ? ORANGE : '#6B7280', backgroundColor: i === 0 ? `${ORANGE}15` : '#F3F4F6', padding: '3px 9px', borderRadius: 6, flexShrink: 0 }}>
+                    <span style={{ fontSize: '0.72rem', fontWeight: '800', color: i === 0 ? ORANGE : 'var(--m-text-muted)', backgroundColor: i === 0 ? `${ORANGE}15` : 'var(--m-surface-2)', padding: '3px 9px', borderRadius: 6, flexShrink: 0 }}>
                       {v.version}
                     </span>
                     <div>
-                      <p style={{ margin: '0 0 2px', fontSize: '0.8rem', color: '#374151', fontWeight: '600' }}>{v.summary}</p>
-                      <p style={{ margin: 0, fontSize: '0.7rem', color: '#9CA3AF' }}>{v.author} · {v.date}</p>
+                      <p style={{ margin: '0 0 2px', fontSize: '0.8rem', color: 'var(--m-text-secondary)', fontWeight: '600' }}>{v.summary}</p>
+                      <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>{v.author} · {v.date}</p>
                     </div>
                     {i === 0 && (
-                      <span style={{ marginLeft: 'auto', fontSize: '0.65rem', fontWeight: '700', color: '#10B981', backgroundColor: '#D1FAE5', padding: '2px 7px', borderRadius: 5 }}>
+                      <span style={{ marginLeft: 'auto', fontSize: '0.65rem', fontWeight: '700', color: 'var(--m-success)', backgroundColor: 'var(--m-success-bg)', padding: '2px 7px', borderRadius: 5 }}>
                         Actual
                       </span>
                     )}
@@ -898,9 +898,9 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
           {/* Editor o Vista */}
           {editing ? (
             <div>
-              <div style={{ marginBottom: 12, padding: '10px 14px', backgroundColor: '#FFFBEB', borderRadius: 8, border: '1px solid #FCD34D', display: 'flex', alignItems: 'center', gap: 7 }}>
+              <div style={{ marginBottom: 12, padding: '10px 14px', backgroundColor: 'var(--m-warning-bg)', borderRadius: 8, border: '1px solid #FCD34D', display: 'flex', alignItems: 'center', gap: 7 }}>
                 <AlertTriangle size={14} color='#F59E0B' />
-                <p style={{ margin: 0, fontSize: '0.78rem', color: '#92400E' }}>
+                <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--m-warning-text)' }}>
                   Editando en formato Markdown. Al guardar se creará una nueva versión automáticamente.
                 </p>
               </div>
@@ -913,7 +913,7 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
                   border: `2px solid ${ORANGE}40`,
                   fontSize: '0.84rem', lineHeight: '1.7',
                   fontFamily: '"JetBrains Mono", "Fira Code", monospace',
-                  color: '#1A1A2E', backgroundColor: '#FAFAFA',
+                  color: 'var(--m-text)', backgroundColor: 'var(--m-surface-2)',
                   outline: 'none', resize: 'vertical',
                   boxSizing: 'border-box',
                 }}
@@ -921,23 +921,23 @@ export function DocumentacionView({ onNavigate: _ }: Props) {
             </div>
           ) : (
             <div
-              style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '28px 32px', lineHeight: '1.7' }}
+              style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '28px 32px', lineHeight: '1.7' }}
               dangerouslySetInnerHTML={{ __html: renderContent(currentSec.content) }}
             />
           )}
 
           {/* Footer de sección */}
           {!editing && (
-            <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #F3F4F6' }}>
+            <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #F3F4F6' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                 <CheckCircle size={13} color='#10B981' />
-                <span style={{ fontSize: '0.75rem', color: '#6B7280' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>
                   Última actualización: <strong>{currentSec.lastModified}</strong> · Versión <strong>{currentSec.currentVersion}</strong>
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Tag size={12} color='#9CA3AF' />
-                <span style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
                   Charlie Marketplace Builder · Nivel 1 — Edición manual
                 </span>
               </div>

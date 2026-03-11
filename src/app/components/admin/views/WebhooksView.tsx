@@ -117,20 +117,20 @@ export function WebhooksView({ onNavigate }: Props) {
         actions={[{ label: '← Integraciones', onClick: () => onNavigate('integraciones') }]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: 'var(--m-bg)' }}>
         {/* Stats */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
           {[
-            { label: 'Webhooks', value: loading ? '...' : webhooks.length, color: '#111827' },
-            { label: 'Activos', value: loading ? '...' : activeCount, color: '#10B981' },
-            { label: 'Inactivos', value: loading ? '...' : webhooks.filter(w => w.estado === 'inactivo').length, color: '#9CA3AF' },
+            { label: 'Webhooks', value: loading ? '...' : webhooks.length, color: 'var(--m-text)' },
+            { label: 'Activos', value: loading ? '...' : activeCount, color: 'var(--m-success)' },
+            { label: 'Inactivos', value: loading ? '...' : webhooks.filter(w => w.estado === 'inactivo').length, color: 'var(--m-text-muted)' },
           ].map((s, i) => (
             <div key={i} style={{
-              flex: 1, backgroundColor: '#fff', borderRadius: 10, padding: '12px 16px',
+              flex: 1, backgroundColor: 'var(--m-surface)', borderRadius: 10, padding: '12px 16px',
               border: '1px solid #E5E7EB', textAlign: 'center',
             }}>
               <div style={{ fontSize: '1.5rem', fontWeight: '800', color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: 2 }}>{s.label}</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', marginTop: 2 }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -146,7 +146,7 @@ export function WebhooksView({ onNavigate }: Props) {
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '10px 16px', borderRadius: 8,
-              backgroundColor: ORANGE, color: '#fff', border: 'none',
+              backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none',
               fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer',
             }}
           >
@@ -158,26 +158,26 @@ export function WebhooksView({ onNavigate }: Props) {
         <div style={{ display: 'grid', gap: 12 }}>
           {webhooks.map(webhook => (
             <div key={webhook.id} style={{
-              backgroundColor: '#fff', borderRadius: 12,
+              backgroundColor: 'var(--m-surface)', borderRadius: 12,
               border: '1px solid #E5E7EB',
               padding: '16px 20px',
             }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem' }}>{webhook.nombre}</span>
+                    <span style={{ fontWeight: '800', color: 'var(--m-text)', fontSize: '0.95rem' }}>{webhook.nombre}</span>
                     <span style={{
                       padding: '2px 8px', borderRadius: 12, fontSize: '0.65rem', fontWeight: '700',
-                      backgroundColor: webhook.estado === 'activo' ? '#D1FAE5' : '#F3F4F6',
-                      color: webhook.estado === 'activo' ? '#10B981' : '#6B7280',
+                      backgroundColor: webhook.estado === 'activo' ? '#D1FAE5' : 'var(--m-surface-2)',
+                      color: webhook.estado === 'activo' ? '#10B981' : 'var(--m-text-muted)',
                     }}>
                       {webhook.estado === 'activo' ? 'Activo' : 'Inactivo'}
                     </span>
                   </div>
                   <code style={{
-                    padding: '4px 8px', borderRadius: 4, backgroundColor: '#F9FAFB',
+                    padding: '4px 8px', borderRadius: 4, backgroundColor: 'var(--m-surface-2)',
                     border: '1px solid #E5E7EB', fontSize: '0.75rem', fontFamily: 'monospace',
-                    color: '#374151', display: 'inline-block',
+                    color: 'var(--m-text-secondary)', display: 'inline-block',
                   }}>
                     {webhook.url}
                   </code>
@@ -188,8 +188,8 @@ export function WebhooksView({ onNavigate }: Props) {
                     disabled={testingId === webhook.id}
                     style={{
                       padding: '6px 10px', borderRadius: 6, border: '1px solid #E5E7EB',
-                      backgroundColor: testingId === webhook.id ? '#F3F4F6' : '#EFF6FF',
-                      color: testingId === webhook.id ? '#9CA3AF' : '#2563EB',
+                      backgroundColor: testingId === webhook.id ? '#F3F4F6' : 'var(--m-info-bg)',
+                      color: testingId === webhook.id ? '#9CA3AF' : 'var(--m-info)',
                       cursor: testingId === webhook.id ? 'not-allowed' : 'pointer',
                       fontSize: '0.72rem', fontWeight: '600',
                       display: 'flex', alignItems: 'center', gap: 4,
@@ -201,8 +201,8 @@ export function WebhooksView({ onNavigate }: Props) {
                     onClick={() => handleUpdate(webhook.id, { estado: webhook.estado === 'activo' ? 'inactivo' : 'activo' })}
                     style={{
                       padding: '6px 10px', borderRadius: 6, border: 'none',
-                      backgroundColor: webhook.estado === 'activo' ? '#F3F4F6' : '#D1FAE5',
-                      color: webhook.estado === 'activo' ? '#6B7280' : '#10B981',
+                      backgroundColor: webhook.estado === 'activo' ? '#F3F4F6' : 'var(--m-success-bg)',
+                      color: webhook.estado === 'activo' ? '#6B7280' : 'var(--m-success)',
                       cursor: 'pointer',
                       fontSize: '0.72rem', fontWeight: '600',
                       display: 'flex', alignItems: 'center', gap: 4,
@@ -215,8 +215,8 @@ export function WebhooksView({ onNavigate }: Props) {
                     disabled={deletingId === webhook.id}
                     style={{
                       padding: '6px 10px', borderRadius: 6, border: 'none',
-                      backgroundColor: deletingId === webhook.id ? '#F3F4F6' : '#FEE2E2',
-                      color: deletingId === webhook.id ? '#9CA3AF' : '#EF4444',
+                      backgroundColor: deletingId === webhook.id ? '#F3F4F6' : 'var(--m-danger-bg)',
+                      color: deletingId === webhook.id ? '#9CA3AF' : 'var(--m-danger)',
                       cursor: deletingId === webhook.id ? 'not-allowed' : 'pointer',
                       fontSize: '0.72rem', fontWeight: '600',
                       display: 'flex', alignItems: 'center', gap: 4,
@@ -229,26 +229,26 @@ export function WebhooksView({ onNavigate }: Props) {
 
               {/* Eventos */}
               <div style={{ marginBottom: 8 }}>
-                <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: '700' }}>Eventos: </span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', fontWeight: '700' }}>Eventos: </span>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
                   {webhook.eventos.length > 0 ? (
                     webhook.eventos.map(evento => (
                       <span key={evento} style={{
                         padding: '2px 8px', borderRadius: 4, fontSize: '0.68rem', fontWeight: '600',
-                        backgroundColor: '#EFF6FF', color: '#2563EB',
+                        backgroundColor: 'var(--m-info-bg)', color: 'var(--m-info)',
                       }}>
                         {EVENTOS_DISPONIBLES.find(e => e.id === evento)?.label || evento}
                       </span>
                     ))
                   ) : (
-                    <span style={{ fontSize: '0.68rem', color: '#9CA3AF', fontStyle: 'italic' }}>Sin eventos</span>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)', fontStyle: 'italic' }}>Sin eventos</span>
                   )}
                 </div>
               </div>
 
               {/* Estado del último intento */}
               {webhook.ultimo_intento && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.7rem', color: '#6B7280' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>
                   <span>Último intento: {new Date(webhook.ultimo_intento).toLocaleString()}</span>
                   {webhook.ultimo_status && (
                     <>
@@ -265,7 +265,7 @@ export function WebhooksView({ onNavigate }: Props) {
                   {webhook.intentos_fallidos > 0 && (
                     <>
                       <span>•</span>
-                      <span style={{ color: '#EF4444', fontWeight: '600' }}>
+                      <span style={{ color: 'var(--m-danger)', fontWeight: '600' }}>
                         {webhook.intentos_fallidos} intentos fallidos
                       </span>
                     </>
@@ -277,7 +277,7 @@ export function WebhooksView({ onNavigate }: Props) {
         </div>
 
         {webhooks.length === 0 && !loading && (
-          <div style={{ textAlign: 'center', padding: '48px 0', color: '#9CA3AF' }}>
+          <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--m-text-muted)' }}>
             <p style={{ fontSize: '2rem', margin: '0 0 8px' }}>🔗</p>
             <p style={{ fontWeight: '600' }}>No hay webhooks configurados</p>
           </div>
@@ -292,14 +292,14 @@ export function WebhooksView({ onNavigate }: Props) {
           zIndex: 1000,
         }}>
           <div style={{
-            backgroundColor: '#fff', borderRadius: 12, padding: '24px',
+            backgroundColor: 'var(--m-surface)', borderRadius: 12, padding: '24px',
             width: '90%', maxWidth: 500, maxHeight: '90vh', overflowY: 'auto',
           }}>
-            <h3 style={{ margin: '0 0 20px', fontSize: '1rem', fontWeight: '800', color: '#111827' }}>
+            <h3 style={{ margin: '0 0 20px', fontSize: '1rem', fontWeight: '800', color: 'var(--m-text)' }}>
               {editingId ? 'Editar Webhook' : 'Nuevo Webhook'}
             </h3>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 6 }}>
                 Nombre *
               </label>
               <input
@@ -316,7 +316,7 @@ export function WebhooksView({ onNavigate }: Props) {
               />
             </div>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 6 }}>
                 URL *
               </label>
               <input
@@ -333,7 +333,7 @@ export function WebhooksView({ onNavigate }: Props) {
               />
             </div>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 8 }}>
+              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 8 }}>
                 Eventos
               </label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -351,13 +351,13 @@ export function WebhooksView({ onNavigate }: Props) {
                       }}
                       style={{ cursor: 'pointer' }}
                     />
-                    <span style={{ fontSize: '0.8rem', color: '#374151' }}>{evento.label}</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--m-text-secondary)' }}>{evento.label}</span>
                   </label>
                 ))}
               </div>
             </div>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 6 }}>
                 Secret (opcional)
               </label>
               <input
@@ -379,8 +379,8 @@ export function WebhooksView({ onNavigate }: Props) {
                 disabled={!newWebhook.nombre.trim() || !newWebhook.url.trim()}
                 style={{
                   flex: 1, padding: '10px', borderRadius: 8,
-                  backgroundColor: (newWebhook.nombre.trim() && newWebhook.url.trim()) ? ORANGE : '#E5E7EB',
-                  color: (newWebhook.nombre.trim() && newWebhook.url.trim()) ? '#fff' : '#9CA3AF',
+                  backgroundColor: (newWebhook.nombre.trim() && newWebhook.url.trim()) ? ORANGE : 'var(--m-border)',
+                  color: (newWebhook.nombre.trim() && newWebhook.url.trim()) ? '#fff' : 'var(--m-text-muted)',
                   border: 'none', fontSize: '0.85rem', fontWeight: '700',
                   cursor: (newWebhook.nombre.trim() && newWebhook.url.trim()) ? 'pointer' : 'not-allowed',
                 }}
@@ -394,7 +394,7 @@ export function WebhooksView({ onNavigate }: Props) {
                 }}
                 style={{
                   padding: '10px 16px', borderRadius: 8, border: '1px solid #E5E7EB',
-                  backgroundColor: '#fff', color: '#6B7280', fontSize: '0.85rem', fontWeight: '600',
+                  backgroundColor: 'var(--m-surface)', color: 'var(--m-text-muted)', fontSize: '0.85rem', fontWeight: '600',
                   cursor: 'pointer',
                 }}
               >

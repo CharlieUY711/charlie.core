@@ -28,31 +28,31 @@ interface ServiceCheck {
 }
 
 const initialServices: ServiceCheck[] = [
-  { id: 'supabase-db',    name: 'Supabase Database',    description: 'PostgreSQL',      category: 'Backend',  icon: Database, color: '#059669', status: 'checking' },
-  { id: 'supabase-auth',  name: 'Supabase Auth',        description: 'Autenticación y sesiones',             category: 'Backend',  icon: Shield,   color: '#059669', status: 'checking' },
-  { id: 'supabase-edge',  name: 'Edge Functions (Hono)',description: 'Servidor /api',        category: 'Backend',  icon: Server,   color: '#059669', status: 'checking' },
-  { id: 'kv-store',       name: 'KV Store',             description: 'Tabla clave-valor persistente',        category: 'Backend',  icon: Cpu,      color: '#059669', status: 'checking' },
-  { id: 'storage',        name: 'Supabase Storage',     description: 'Supabase Storage Buckets',              category: 'Backend',  icon: Database, color: '#059669', status: 'checking' },
-  { id: 'plexo',          name: 'Plexo UV',             description: 'API de pagos Uruguay',                 category: 'Pagos',    icon: Globe,    color: '#6B7280', status: 'pending' },
-  { id: 'mercadopago',    name: 'MercadoPago',          description: 'Pasarela Latam',                       category: 'Pagos',    icon: Globe,    color: '#6B7280', status: 'pending' },
-  { id: 'twilio',         name: 'Twilio',               description: 'SMS / WhatsApp',                       category: 'Comms',    icon: Globe,    color: '#6B7280', status: 'pending' },
-  { id: 'resend',         name: 'Resend',               description: 'Email transaccional',                  category: 'Comms',    icon: Globe,    color: '#6B7280', status: 'pending' },
-  { id: 'meta',           name: 'Meta Business',        description: 'Instagram / Facebook / WhatsApp API',  category: 'RRSS',     icon: Globe,    color: '#6B7280', status: 'pending' },
-  { id: 'mercadolibre',   name: 'MercadoLibre',         description: 'API de marketplace',                   category: 'Tiendas',  icon: Globe,    color: '#6B7280', status: 'pending' },
-  { id: 'google-maps',    name: 'Google Maps',          description: 'Geocodificación y rutas',              category: 'Mapas',    icon: Globe,    color: '#6B7280', status: 'pending' },
+  { id: 'supabase-db',    name: 'Supabase Database',    description: 'PostgreSQL',      category: 'Backend',  icon: Database, color: 'var(--m-success)', status: 'checking' },
+  { id: 'supabase-auth',  name: 'Supabase Auth',        description: 'Autenticación y sesiones',             category: 'Backend',  icon: Shield,   color: 'var(--m-success)', status: 'checking' },
+  { id: 'supabase-edge',  name: 'Edge Functions (Hono)',description: 'Servidor /api',        category: 'Backend',  icon: Server,   color: 'var(--m-success)', status: 'checking' },
+  { id: 'kv-store',       name: 'KV Store',             description: 'Tabla clave-valor persistente',        category: 'Backend',  icon: Cpu,      color: 'var(--m-success)', status: 'checking' },
+  { id: 'storage',        name: 'Supabase Storage',     description: 'Supabase Storage Buckets',              category: 'Backend',  icon: Database, color: 'var(--m-success)', status: 'checking' },
+  { id: 'plexo',          name: 'Plexo UV',             description: 'API de pagos Uruguay',                 category: 'Pagos',    icon: Globe,    color: 'var(--m-text-muted)', status: 'pending' },
+  { id: 'mercadopago',    name: 'MercadoPago',          description: 'Pasarela Latam',                       category: 'Pagos',    icon: Globe,    color: 'var(--m-text-muted)', status: 'pending' },
+  { id: 'twilio',         name: 'Twilio',               description: 'SMS / WhatsApp',                       category: 'Comms',    icon: Globe,    color: 'var(--m-text-muted)', status: 'pending' },
+  { id: 'resend',         name: 'Resend',               description: 'Email transaccional',                  category: 'Comms',    icon: Globe,    color: 'var(--m-text-muted)', status: 'pending' },
+  { id: 'meta',           name: 'Meta Business',        description: 'Instagram / Facebook / WhatsApp API',  category: 'RRSS',     icon: Globe,    color: 'var(--m-text-muted)', status: 'pending' },
+  { id: 'mercadolibre',   name: 'MercadoLibre',         description: 'API de marketplace',                   category: 'Tiendas',  icon: Globe,    color: 'var(--m-text-muted)', status: 'pending' },
+  { id: 'google-maps',    name: 'Google Maps',          description: 'Geocodificación y rutas',              category: 'Mapas',    icon: Globe,    color: 'var(--m-text-muted)', status: 'pending' },
 ];
 
 const STATUS_META: Record<ServiceStatus, { label: string; color: string; bg: string; icon: any }> = {
-  ok:       { label: 'Operativo',       color: '#059669', bg: '#F0FDF8', icon: CheckCircle2 },
-  error:    { label: 'Error',           color: '#EF4444', bg: '#FEF2F2', icon: XCircle      },
-  checking: { label: 'Verificando...',  color: '#3B82F6', bg: '#EFF6FF', icon: RefreshCw    },
-  unknown:  { label: 'Desconocido',     color: '#F59E0B', bg: '#FFFBEB', icon: AlertCircle  },
-  pending:  { label: 'Sin configurar',  color: '#9CA3AF', bg: '#F9FAFB', icon: Clock        },
+  ok:       { label: 'Operativo',       color: 'var(--m-success)', bg: 'var(--m-success-bg)', icon: CheckCircle2 },
+  error:    { label: 'Error',           color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', icon: XCircle      },
+  checking: { label: 'Verificando...',  color: 'var(--m-info)', bg: 'var(--m-info-bg)', icon: RefreshCw    },
+  unknown:  { label: 'Desconocido',     color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', icon: AlertCircle  },
+  pending:  { label: 'Sin configurar',  color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', icon: Clock        },
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Backend: '#059669', Pagos: '#FF6835', Comms: '#8B5CF6',
-  RRSS: '#EC4899', Tiendas: '#3B82F6', Mapas: '#6366F1',
+  Backend: 'var(--m-success)', Pagos: 'var(--m-primary)', Comms: 'var(--m-purple)',
+  RRSS: '#EC4899', Tiendas: 'var(--m-info)', Mapas: 'var(--m-purple)',
 };
 
 export function HealthMonitorView({ onNavigate }: Props) {
@@ -136,23 +136,23 @@ export function HealthMonitorView({ onNavigate }: Props) {
         ]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: 'var(--m-bg)' }}>
 
         {/* Summary bar */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 24 }}>
           {[
-            { label: 'Operativos',    value: counts.ok,          color: '#059669', icon: CheckCircle2 },
-            { label: 'Con error',     value: counts.error,       color: '#EF4444', icon: XCircle      },
-            { label: 'Sin configurar',value: counts.pending,     color: '#9CA3AF', icon: Clock        },
-            { label: 'Total checks',  value: services.length,    color: '#FF6835', icon: Activity     },
+            { label: 'Operativos',    value: counts.ok,          color: 'var(--m-success)', icon: CheckCircle2 },
+            { label: 'Con error',     value: counts.error,       color: 'var(--m-danger)', icon: XCircle      },
+            { label: 'Sin configurar',value: counts.pending,     color: 'var(--m-text-muted)', icon: Clock        },
+            { label: 'Total checks',  value: services.length,    color: 'var(--m-primary)', icon: Activity     },
           ].map(({ label, value, color, icon: Icon }) => (
-            <div key={label} style={{ backgroundColor: '#fff', borderRadius: 12, padding: '16px 20px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div key={label} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, padding: '16px 20px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ width: 38, height: 38, borderRadius: 10, backgroundColor: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size={16} color={color} />
               </div>
               <div>
-                <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#111827', lineHeight: 1 }}>{value}</div>
-                <div style={{ fontSize: '0.68rem', color: '#9CA3AF', marginTop: 2 }}>{label}</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--m-text)', lineHeight: 1 }}>{value}</div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)', marginTop: 2 }}>{label}</div>
               </div>
             </div>
           ))}
@@ -161,11 +161,11 @@ export function HealthMonitorView({ onNavigate }: Props) {
         {/* Last check */}
         <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
           <Clock size={12} color="#9CA3AF" />
-          <span style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>
+          <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
             Última verificación: {lastCheck.toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </span>
           {checking && (
-            <span style={{ fontSize: '0.72rem', color: '#3B82F6', display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ fontSize: '0.72rem', color: 'var(--m-info)', display: 'flex', alignItems: 'center', gap: 4 }}>
               <RefreshCw size={10} style={{ animation: 'spin 1s linear infinite' }} /> Verificando...
             </span>
           )}
@@ -180,8 +180,8 @@ export function HealthMonitorView({ onNavigate }: Props) {
               {/* Category header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                 <span style={{ fontSize: '0.68rem', fontWeight: '800', color: catColor, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{cat}</span>
-                <div style={{ flex: 1, height: 1, backgroundColor: '#E5E7EB' }} />
-                <span style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>{catServices.filter(s => s.status === 'ok').length}/{catServices.length} OK</span>
+                <div style={{ flex: 1, height: 1, backgroundColor: 'var(--m-border)' }} />
+                <span style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)' }}>{catServices.filter(s => s.status === 'ok').length}/{catServices.length} OK</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -190,7 +190,7 @@ export function HealthMonitorView({ onNavigate }: Props) {
                   const SIcon = svc.icon;
                   const StatusIcon = sm.icon;
                   return (
-                    <div key={svc.id} style={{ backgroundColor: '#fff', borderRadius: 10, border: '1px solid #E5E7EB', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div key={svc.id} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 10, border: '1px solid #E5E7EB', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
                       {/* Service icon */}
                       <div style={{ width: 36, height: 36, borderRadius: 9, backgroundColor: `${svc.color}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <SIcon size={16} color={svc.color} />
@@ -198,21 +198,21 @@ export function HealthMonitorView({ onNavigate }: Props) {
 
                       {/* Info */}
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: '700', fontSize: '0.85rem', color: '#111827', marginBottom: 2 }}>{svc.name}</div>
-                        <div style={{ fontSize: '0.7rem', color: '#9CA3AF' }}>{svc.description}</div>
+                        <div style={{ fontWeight: '700', fontSize: '0.85rem', color: 'var(--m-text)', marginBottom: 2 }}>{svc.name}</div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>{svc.description}</div>
                       </div>
 
                       {/* Latency */}
                       {svc.latency != null && svc.latency > 0 && (
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                          <div style={{ fontSize: '0.78rem', fontWeight: '700', color: svc.latency < 100 ? '#059669' : svc.latency < 500 ? '#F59E0B' : '#EF4444' }}>{svc.latency}ms</div>
-                          <div style={{ fontSize: '0.6rem', color: '#9CA3AF' }}>latencia</div>
+                          <div style={{ fontSize: '0.78rem', fontWeight: '700', color: svc.latency < 100 ? '#059669' : svc.latency < 500 ? '#F59E0B' : 'var(--m-danger)' }}>{svc.latency}ms</div>
+                          <div style={{ fontSize: '0.6rem', color: 'var(--m-text-muted)' }}>latencia</div>
                         </div>
                       )}
 
                       {/* Message */}
                       {svc.message && (
-                        <div style={{ fontSize: '0.7rem', color: '#9CA3AF', maxWidth: 180, textAlign: 'right', flexShrink: 0 }}>{svc.message}</div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', maxWidth: 180, textAlign: 'right', flexShrink: 0 }}>{svc.message}</div>
                       )}
 
                       {/* Status badge */}
@@ -230,12 +230,12 @@ export function HealthMonitorView({ onNavigate }: Props) {
 
         {/* Info note for pending */}
         {counts.pending > 0 && (
-          <div style={{ marginTop: 20, padding: '14px 18px', backgroundColor: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: 10 }}>
+          <div style={{ marginTop: 20, padding: '14px 18px', backgroundColor: 'var(--m-warning-bg)', border: '1px solid #FDE68A', borderRadius: 10 }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
               <AlertCircle size={14} color="#D97706" style={{ marginTop: 2, flexShrink: 0 }} />
-              <p style={{ margin: 0, fontSize: '0.76rem', color: '#92400E', lineHeight: 1.6 }}>
+              <p style={{ margin: 0, fontSize: '0.76rem', color: 'var(--m-warning-text)', lineHeight: 1.6 }}>
                 <strong>{counts.pending} servicios</strong> están marcados como "Sin configurar" porque sus secrets/credenciales aún no fueron cargados en Supabase. Para activarlos, configurá las variables de entorno en <strong>Supabase → Settings → Edge Functions → Secrets</strong>.
-                Consultá el <button onClick={() => onNavigate('integraciones-apis')} style={{ background: 'none', border: 'none', color: '#D97706', textDecoration: 'underline', cursor: 'pointer', padding: 0, fontWeight: '700', fontSize: '0.76rem' }}>Repositorio de APIs</button> para ver qué variable requiere cada servicio.
+                Consultá el <button onClick={() => onNavigate('integraciones-apis')} style={{ background: 'none', border: 'none', color: 'var(--m-warning)', textDecoration: 'underline', cursor: 'pointer', padding: 0, fontWeight: '700', fontSize: '0.76rem' }}>Repositorio de APIs</button> para ver qué variable requiere cada servicio.
               </p>
             </div>
           </div>

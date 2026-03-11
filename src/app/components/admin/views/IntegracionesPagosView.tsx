@@ -58,16 +58,16 @@ function integracionToProvider(integracion: Integracion): Provider {
 }
 
 const STATUS_META: Record<Status, { label: string; color: string; bg: string; Icon: any }> = {
-  connected:    { label: 'Conectada',   color: '#10B981', bg: '#D1FAE5', Icon: CheckCircle2 },
-  sandbox:      { label: 'Sandbox',     color: '#F59E0B', bg: '#FEF3C7', Icon: AlertCircle  },
-  pending:      { label: 'Sin conectar',color: '#9CA3AF', bg: '#F3F4F6', Icon: Clock        },
-  'coming-soon':{ label: 'Próximamente',color: '#3B82F6', bg: '#DBEAFE', Icon: Zap          },
+  connected:    { label: 'Conectada',   color: 'var(--m-success)', bg: 'var(--m-success-bg)', Icon: CheckCircle2 },
+  sandbox:      { label: 'Sandbox',     color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', Icon: AlertCircle  },
+  pending:      { label: 'Sin conectar',color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', Icon: Clock        },
+  'coming-soon':{ label: 'Próximamente',color: 'var(--m-info)', bg: 'var(--m-info-border)', Icon: Zap          },
 };
 
 const API_LABEL: Record<ApiMode, { label: string; color: string; bg: string }> = {
-  api:      { label: 'Con API',       color: '#10B981', bg: '#D1FAE5' },
-  'no-api': { label: 'Vía pasarela',  color: '#8B5CF6', bg: '#EDE9FE' },
-  redirect: { label: 'Redirección',   color: '#F59E0B', bg: '#FEF3C7' },
+  api:      { label: 'Con API',       color: 'var(--m-success)', bg: 'var(--m-success-bg)' },
+  'no-api': { label: 'Vía pasarela',  color: 'var(--m-purple)', bg: 'var(--m-purple-bg)' },
+  redirect: { label: 'Redirección',   color: 'var(--m-warning)', bg: 'var(--m-warning-bg)' },
 };
 
 type Filter = 'all' | 'uy' | 'latam' | 'global';
@@ -114,52 +114,52 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
         actions={[{ label: '← Integraciones', onClick: () => onNavigate('integraciones') }]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: 'var(--m-bg)' }}>
 
         {/* Stats */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
           {[
-            { label: 'Proveedores', value: loading ? '...' : PROVIDERS.length, color: '#111827' },
-            { label: 'Conectadas',  value: loading ? '...' : connected, color: '#10B981' },
-            { label: 'Sandbox',     value: loading ? '...' : sandbox,   color: '#F59E0B' },
+            { label: 'Proveedores', value: loading ? '...' : PROVIDERS.length, color: 'var(--m-text)' },
+            { label: 'Conectadas',  value: loading ? '...' : connected, color: 'var(--m-success)' },
+            { label: 'Sandbox',     value: loading ? '...' : sandbox,   color: 'var(--m-warning)' },
             { label: 'Uruguay 🇺🇾',  value: loading ? '...' : PROVIDERS.filter(p => p.region === 'uy').length, color: ORANGE },
           ].map((s, i) => (
             <div key={i} style={{
-              flex: 1, backgroundColor: '#fff', borderRadius: 10, padding: '12px 16px',
+              flex: 1, backgroundColor: 'var(--m-surface)', borderRadius: 10, padding: '12px 16px',
               border: '1px solid #E5E7EB', textAlign: 'center',
             }}>
               <div style={{ fontSize: '1.5rem', fontWeight: '800', color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: 2 }}>{s.label}</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', marginTop: 2 }}>{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Filters */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#6B7280', alignSelf: 'center', marginRight: 4 }}>Región:</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--m-text-muted)', alignSelf: 'center', marginRight: 4 }}>Región:</span>
           {(['all','uy','latam','global'] as Filter[]).map(f => (
             <button key={f} onClick={() => setRegionFilter(f)}
               style={{
                 padding: '5px 12px', borderRadius: 20, cursor: 'pointer',
-                backgroundColor: regionFilter === f ? ORANGE : '#fff',
-                color: regionFilter === f ? '#fff' : '#374151',
+                backgroundColor: regionFilter === f ? ORANGE : 'var(--m-surface)',
+                color: regionFilter === f ? '#fff' : 'var(--m-text-secondary)',
                 fontSize: '0.78rem', fontWeight: '600',
-                border: `1.5px solid ${regionFilter === f ? ORANGE : '#E5E7EB'}`,
+                border: `1.5px solid ${regionFilter === f ? ORANGE : 'var(--m-border)'}`,
               }}
             >
               {{ all: 'Todos', uy: '🇺🇾 Uruguay', latam: '🌎 Latam', global: '🌐 Global' }[f]}
             </button>
           ))}
-          <div style={{ width: 1, height: 28, backgroundColor: '#E5E7EB', alignSelf: 'center', margin: '0 4px' }} />
-          <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#6B7280', alignSelf: 'center', marginRight: 4 }}>Integración:</span>
+          <div style={{ width: 1, height: 28, backgroundColor: 'var(--m-border)', alignSelf: 'center', margin: '0 4px' }} />
+          <span style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--m-text-muted)', alignSelf: 'center', marginRight: 4 }}>Integración:</span>
           {(['all','api','no-api'] as ApiFilter[]).map(f => (
             <button key={f} onClick={() => setApiFilter(f)}
               style={{
                 padding: '5px 12px', borderRadius: 20, cursor: 'pointer',
-                backgroundColor: apiFilter === f ? '#1F2937' : '#fff',
-                color: apiFilter === f ? '#fff' : '#374151',
+                backgroundColor: apiFilter === f ? '#1F2937' : 'var(--m-surface)',
+                color: apiFilter === f ? '#fff' : 'var(--m-text-secondary)',
                 fontSize: '0.78rem', fontWeight: '600',
-                border: `1.5px solid ${apiFilter === f ? '#1F2937' : '#E5E7EB'}`,
+                border: `1.5px solid ${apiFilter === f ? '#1F2937' : 'var(--m-border)'}`,
               }}
             >
               {{ all: 'Todos', api: '⚡ Con API', 'no-api': '🔗 Sin API directo' }[f]}
@@ -176,7 +176,7 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
             const isExp = expandedId === p.id;
             return (
               <div key={p.id} style={{
-                backgroundColor: '#fff', borderRadius: 14,
+                backgroundColor: 'var(--m-surface)', borderRadius: 14,
                 border: p.recommended ? `1.5px solid ${ORANGE}` : '1px solid #E5E7EB',
                 overflow: 'hidden', transition: 'box-shadow 0.15s',
                 boxShadow: p.recommended ? `0 0 0 4px ${ORANGE}12` : 'none',
@@ -189,7 +189,7 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
                     <div style={{
                       width: 42, height: 42, borderRadius: 10,
-                      backgroundColor: '#F9FAFB',
+                      backgroundColor: 'var(--m-surface-2)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: '1.3rem', flexShrink: 0,
                     }}>
@@ -197,7 +197,7 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                        <span style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem' }}>{p.name}</span>
+                        <span style={{ fontWeight: '800', color: 'var(--m-text)', fontSize: '0.95rem' }}>{p.name}</span>
                         {p.recommended && (
                           <span style={{ display: 'flex', alignItems: 'center', gap: 3, padding: '2px 7px', backgroundColor: `${ORANGE}18`, color: ORANGE, borderRadius: 4, fontSize: '0.62rem', fontWeight: '700' }}>
                             <Star size={9} fill={ORANGE} /> Recomendado UY
@@ -211,10 +211,10 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
                     </div>
                   </div>
 
-                  <p style={{ margin: '0 0 12px', fontSize: '0.78rem', color: '#6B7280', lineHeight: 1.5 }}>{p.description}</p>
+                  <p style={{ margin: '0 0 12px', fontSize: '0.78rem', color: 'var(--m-text-muted)', lineHeight: 1.5 }}>{p.description}</p>
 
                   {p.badge && p.apiMode !== 'api' && (
-                    <div style={{ marginBottom: 10, padding: '6px 10px', backgroundColor: '#F9FAFB', borderRadius: 7, fontSize: '0.72rem', color: '#6B7280' }}>
+                    <div style={{ marginBottom: 10, padding: '6px 10px', backgroundColor: 'var(--m-surface-2)', borderRadius: 7, fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
                       ℹ️ {p.badge}
                     </div>
                   )}
@@ -227,13 +227,13 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
                     <div style={{ display: 'flex', gap: 6 }}>
                       {p.docsUrl && (
                         <a href={p.docsUrl} target="_blank" rel="noopener noreferrer"
-                          style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', borderRadius: 7, border: '1px solid #E5E7EB', backgroundColor: '#F9FAFB', color: '#374151', fontSize: '0.72rem', fontWeight: '600', textDecoration: 'none' }}>
+                          style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', borderRadius: 7, border: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface-2)', color: 'var(--m-text-secondary)', fontSize: '0.72rem', fontWeight: '600', textDecoration: 'none' }}>
                           <ExternalLink size={11} /> Docs
                         </a>
                       )}
                       {p.status !== 'coming-soon' && p.apiMode === 'api' && (
                         <button onClick={() => setExpandedId(isExp ? null : p.id)}
-                          style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 7, border: 'none', backgroundColor: p.status === 'connected' ? '#F3F4F6' : ORANGE, color: p.status === 'connected' ? '#374151' : '#fff', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}>
+                          style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 7, border: 'none', backgroundColor: p.status === 'connected' ? '#F3F4F6' : ORANGE, color: p.status === 'connected' ? '#374151' : 'var(--m-surface)', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}>
                           <Settings2 size={11} /> {p.status === 'connected' ? 'Config' : 'Conectar'}
                         </button>
                       )}
@@ -242,24 +242,24 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
 
                   {/* Expanded config */}
                   {isExp && (
-                    <div style={{ marginTop: 14, padding: '14px', backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB' }}>
-                      <p style={{ margin: '0 0 10px', fontSize: '0.72rem', fontWeight: '700', color: '#374151' }}>Credenciales API — {p.name}</p>
+                    <div style={{ marginTop: 14, padding: '14px', backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB' }}>
+                      <p style={{ margin: '0 0 10px', fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-text-secondary)' }}>Credenciales API — {p.name}</p>
                       {['Public Key / Client ID', 'Secret Key / Access Token'].map((field, i) => (
                         <div key={i} style={{ marginBottom: 8 }}>
-                          <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{field}</label>
+                          <label style={{ fontSize: '0.68rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{field}</label>
                           <input type={i === 1 ? 'password' : 'text'} placeholder={`${field}...`}
-                            style={{ width: '100%', padding: '7px 10px', border: '1.5px solid #E5E7EB', borderRadius: 7, fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box', backgroundColor: '#fff' }}
+                            style={{ width: '100%', padding: '7px 10px', border: '1.5px solid #E5E7EB', borderRadius: 7, fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box', backgroundColor: 'var(--m-surface)' }}
                             onFocus={e => (e.target.style.borderColor = ORANGE)}
                             onBlur={e => (e.target.style.borderColor = '#E5E7EB')}
                           />
                         </div>
                       ))}
                       <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-                        <button style={{ flex: 1, padding: '8px', backgroundColor: ORANGE, color: '#fff', border: 'none', borderRadius: 7, fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer' }}>
+                        <button style={{ flex: 1, padding: '8px', backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none', borderRadius: 7, fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer' }}>
                           Guardar y probar conexión
                         </button>
                         <button onClick={() => setExpandedId(null)}
-                          style={{ padding: '8px 12px', backgroundColor: '#fff', color: '#9CA3AF', border: '1px solid #E5E7EB', borderRadius: 7, fontSize: '0.78rem', cursor: 'pointer' }}>
+                          style={{ padding: '8px 12px', backgroundColor: 'var(--m-surface)', color: 'var(--m-text-muted)', border: '1px solid #E5E7EB', borderRadius: 7, fontSize: '0.78rem', cursor: 'pointer' }}>
                           Cancelar
                         </button>
                       </div>
@@ -272,7 +272,7 @@ export function IntegracionesPagosView({ onNavigate }: Props) {
         </div>
 
         {filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '48px 0', color: '#9CA3AF' }}>
+          <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--m-text-muted)' }}>
             <p style={{ fontSize: '2rem', margin: '0 0 8px' }}>🔍</p>
             <p style={{ fontWeight: '600' }}>Sin resultados para ese filtro</p>
           </div>

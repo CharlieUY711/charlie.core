@@ -34,31 +34,31 @@ interface APIEntry {
 }
 
 const CATEGORY_INFO: Record<Category, { label: string; color: string; bg: string }> = {
-  pagos:      { label: 'Pagos',       color: '#FF6835', bg: '#FFF4F0' },
-  tiendas:    { label: 'Tiendas',     color: '#3B82F6', bg: '#EFF6FF' },
-  logistica:  { label: 'Logística',   color: '#10B981', bg: '#F0FDF8' },
-  mensajeria: { label: 'Mensajería',  color: '#8B5CF6', bg: '#F5F3FF' },
-  rrss:       { label: 'RRSS',        color: '#EC4899', bg: '#FDF2F8' },
-  ia:         { label: 'IA',          color: '#F59E0B', bg: '#FFFBEB' },
-  backend:    { label: 'Backend',     color: '#059669', bg: '#ECFDF5' },
-  marketing:  { label: 'Marketing',   color: '#EF4444', bg: '#FEF2F2' },
-  finanzas:   { label: 'Finanzas',    color: '#0EA5E9', bg: '#F0F9FF' },
-  mapas:      { label: 'Mapas',       color: '#6366F1', bg: '#EEF2FF' },
+  pagos:      { label: 'Pagos',       color: 'var(--m-primary)', bg: 'var(--m-primary-10)' },
+  tiendas:    { label: 'Tiendas',     color: 'var(--m-info)', bg: 'var(--m-info-bg)' },
+  logistica:  { label: 'Logística',   color: 'var(--m-success)', bg: 'var(--m-success-bg)' },
+  mensajeria: { label: 'Mensajería',  color: 'var(--m-purple)', bg: 'var(--m-purple-bg)' },
+  rrss:       { label: 'RRSS',        color: '#EC4899', bg: 'var(--m-danger-bg)' },
+  ia:         { label: 'IA',          color: 'var(--m-warning)', bg: 'var(--m-warning-bg)' },
+  backend:    { label: 'Backend',     color: 'var(--m-success)', bg: 'var(--m-success-bg)' },
+  marketing:  { label: 'Marketing',   color: 'var(--m-danger)', bg: 'var(--m-danger-bg)' },
+  finanzas:   { label: 'Finanzas',    color: 'var(--m-info)', bg: 'var(--m-info-bg)' },
+  mapas:      { label: 'Mapas',       color: 'var(--m-purple)', bg: 'var(--m-purple-bg)' },
 };
 
 const STATUS_META: Record<APIStatus, { label: string; color: string; icon: any }> = {
-  connected:      { label: 'Conectada',       color: '#059669', icon: CheckCircle2 },
-  'not-configured': { label: 'Sin configurar', color: '#9CA3AF', icon: Clock },
-  error:          { label: 'Error',            color: '#EF4444', icon: XCircle    },
-  partial:        { label: 'Parcial',          color: '#F59E0B', icon: AlertCircle },
+  connected:      { label: 'Conectada',       color: 'var(--m-success)', icon: CheckCircle2 },
+  'not-configured': { label: 'Sin configurar', color: 'var(--m-text-muted)', icon: Clock },
+  error:          { label: 'Error',            color: 'var(--m-danger)', icon: XCircle    },
+  partial:        { label: 'Parcial',          color: 'var(--m-warning)', icon: AlertCircle },
 };
 
 const AUTH_META: Record<AuthType, { label: string; color: string }> = {
-  'api-key': { label: 'API Key',  color: '#6366F1' },
-  oauth2:    { label: 'OAuth 2.0', color: '#3B82F6' },
-  bearer:    { label: 'Bearer',   color: '#8B5CF6' },
-  webhook:   { label: 'Webhook',  color: '#F59E0B' },
-  none:      { label: 'Sin auth', color: '#9CA3AF' },
+  'api-key': { label: 'API Key',  color: 'var(--m-purple)' },
+  oauth2:    { label: 'OAuth 2.0', color: 'var(--m-info)' },
+  bearer:    { label: 'Bearer',   color: 'var(--m-purple)' },
+  webhook:   { label: 'Webhook',  color: 'var(--m-warning)' },
+  none:      { label: 'Sin auth', color: 'var(--m-text-muted)' },
 };
 
 const APIS: APIEntry[] = [
@@ -130,23 +130,23 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
         actions={[{ label: '← Integraciones', onClick: () => onNavigate('integraciones') }]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: 'var(--m-bg)' }}>
 
         {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 24 }}>
           {[
-            { label: 'APIs registradas',  value: stats.total,       icon: Database, color: '#FF6835' },
-            { label: 'Conectadas',         value: stats.connected,   icon: CheckCircle2, color: '#059669' },
-            { label: 'Categorías',         value: stats.categories,  icon: Globe,  color: '#3B82F6' },
-            { label: 'Con sandbox',        value: stats.sandboxAvail, icon: Shield, color: '#8B5CF6' },
+            { label: 'APIs registradas',  value: stats.total,       icon: Database, color: 'var(--m-primary)' },
+            { label: 'Conectadas',         value: stats.connected,   icon: CheckCircle2, color: 'var(--m-success)' },
+            { label: 'Categorías',         value: stats.categories,  icon: Globe,  color: 'var(--m-info)' },
+            { label: 'Con sandbox',        value: stats.sandboxAvail, icon: Shield, color: 'var(--m-purple)' },
           ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} style={{ backgroundColor: '#fff', borderRadius: 12, padding: '16px 20px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div key={label} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, padding: '16px 20px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size={18} color={color} />
               </div>
               <div>
-                <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#111827', lineHeight: 1 }}>{value}</div>
-                <div style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: 2 }}>{label}</div>
+                <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--m-text)', lineHeight: 1 }}>{value}</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', marginTop: 2 }}>{label}</div>
               </div>
             </div>
           ))}
@@ -159,20 +159,20 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
             <input
               value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Buscar API..."
-              style={{ width: '100%', paddingLeft: 32, paddingRight: 12, paddingTop: 8, paddingBottom: 8, border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', backgroundColor: '#fff', boxSizing: 'border-box' }}
+              style={{ width: '100%', paddingLeft: 32, paddingRight: 12, paddingTop: 8, paddingBottom: 8, border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', backgroundColor: 'var(--m-surface)', boxSizing: 'border-box' }}
             />
           </div>
           <select value={catFilter} onChange={e => setCatFilter(e.target.value as any)}
-            style={{ padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', backgroundColor: '#fff', cursor: 'pointer' }}>
+            style={{ padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', backgroundColor: 'var(--m-surface)', cursor: 'pointer' }}>
             <option value="all">Todas las categorías</option>
             {Object.entries(CATEGORY_INFO).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as any)}
-            style={{ padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', backgroundColor: '#fff', cursor: 'pointer' }}>
+            style={{ padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', backgroundColor: 'var(--m-surface)', cursor: 'pointer' }}>
             <option value="all">Todos los estados</option>
             {Object.entries(STATUS_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
-          <span style={{ fontSize: '0.75rem', color: '#9CA3AF', flexShrink: 0 }}>{filtered.length} resultados</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--m-text-muted)', flexShrink: 0 }}>{filtered.length} resultados</span>
         </div>
 
         {/* API List */}
@@ -185,7 +185,7 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
             const StatusIcon = sm.icon;
 
             return (
-              <div key={api.id} style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', transition: 'box-shadow 0.15s' }}>
+              <div key={api.id} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', transition: 'box-shadow 0.15s' }}>
                 {/* Main row */}
                 <button
                   onClick={() => setExpandedId(isExp ? null : api.id)}
@@ -197,14 +197,14 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                      <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#111827' }}>{api.name}</span>
+                      <span style={{ fontWeight: '700', fontSize: '0.9rem', color: 'var(--m-text)' }}>{api.name}</span>
                       <span style={{ fontSize: '0.65rem', fontWeight: '700', padding: '2px 7px', borderRadius: 20, backgroundColor: cat.bg, color: cat.color }}>{cat.label}</span>
                       {api.sandbox && (
-                        <span style={{ fontSize: '0.6rem', fontWeight: '700', padding: '2px 6px', borderRadius: 20, backgroundColor: '#F0FDF8', color: '#059669', border: '1px solid #A7F3D0' }}>SANDBOX</span>
+                        <span style={{ fontSize: '0.6rem', fontWeight: '700', padding: '2px 6px', borderRadius: 20, backgroundColor: 'var(--m-success-bg)', color: 'var(--m-success)', border: '1px solid #A7F3D0' }}>SANDBOX</span>
                       )}
-                      <span style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>{api.flag}</span>
+                      <span style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)' }}>{api.flag}</span>
                     </div>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{api.description}</p>
+                    <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--m-text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{api.description}</p>
                   </div>
 
                   {/* Auth badge */}
@@ -219,21 +219,21 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
                   <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5, minWidth: 120, justifyContent: 'flex-end' }}>
                     <StatusIcon size={14} color={sm.color} />
                     <span style={{ fontSize: '0.75rem', fontWeight: '600', color: sm.color }}>{sm.label}</span>
-                    {api.latency && <span style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>{api.latency}ms</span>}
+                    {api.latency && <span style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)' }}>{api.latency}ms</span>}
                     {isExp ? <ChevronDown size={14} color="#9CA3AF" /> : <ChevronRight size={14} color="#9CA3AF" />}
                   </div>
                 </button>
 
                 {/* Expanded detail */}
                 {isExp && (
-                  <div style={{ borderTop: '1px solid #F3F4F6', padding: '16px 18px', backgroundColor: '#FAFAFA' }}>
+                  <div style={{ borderTop: '1px solid #F3F4F6', padding: '16px 18px', backgroundColor: 'var(--m-surface-2)' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12, marginBottom: 14 }}>
                       {/* Base URL */}
                       {api.baseUrl && (
-                        <div style={{ backgroundColor: '#fff', borderRadius: 8, padding: '10px 14px', border: '1px solid #E5E7EB' }}>
-                          <div style={{ fontSize: '0.65rem', fontWeight: '700', color: '#9CA3AF', textTransform: 'uppercase', marginBottom: 4 }}>Base URL</div>
+                        <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 8, padding: '10px 14px', border: '1px solid #E5E7EB' }}>
+                          <div style={{ fontSize: '0.65rem', fontWeight: '700', color: 'var(--m-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Base URL</div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <code style={{ fontSize: '0.72rem', color: '#3B82F6', flex: 1, wordBreak: 'break-all' }}>{api.baseUrl}</code>
+                            <code style={{ fontSize: '0.72rem', color: 'var(--m-info)', flex: 1, wordBreak: 'break-all' }}>{api.baseUrl}</code>
                             <button onClick={() => copyToClipboard(api.baseUrl)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
                               <Copy size={12} color="#9CA3AF" />
                             </button>
@@ -242,10 +242,10 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
                       )}
                       {/* Env variable */}
                       {api.envKey && (
-                        <div style={{ backgroundColor: '#fff', borderRadius: 8, padding: '10px 14px', border: '1px solid #E5E7EB' }}>
-                          <div style={{ fontSize: '0.65rem', fontWeight: '700', color: '#9CA3AF', textTransform: 'uppercase', marginBottom: 4 }}>Variable de entorno</div>
+                        <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 8, padding: '10px 14px', border: '1px solid #E5E7EB' }}>
+                          <div style={{ fontSize: '0.65rem', fontWeight: '700', color: 'var(--m-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Variable de entorno</div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <code style={{ fontSize: '0.72rem', color: '#8B5CF6', flex: 1 }}>{api.envKey}=<span style={{ color: '#9CA3AF' }}>••••••••</span></code>
+                            <code style={{ fontSize: '0.72rem', color: 'var(--m-purple)', flex: 1 }}>{api.envKey}=<span style={{ color: 'var(--m-text-muted)' }}>••••••••</span></code>
                             <button onClick={() => copyToClipboard(api.envKey!)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
                               <Copy size={12} color="#9CA3AF" />
                             </button>
@@ -253,13 +253,13 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
                         </div>
                       )}
                       {/* Status detail */}
-                      <div style={{ backgroundColor: '#fff', borderRadius: 8, padding: '10px 14px', border: '1px solid #E5E7EB' }}>
-                        <div style={{ fontSize: '0.65rem', fontWeight: '700', color: '#9CA3AF', textTransform: 'uppercase', marginBottom: 4 }}>Estado actual</div>
+                      <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 8, padding: '10px 14px', border: '1px solid #E5E7EB' }}>
+                        <div style={{ fontSize: '0.65rem', fontWeight: '700', color: 'var(--m-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Estado actual</div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                           <StatusIcon size={14} color={sm.color} />
                           <span style={{ fontSize: '0.78rem', fontWeight: '600', color: sm.color }}>{sm.label}</span>
                           {api.status === 'not-configured' && (
-                            <span style={{ fontSize: '0.68rem', color: '#6B7280' }}>→ Configurar en Supabase secrets</span>
+                            <span style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)' }}>→ Configurar en Supabase secrets</span>
                           )}
                         </div>
                       </div>
@@ -267,17 +267,17 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
                     {/* Actions */}
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                       <a href={api.docsUrl} target="_blank" rel="noopener noreferrer"
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, border: '1px solid #E5E7EB', backgroundColor: '#fff', fontSize: '0.75rem', fontWeight: '600', color: '#374151', textDecoration: 'none', cursor: 'pointer' }}>
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, border: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)', fontSize: '0.75rem', fontWeight: '600', color: 'var(--m-text-secondary)', textDecoration: 'none', cursor: 'pointer' }}>
                         <ExternalLink size={12} /> Documentación oficial
                       </a>
                       <button
                         onClick={() => toast.info(`Test de conexión para ${api.name} — pendiente de implementar`)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, border: '1px solid #E5E7EB', backgroundColor: '#fff', fontSize: '0.75rem', fontWeight: '600', color: '#374151', cursor: 'pointer' }}>
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, border: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)', fontSize: '0.75rem', fontWeight: '600', color: 'var(--m-text-secondary)', cursor: 'pointer' }}>
                         <Activity size={12} /> Test de conexión
                       </button>
                       <button
                         onClick={() => toast.info(`Abrí Supabase → Settings → Secrets y configurá ${api.envKey ?? 'las variables requeridas'}`)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, border: '1px solid #FF6835', backgroundColor: '#FFF4F0', fontSize: '0.75rem', fontWeight: '600', color: '#FF6835', cursor: 'pointer' }}>
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, border: '1px solid #FF6835', backgroundColor: 'var(--m-primary-10)', fontSize: '0.75rem', fontWeight: '600', color: 'var(--m-primary)', cursor: 'pointer' }}>
                         <Key size={12} /> Configurar secret
                       </button>
                     </div>
@@ -287,7 +287,7 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
             );
           })}
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+            <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
               <Globe size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />
               <p style={{ margin: 0, fontWeight: '600' }}>No se encontraron APIs</p>
             </div>
@@ -295,11 +295,11 @@ export function RepositorioAPIsView({ onNavigate }: Props) {
         </div>
 
         {/* Footer note */}
-        <div style={{ marginTop: 24, padding: '14px 18px', backgroundColor: '#F0F9FF', border: '1px solid #BAE6FD', borderRadius: 10 }}>
+        <div style={{ marginTop: 24, padding: '14px 18px', backgroundColor: 'var(--m-info-bg)', border: '1px solid #BAE6FD', borderRadius: 10 }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
             <RefreshCw size={14} color="#0EA5E9" style={{ marginTop: 2, flexShrink: 0 }} />
-            <p style={{ margin: 0, fontSize: '0.76rem', color: '#0369A1', lineHeight: 1.6 }}>
-              <strong>Para conectar una API</strong>: configurá la variable de entorno en <strong>Supabase → Project Settings → Edge Functions → Secrets</strong>, luego implementá la lógica en el servidor Hono correspondiente bajo <code style={{ backgroundColor: '#E0F2FE', padding: '1px 4px', borderRadius: 3 }}>/supabase/functions/server/</code>. Las variables <code style={{ backgroundColor: '#E0F2FE', padding: '1px 4px', borderRadius: 3 }}>SUPABASE_URL</code>, <code style={{ backgroundColor: '#E0F2FE', padding: '1px 4px', borderRadius: 3 }}>SUPABASE_ANON_KEY</code> y <code style={{ backgroundColor: '#E0F2FE', padding: '1px 4px', borderRadius: 3 }}>SUPABASE_SERVICE_ROLE_KEY</code> ya están configuradas.
+            <p style={{ margin: 0, fontSize: '0.76rem', color: 'var(--m-info)', lineHeight: 1.6 }}>
+              <strong>Para conectar una API</strong>: configurá la variable de entorno en <strong>Supabase → Project Settings → Edge Functions → Secrets</strong>, luego implementá la lógica en el servidor Hono correspondiente bajo <code style={{ backgroundColor: 'var(--m-info-bg)', padding: '1px 4px', borderRadius: 3 }}>/supabase/functions/server/</code>. Las variables <code style={{ backgroundColor: 'var(--m-info-bg)', padding: '1px 4px', borderRadius: 3 }}>SUPABASE_URL</code>, <code style={{ backgroundColor: 'var(--m-info-bg)', padding: '1px 4px', borderRadius: 3 }}>SUPABASE_ANON_KEY</code> y <code style={{ backgroundColor: 'var(--m-info-bg)', padding: '1px 4px', borderRadius: 3 }}>SUPABASE_SERVICE_ROLE_KEY</code> ya están configuradas.
             </p>
           </div>
         </div>

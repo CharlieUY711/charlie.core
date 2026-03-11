@@ -52,19 +52,19 @@ function calcScore(ev: Evaluacion): number {
 }
 
 function scoreLabel(score: number): { label: string; color: string } {
-  if (score >= 75) return { label: 'Promover',  color: '#10B981' };
-  if (score >= 45) return { label: 'Revisar',   color: '#F59E0B' };
-  return              { label: 'Descartar',  color: '#EF4444' };
+  if (score >= 75) return { label: 'Promover',  color: 'var(--m-success)' };
+  if (score >= 45) return { label: 'Revisar',   color: 'var(--m-warning)' };
+  return              { label: 'Descartar',  color: 'var(--m-danger)' };
 }
 
 // ─── Estado labels ────────────────────────────────────────────────────────────
 
 const ESTADO_INFO: Record<Estado, { label: string; color: string; icon: React.ElementType }> = {
-  nueva:       { label: 'Nueva',       color: '#3B82F6', icon: Lightbulb    },
-  en_revision: { label: 'En revisión', color: '#F59E0B', icon: Clock        },
-  aprobada:    { label: 'Aprobada',    color: '#10B981', icon: CheckCircle2 },
-  descartada:  { label: 'Descartada',  color: '#9CA3AF', icon: XCircle      },
-  promovida:   { label: 'Promovida',   color: '#FF6835', icon: ArrowUpCircle },
+  nueva:       { label: 'Nueva',       color: 'var(--m-info)', icon: Lightbulb    },
+  en_revision: { label: 'En revisión', color: 'var(--m-warning)', icon: Clock        },
+  aprobada:    { label: 'Aprobada',    color: 'var(--m-success)', icon: CheckCircle2 },
+  descartada:  { label: 'Descartada',  color: 'var(--m-text-muted)', icon: XCircle      },
+  promovida:   { label: 'Promovida',   color: 'var(--m-primary)', icon: ArrowUpCircle },
 };
 
 // ─── Storage ──────────────────────────────────────────────────────────────────
@@ -155,13 +155,13 @@ export function IdeasView(_props: Props) {
   const modulos = MODULE_MANIFEST.filter(e => e.isReal);
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA', padding: '32px' }}>
+    <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)', padding: '32px' }}>
 
       {/* ── Header ── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#111', margin: '0 0 6px' }}>Ideas</h1>
-          <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--m-text)', margin: '0 0 6px' }}>Ideas</h1>
+          <p style={{ fontSize: '13px', color: 'var(--m-text-muted)', margin: 0 }}>
             {ideas.length} ideas · {conteo['promovida'] ?? 0} promovidas · {conteo['aprobada'] ?? 0} aprobadas
           </p>
         </div>
@@ -170,7 +170,7 @@ export function IdeasView(_props: Props) {
           style={{
             display: 'flex', alignItems: 'center', gap: '7px',
             padding: '10px 18px', borderRadius: '10px', border: 'none',
-            backgroundColor: '#FF6835', color: '#fff',
+            backgroundColor: 'var(--m-primary)', color: 'var(--m-surface)',
             fontSize: '13px', fontWeight: 700, cursor: 'pointer',
           }}
         >
@@ -181,11 +181,11 @@ export function IdeasView(_props: Props) {
       {/* ── Form nueva idea ── */}
       {showForm && (
         <div style={{
-          backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB',
+          backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB',
           padding: '20px', marginBottom: '20px', boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-            <span style={{ fontWeight: 700, fontSize: '14px', color: '#111' }}>Nueva idea</span>
+            <span style={{ fontWeight: 700, fontSize: '14px', color: 'var(--m-text)' }}>Nueva idea</span>
             <button onClick={() => setShowForm(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
               <X size={16} color="#9CA3AF" />
             </button>
@@ -220,11 +220,11 @@ export function IdeasView(_props: Props) {
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
             <button onClick={() => setShowForm(false)} style={{
               padding: '8px 16px', borderRadius: '8px', border: '1px solid #E5E7EB',
-              backgroundColor: '#fff', fontSize: '13px', cursor: 'pointer', color: '#6B7280',
+              backgroundColor: 'var(--m-surface)', fontSize: '13px', cursor: 'pointer', color: 'var(--m-text-muted)',
             }}>Cancelar</button>
             <button onClick={agregarIdea} style={{
               padding: '8px 16px', borderRadius: '8px', border: 'none',
-              backgroundColor: '#FF6835', color: '#fff', fontSize: '13px',
+              backgroundColor: 'var(--m-primary)', color: 'var(--m-surface)', fontSize: '13px',
               fontWeight: 700, cursor: 'pointer',
             }}>Guardar idea</button>
           </div>
@@ -243,8 +243,8 @@ export function IdeasView(_props: Props) {
               style={{
                 padding: '6px 14px', borderRadius: '99px', fontSize: '12px', fontWeight: 600,
                 border: isActive ? `2px solid ${color}` : '1.5px solid #E5E7EB',
-                backgroundColor: isActive ? `${color}14` : '#fff',
-                color: isActive ? color : '#6B7280',
+                backgroundColor: isActive ? `${color}14` : 'var(--m-surface)',
+                color: isActive ? color : 'var(--m-text-muted)',
                 cursor: 'pointer',
               }}
             >
@@ -256,7 +256,7 @@ export function IdeasView(_props: Props) {
 
       {/* ── Lista ── */}
       {filtered.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+        <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
           <Lightbulb size={32} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
           <p style={{ margin: 0, fontSize: '14px' }}>
             {filtro === 'todas' ? 'Todavía no hay ideas. ¡Agregá la primera!' : 'No hay ideas en este estado.'}
@@ -274,7 +274,7 @@ export function IdeasView(_props: Props) {
 
           return (
             <div key={idea.id} style={{
-              backgroundColor: '#fff', borderRadius: '12px',
+              backgroundColor: 'var(--m-surface)', borderRadius: '12px',
               border: '1px solid #E5E7EB', overflow: 'hidden',
             }}>
               {/* ── Fila principal ── */}
@@ -287,9 +287,9 @@ export function IdeasView(_props: Props) {
               >
                 <Icon size={16} color={info.color} style={{ flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#111' }}>{idea.titulo}</span>
+                  <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--m-text)' }}>{idea.titulo}</span>
                   {idea.descripcion && (
-                    <p style={{ fontSize: '12px', color: '#9CA3AF', margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <p style={{ fontSize: '12px', color: 'var(--m-text-muted)', margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {idea.descripcion}
                     </p>
                   )}
@@ -313,7 +313,7 @@ export function IdeasView(_props: Props) {
                   {info.label}
                 </span>
 
-                <span style={{ fontSize: '11px', color: '#D1D5DB', flexShrink: 0 }}>
+                <span style={{ fontSize: '11px', color: 'var(--m-border)', flexShrink: 0 }}>
                   {new Date(idea.created_at).toLocaleDateString('es-UY', { day: '2-digit', month: '2-digit' })}
                 </span>
 
@@ -326,23 +326,23 @@ export function IdeasView(_props: Props) {
 
                   {/* Descripción completa */}
                   {idea.descripcion && (
-                    <p style={{ fontSize: '13px', color: '#374151', margin: '14px 0', lineHeight: '1.6' }}>
+                    <p style={{ fontSize: '13px', color: 'var(--m-text-secondary)', margin: '14px 0', lineHeight: '1.6' }}>
                       {idea.descripcion}
                     </p>
                   )}
 
                   {/* ── Evaluación ── */}
                   <div style={{
-                    backgroundColor: '#F9FAFB', borderRadius: '10px',
+                    backgroundColor: 'var(--m-surface-2)', borderRadius: '10px',
                     padding: '16px', marginBottom: '14px',
                   }}>
-                    <p style={{ fontSize: '12px', fontWeight: 700, color: '#374151', margin: '0 0 14px' }}>
+                    <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)', margin: '0 0 14px' }}>
                       Evaluación
                     </p>
 
                     {/* Pregunta 1 */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                      <span style={{ fontSize: '13px', color: '#374151' }}>¿Resuelve un problema real?</span>
+                      <span style={{ fontSize: '13px', color: 'var(--m-text-secondary)' }}>¿Resuelve un problema real?</span>
                       <button
                         onClick={() => {
                           const base = ev ?? { ...DEFAULT_EV };
@@ -351,8 +351,8 @@ export function IdeasView(_props: Props) {
                         style={{
                           padding: '5px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer',
                           fontSize: '12px', fontWeight: 700,
-                          backgroundColor: ev?.resuelve_problema ? '#D1FAE5' : '#F3F4F6',
-                          color: ev?.resuelve_problema ? '#059669' : '#9CA3AF',
+                          backgroundColor: ev?.resuelve_problema ? '#D1FAE5' : 'var(--m-surface-2)',
+                          color: ev?.resuelve_problema ? '#059669' : 'var(--m-text-muted)',
                         }}
                       >
                         {ev?.resuelve_problema ? 'Sí' : 'No'}
@@ -361,7 +361,7 @@ export function IdeasView(_props: Props) {
 
                     {/* Pregunta 2 */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                      <span style={{ fontSize: '13px', color: '#374151' }}>¿Cuántos clientes lo necesitan?</span>
+                      <span style={{ fontSize: '13px', color: 'var(--m-text-secondary)' }}>¿Cuántos clientes lo necesitan?</span>
                       <div style={{ display: 'flex', gap: '6px' }}>
                         {(['uno', 'varios', 'todos'] as Alcance[]).map(a => (
                           <button key={a} onClick={() => {
@@ -370,8 +370,8 @@ export function IdeasView(_props: Props) {
                           }} style={{
                             padding: '5px 12px', borderRadius: '8px', border: 'none', cursor: 'pointer',
                             fontSize: '12px', fontWeight: 600,
-                            backgroundColor: ev?.alcance === a ? '#DBEAFE' : '#F3F4F6',
-                            color: ev?.alcance === a ? '#1D4ED8' : '#9CA3AF',
+                            backgroundColor: ev?.alcance === a ? '#DBEAFE' : 'var(--m-surface-2)',
+                            color: ev?.alcance === a ? '#1D4ED8' : 'var(--m-text-muted)',
                           }}>
                             {a === 'uno' ? 'Uno' : a === 'varios' ? 'Varios' : 'Todos'}
                           </button>
@@ -381,10 +381,10 @@ export function IdeasView(_props: Props) {
 
                     {/* Pregunta 3 */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                      <span style={{ fontSize: '13px', color: '#374151' }}>Complejidad estimada</span>
+                      <span style={{ fontSize: '13px', color: 'var(--m-text-secondary)' }}>Complejidad estimada</span>
                       <div style={{ display: 'flex', gap: '6px' }}>
                         {(['baja', 'media', 'alta'] as Complejidad[]).map(c => {
-                          const col = c === 'baja' ? '#10B981' : c === 'media' ? '#F59E0B' : '#EF4444';
+                          const col = c === 'baja' ? '#10B981' : c === 'media' ? '#F59E0B' : 'var(--m-danger)';
                           return (
                             <button key={c} onClick={() => {
                               const base = ev ?? { ...DEFAULT_EV };
@@ -392,8 +392,8 @@ export function IdeasView(_props: Props) {
                             }} style={{
                               padding: '5px 12px', borderRadius: '8px', border: 'none', cursor: 'pointer',
                               fontSize: '12px', fontWeight: 600,
-                              backgroundColor: ev?.complejidad === c ? `${col}20` : '#F3F4F6',
-                              color: ev?.complejidad === c ? col : '#9CA3AF',
+                              backgroundColor: ev?.complejidad === c ? `${col}20` : 'var(--m-surface-2)',
+                              color: ev?.complejidad === c ? col : 'var(--m-text-muted)',
                             }}>
                               {c.charAt(0).toUpperCase() + c.slice(1)}
                             </button>
@@ -404,7 +404,7 @@ export function IdeasView(_props: Props) {
 
                     {/* Pregunta 4 */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '13px', color: '#374151' }}>¿Depende de otro módulo?</span>
+                      <span style={{ fontSize: '13px', color: 'var(--m-text-secondary)' }}>¿Depende de otro módulo?</span>
                       <select
                         value={ev?.depende_de ?? ''}
                         onChange={e => {
@@ -413,7 +413,7 @@ export function IdeasView(_props: Props) {
                         }}
                         style={{
                           padding: '5px 10px', borderRadius: '8px', border: '1px solid #E5E7EB',
-                          fontSize: '12px', color: '#374151', backgroundColor: '#fff', cursor: 'pointer',
+                          fontSize: '12px', color: 'var(--m-text-secondary)', backgroundColor: 'var(--m-surface)', cursor: 'pointer',
                         }}
                       >
                         <option value="">Ninguno</option>
@@ -427,10 +427,10 @@ export function IdeasView(_props: Props) {
                     {ev && (
                       <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid #E5E7EB' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '12px', fontWeight: 700, color: '#374151' }}>Score de viabilidad</span>
+                          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)' }}>Score de viabilidad</span>
                           <span style={{ fontSize: '12px', fontWeight: 700, color: sg?.color }}>{idea.score}% — {sg?.label}</span>
                         </div>
-                        <div style={{ height: '6px', backgroundColor: '#E5E7EB', borderRadius: '99px', overflow: 'hidden' }}>
+                        <div style={{ height: '6px', backgroundColor: 'var(--m-border)', borderRadius: '99px', overflow: 'hidden' }}>
                           <div style={{
                             height: '100%', borderRadius: '99px', transition: 'width 0.3s ease',
                             width: `${idea.score}%`, backgroundColor: sg?.color,
@@ -462,8 +462,8 @@ export function IdeasView(_props: Props) {
                     <button onClick={() => eliminar(idea.id)} style={{
                       display: 'flex', alignItems: 'center', gap: '5px', marginLeft: 'auto',
                       padding: '6px 12px', borderRadius: '8px',
-                      border: '1px solid #FCA5A540', backgroundColor: '#FEF2F2',
-                      color: '#EF4444', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+                      border: '1px solid #FCA5A540', backgroundColor: 'var(--m-danger-bg)',
+                      color: 'var(--m-danger)', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
                     }}>
                       <Trash2 size={12} /> Eliminar
                     </button>

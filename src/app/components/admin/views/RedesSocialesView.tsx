@@ -114,22 +114,22 @@ export function RedesSocialesView({ onNavigate }: Props) {
 
   /* ─ Stat chip ─ */
   const Stat = ({ value, label, highlight }: { value: string; label: string; highlight?: boolean }) => (
-    <div style={{ padding: '14px 20px', borderRadius: '8px', border: highlight ? `1.5px solid ${ORANGE}33` : '1px solid #E5E7EB', backgroundColor: highlight ? `${ORANGE}08` : '#FFFFFF', minWidth: '110px' }}>
-      <p style={{ margin: 0, fontSize: '1.3rem', fontWeight: '900', color: highlight ? ORANGE : '#111827' }}>{value}</p>
-      <p style={{ margin: '3px 0 0', fontSize: '0.72rem', color: '#6B7280' }}>{label}</p>
+    <div style={{ padding: '14px 20px', borderRadius: '8px', border: highlight ? `1.5px solid ${ORANGE}33` : '1px solid #E5E7EB', backgroundColor: highlight ? `${ORANGE}08` : 'var(--m-surface)', minWidth: '110px' }}>
+      <p style={{ margin: 0, fontSize: '1.3rem', fontWeight: '900', color: highlight ? ORANGE : 'var(--m-text)' }}>{value}</p>
+      <p style={{ margin: '3px 0 0', fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{label}</p>
     </div>
   );
 
   /* ─ Platform action cards ─ */
   const ActionCard = ({ icon: Icon, label, desc, color }: { icon: any; label: string; desc: string; color: string }) => (
-    <div style={{ flex: 1, border: '1px solid #E5E7EB', borderRadius: '10px', padding: '16px', textAlign: 'center', cursor: 'pointer', transition: 'border-color 0.15s', backgroundColor: '#FFFFFF' }}
+    <div style={{ flex: 1, border: '1px solid #E5E7EB', borderRadius: '10px', padding: '16px', textAlign: 'center', cursor: 'pointer', transition: 'border-color 0.15s', backgroundColor: 'var(--m-surface)' }}
       onMouseEnter={e => (e.currentTarget.style.borderColor = color)}
       onMouseLeave={e => (e.currentTarget.style.borderColor = '#E5E7EB')}>
       <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
         <Icon size={18} color={color} />
       </div>
-      <p style={{ margin: '0 0 3px', fontWeight: '700', color: '#111827', fontSize: '0.85rem' }}>{label}</p>
-      <p style={{ margin: 0, color: '#6B7280', fontSize: '0.72rem' }}>{desc}</p>
+      <p style={{ margin: '0 0 3px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.85rem' }}>{label}</p>
+      <p style={{ margin: 0, color: 'var(--m-text-muted)', fontSize: '0.72rem' }}>{desc}</p>
     </div>
   );
 
@@ -148,19 +148,19 @@ export function RedesSocialesView({ onNavigate }: Props) {
       <RRSSBanner onNavigate={onNavigate} active="redes-sociales" />
 
       {/* Sub-header: Centro Operativo title + tabs */}
-      <div style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
         <div style={{ padding: '16px 28px 0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <Share2 size={16} color={ORANGE} />
-            <h2 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#111827' }}>Centro Operativo de Redes Sociales</h2>
+            <h2 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: 'var(--m-text)' }}>Centro Operativo de Redes Sociales</h2>
           </div>
-          <p style={{ margin: '0 0 12px', color: '#6B7280', fontSize: '0.78rem' }}>
+          <p style={{ margin: '0 0 12px', color: 'var(--m-text-muted)', fontSize: '0.78rem' }}>
             Meta Business Suite · Gestión unificada de Facebook, Instagram y WhatsApp
           </p>
           <div style={{ display: 'flex', gap: '0' }}>
             {TABS.map(t => (
               <button key={t.id} onClick={() => setActiveTab(t.id)}
-                style={{ padding: '10px 16px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: activeTab === t.id ? ORANGE : '#6B7280', fontWeight: activeTab === t.id ? '700' : '500', fontSize: '0.82rem', borderBottom: activeTab === t.id ? `2px solid ${ORANGE}` : '2px solid transparent', whiteSpace: 'nowrap' }}>
+                style={{ padding: '10px 16px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: activeTab === t.id ? ORANGE : 'var(--m-text-muted)', fontWeight: activeTab === t.id ? '700' : '500', fontSize: '0.82rem', borderBottom: activeTab === t.id ? `2px solid ${ORANGE}` : '2px solid transparent', whiteSpace: 'nowrap' }}>
                 {t.label}
               </button>
             ))}
@@ -168,19 +168,19 @@ export function RedesSocialesView({ onNavigate }: Props) {
         </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)' }}>
         <div style={{ padding: '20px 28px', maxWidth: '1200px' }}>
 
           {/* ── PANEL UNIFICADO ── */}
           {activeTab === 'panel' && (
             <>
               {loading ? (
-                <div style={{ textAlign: 'center', padding: '40px', color: '#6B7280' }}>
+                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--m-text-muted)' }}>
                   <Loader2 size={32} className="animate-spin" style={{ margin: '0 auto 12px', display: 'block' }} />
                   <p>Cargando datos...</p>
                 </div>
               ) : error ? (
-                <div style={{ backgroundColor: '#FEF2F2', borderRadius: '10px', border: '1px solid #FECACA', padding: '14px 18px', color: '#991B1B' }}>
+                <div style={{ backgroundColor: 'var(--m-danger-bg)', borderRadius: '10px', border: '1px solid #FECACA', padding: '14px 18px', color: 'var(--m-danger-text)' }}>
                   <p style={{ margin: 0, fontWeight: '700' }}>⚠️ Error: {error}</p>
                 </div>
               ) : (
@@ -191,7 +191,7 @@ export function RedesSocialesView({ onNavigate }: Props) {
                   { 
                     platform: 'Facebook', 
                     color: '#1877F2', 
-                    bg: '#EFF6FF', 
+                    bg: 'var(--m-info-bg)', 
                     stats: [
                       { v: formatNumber(getLatestMetrica('facebook')?.seguidores || 0), l: 'Seguidores' },
                       { v: formatNumber(getLatestMetrica('facebook')?.alcance || 0), l: 'Alcance hoy' },
@@ -211,7 +211,7 @@ export function RedesSocialesView({ onNavigate }: Props) {
                   { 
                     platform: 'WhatsApp', 
                     color: '#25D366', 
-                    bg: '#F0FFF4', 
+                    bg: 'var(--m-success-bg)', 
                     stats: [
                       { v: formatNumber(getLatestMetrica('whatsapp')?.seguidores || 0), l: 'Contactos' },
                       { v: posts.filter(p => p.platform === 'whatsapp').length.toString(), l: 'Posts' },
@@ -220,8 +220,8 @@ export function RedesSocialesView({ onNavigate }: Props) {
                   },
                   { 
                     platform: 'Programadas', 
-                    color: '#8B5CF6', 
-                    bg: '#F5F3FF', 
+                    color: 'var(--m-purple)', 
+                    bg: 'var(--m-purple-bg)', 
                     stats: [
                       { v: posts.filter(p => p.estado === 'programado').length.toString(), l: 'Posts programados' },
                       { v: posts.filter(p => p.estado === 'borrador').length.toString(), l: 'Pendientes' },
@@ -239,8 +239,8 @@ export function RedesSocialesView({ onNavigate }: Props) {
                     <p style={{ margin: '0 0 10px', fontWeight: '700', color: p.color, fontSize: '0.85rem' }}>{p.platform}</p>
                     {p.stats.map((s, j) => (
                       <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '0.72rem', color: '#6B7280' }}>{s.l}</span>
-                        <span style={{ fontSize: '0.88rem', fontWeight: '800', color: '#111827' }}>{s.v}</span>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{s.l}</span>
+                        <span style={{ fontSize: '0.88rem', fontWeight: '800', color: 'var(--m-text)' }}>{s.v}</span>
                       </div>
                     ))}
                   </div>
@@ -249,13 +249,13 @@ export function RedesSocialesView({ onNavigate }: Props) {
 
               {/* Charts row */}
               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '24px' }}>
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
-                  <h3 style={{ margin: '0 0 16px', fontWeight: '700', color: '#111827', fontSize: '0.88rem' }}>Resumen Métricas — 7 días</h3>
+                <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
+                  <h3 style={{ margin: '0 0 16px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.88rem' }}>Resumen Métricas — 7 días</h3>
                   <ResponsiveContainer width="100%" height={180}>
                     <LineChart data={LINE_DATA} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-                      <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#9CA3AF' }} />
-                      <YAxis tick={{ fontSize: 10, fill: '#9CA3AF' }} />
+                      <XAxis dataKey="day" tick={{ fontSize: 10, fill: 'var(--m-text-muted)' }} />
+                      <YAxis tick={{ fontSize: 10, fill: 'var(--m-text-muted)' }} />
                       <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '0.75rem' }} />
                       <Line type="monotone" dataKey="facebook"  stroke="#1877F2" strokeWidth={2} dot={false} name="Facebook" />
                       <Line type="monotone" dataKey="instagram" stroke="#E1306C" strokeWidth={2} dot={false} name="Instagram" />
@@ -263,8 +263,8 @@ export function RedesSocialesView({ onNavigate }: Props) {
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
-                  <h3 style={{ margin: '0 0 16px', fontWeight: '700', color: '#111827', fontSize: '0.88rem' }}>Distribución Engagement</h3>
+                <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
+                  <h3 style={{ margin: '0 0 16px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.88rem' }}>Distribución Engagement</h3>
                   <ResponsiveContainer width="100%" height={180}>
                     <PieChart>
                       <Pie data={PIE_DATA} cx="50%" cy="50%" outerRadius={65} dataKey="value" label={({ name, value }) => `${value}%`} labelLine={false} fontSize={10}>
@@ -277,10 +277,10 @@ export function RedesSocialesView({ onNavigate }: Props) {
               </div>
 
               {/* Recent publications */}
-              <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px 20px', marginBottom: '16px' }}>
-                <h3 style={{ margin: '0 0 12px', fontWeight: '700', color: '#111827', fontSize: '0.88rem' }}>Publicaciones en Meta Business</h3>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px 20px', marginBottom: '16px' }}>
+                <h3 style={{ margin: '0 0 12px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.88rem' }}>Publicaciones en Meta Business</h3>
                 {posts.slice(0, 5).length === 0 ? (
-                  <p style={{ color: '#9CA3AF', fontSize: '0.8rem', textAlign: 'center', padding: '20px' }}>No hay publicaciones aún</p>
+                  <p style={{ color: 'var(--m-text-muted)', fontSize: '0.8rem', textAlign: 'center', padding: '20px' }}>No hay publicaciones aún</p>
                 ) : (
                   posts.slice(0, 5).map((p, i) => {
                     const date = p.publicado_en ? new Date(p.publicado_en) : new Date(p.created_at);
@@ -290,13 +290,13 @@ export function RedesSocialesView({ onNavigate }: Props) {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <span style={{ fontSize: '1.1rem' }}>{icon}</span>
                           <div>
-                            <p style={{ margin: 0, fontSize: '0.82rem', color: '#111827', fontWeight: '600' }}>{p.contenido || 'Sin contenido'}</p>
-                            <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#9CA3AF' }}>
+                            <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--m-text)', fontWeight: '600' }}>{p.contenido || 'Sin contenido'}</p>
+                            <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
                               {p.platform} · {date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                             </p>
                           </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '14px', fontSize: '0.75rem', color: '#6B7280' }}>
+                        <div style={{ display: 'flex', gap: '14px', fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>
                           <span>❤️ {p.likes}</span>
                           <span>👁 {formatNumber(p.alcance)}</span>
                         </div>
@@ -307,9 +307,9 @@ export function RedesSocialesView({ onNavigate }: Props) {
               </div>
 
               {/* Pending tasks */}
-              <div style={{ backgroundColor: '#FFFBEB', borderRadius: '10px', border: '1px solid #FDE68A', padding: '14px 18px' }}>
-                <p style={{ margin: '0 0 6px', fontWeight: '700', color: '#92400E', fontSize: '0.85rem' }}>⚠️ Tareas Pendientes</p>
-                <ul style={{ margin: 0, paddingLeft: '16px', color: '#78350F', fontSize: '0.78rem', lineHeight: '1.8' }}>
+              <div style={{ backgroundColor: 'var(--m-warning-bg)', borderRadius: '10px', border: '1px solid #FDE68A', padding: '14px 18px' }}>
+                <p style={{ margin: '0 0 6px', fontWeight: '700', color: 'var(--m-warning-text)', fontSize: '0.85rem' }}>⚠️ Tareas Pendientes</p>
+                <ul style={{ margin: 0, paddingLeft: '16px', color: 'var(--m-warning-text)', fontSize: '0.78rem', lineHeight: '1.8' }}>
                   {posts.filter(p => p.estado === 'borrador').length > 0 && (
                     <li>{posts.filter(p => p.estado === 'borrador').length} publicación(es) en borrador</li>
                   )}
@@ -339,20 +339,20 @@ export function RedesSocialesView({ onNavigate }: Props) {
               <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
                 {(['publicaciones', 'mensajes'] as FBTab[]).map(t => (
                   <button key={t} onClick={() => setFbTab(t)}
-                    style={{ padding: '8px 18px', borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: fbTab === t ? '#1877F2' : '#FFFFFF', color: fbTab === t ? '#FFF' : '#374151', fontWeight: '600', cursor: 'pointer', fontSize: '0.82rem', textTransform: 'capitalize', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    style={{ padding: '8px 18px', borderRadius: '8px', border: '1px solid #E5E7EB', backgroundColor: fbTab === t ? '#1877F2' : 'var(--m-surface)', color: fbTab === t ? '#FFF' : 'var(--m-text-secondary)', fontWeight: '600', cursor: 'pointer', fontSize: '0.82rem', textTransform: 'capitalize', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     {t === 'publicaciones' ? <Image size={13} /> : <MessageCircle size={13} />}
                     {t.charAt(0).toUpperCase() + t.slice(1)}
                   </button>
                 ))}
-                <button style={{ marginLeft: 'auto', padding: '8px 18px', backgroundColor: '#1877F2', color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button style={{ marginLeft: 'auto', padding: '8px 18px', backgroundColor: '#1877F2', color: 'var(--m-surface)', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Plus size={14} /> Nueva Publicación
                 </button>
               </div>
-              <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '40px', textAlign: 'center', color: '#9CA3AF' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '40px', textAlign: 'center', color: 'var(--m-text-muted)' }}>
                 <div style={{ width: '50px', height: '50px', borderRadius: '50%', backgroundColor: '#1877F222', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
                   <Image size={22} color="#1877F2" />
                 </div>
-                <p style={{ margin: 0, fontWeight: '600', color: '#374151' }}>No hay publicaciones</p>
+                <p style={{ margin: 0, fontWeight: '600', color: 'var(--m-text-secondary)' }}>No hay publicaciones</p>
                 <p style={{ margin: '4px 0 0', fontSize: '0.8rem' }}>Crea tu primera publicación para comenzar</p>
               </div>
             </>
@@ -367,12 +367,12 @@ export function RedesSocialesView({ onNavigate }: Props) {
                 <Stat value={posts.filter(p => p.platform === 'instagram').reduce((sum, p) => sum + p.comentarios, 0).toString()} label="Comentarios" />
                 <Stat value={posts.filter(p => p.platform === 'instagram').length.toString()} label="Posts" />
               </div>
-              <div style={{ backgroundColor: '#FFFFFF', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '40px', textAlign: 'center' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '40px', textAlign: 'center' }}>
                 <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'linear-gradient(135deg, #405DE6, #E1306C, #FD1D1D)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                   <span style={{ fontSize: '1.6rem' }}>📸</span>
                 </div>
-                <h3 style={{ margin: '0 0 8px', fontWeight: '800', color: '#111827', fontSize: '1.1rem' }}>Instagram Management</h3>
-                <p style={{ margin: '0 0 24px', color: '#6B7280', fontSize: '0.8rem', maxWidth: '380px', marginLeft: 'auto', marginRight: 'auto', lineHeight: '1.5' }}>
+                <h3 style={{ margin: '0 0 8px', fontWeight: '800', color: 'var(--m-text)', fontSize: '1.1rem' }}>Instagram Management</h3>
+                <p style={{ margin: '0 0 24px', color: 'var(--m-text-muted)', fontSize: '0.8rem', maxWidth: '380px', marginLeft: 'auto', marginRight: 'auto', lineHeight: '1.5' }}>
                   Gestión completa de Instagram incluyendo feed, stories, reels, mensajes directos y shopping tag
                 </p>
                 <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -395,19 +395,19 @@ export function RedesSocialesView({ onNavigate }: Props) {
                 <Stat value={`${getLatestMetrica('whatsapp')?.engagement.toFixed(1) || 0}%`} label="Engagement" />
                 <Stat value={formatNumber(getLatestMetrica('whatsapp')?.alcance || 0)} label="Alcance" />
               </div>
-              <div style={{ backgroundColor: '#FFFFFF', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '40px', textAlign: 'center' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '40px', textAlign: 'center' }}>
                 <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: '#25D36622', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                   <MessageCircle size={30} color="#25D366" />
                 </div>
-                <h3 style={{ margin: '0 0 8px', fontWeight: '800', color: '#111827', fontSize: '1.1rem' }}>WhatsApp Business API</h3>
-                <p style={{ margin: '0 0 24px', color: '#6B7280', fontSize: '0.8rem', maxWidth: '380px', marginLeft: 'auto', marginRight: 'auto', lineHeight: '1.5' }}>
+                <h3 style={{ margin: '0 0 8px', fontWeight: '800', color: 'var(--m-text)', fontSize: '1.1rem' }}>WhatsApp Business API</h3>
+                <p style={{ margin: '0 0 24px', color: 'var(--m-text-muted)', fontSize: '0.8rem', maxWidth: '380px', marginLeft: 'auto', marginRight: 'auto', lineHeight: '1.5' }}>
                   Gestión profesional de WhatsApp Business con mensajería masiva, chatbot y catálogo de productos
                 </p>
                 <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                   {[
                     { icon: Send,        label: 'Mensajería',    desc: 'Chats y broadcasts',         color: '#25D366' },
-                    { icon: ShoppingBag, label: 'Catálogo',      desc: 'Productos y ventas',          color: '#128C7E' },
-                    { icon: Zap,         label: 'Automatización', desc: 'Respuestas automáticas',    color: '#FF6835' },
+                    { icon: ShoppingBag, label: 'Catálogo',      desc: 'Productos y ventas',          color: 'var(--m-success)' },
+                    { icon: Zap,         label: 'Automatización', desc: 'Respuestas automáticas',    color: 'var(--m-primary)' },
                   ].map((card, i) => <ActionCard key={i} {...card} />)}
                 </div>
               </div>
@@ -431,12 +431,12 @@ function ContentCalendar({ events }: { events: Record<number, { label: string; c
   const weekDays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
   return (
-    <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px 24px' }}>
+    <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px 24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h3 style={{ margin: 0, fontWeight: '800', color: '#111827', fontSize: '1rem' }}>Calendario de Contenido</h3>
+        <h3 style={{ margin: 0, fontWeight: '800', color: 'var(--m-text)', fontSize: '1rem' }}>Calendario de Contenido</h3>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer', padding: '5px 8px' }}><ChevronLeft size={14} /></button>
-          <span style={{ fontWeight: '700', color: '#111827', fontSize: '0.9rem' }}>Febrero 2026</span>
+          <span style={{ fontWeight: '700', color: 'var(--m-text)', fontSize: '0.9rem' }}>Febrero 2026</span>
           <button style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer', padding: '5px 8px' }}><ChevronRight size={14} /></button>
         </div>
       </div>
@@ -444,22 +444,22 @@ function ContentCalendar({ events }: { events: Record<number, { label: string; c
       {/* Day headers */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '1px', marginBottom: '2px' }}>
         {weekDays.map(d => (
-          <div key={d} style={{ textAlign: 'center', padding: '8px', color: '#6B7280', fontSize: '0.75rem', fontWeight: '700' }}>{d}</div>
+          <div key={d} style={{ textAlign: 'center', padding: '8px', color: 'var(--m-text-muted)', fontSize: '0.75rem', fontWeight: '700' }}>{d}</div>
         ))}
       </div>
 
       {/* Calendar grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '1px', backgroundColor: '#F3F4F6' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '1px', backgroundColor: 'var(--m-surface-2)' }}>
         {/* Empty cells for start day */}
         {Array.from({ length: startDow }).map((_, i) => (
-          <div key={`e${i}`} style={{ backgroundColor: '#FAFAFA', minHeight: '80px', padding: '6px' }} />
+          <div key={`e${i}`} style={{ backgroundColor: 'var(--m-surface-2)', minHeight: '80px', padding: '6px' }} />
         ))}
         {days.map(day => {
           const isToday = day === today;
           const dayEvents = events[day] || [];
           return (
-            <div key={day} style={{ backgroundColor: isToday ? '#FFF4EC' : '#FFFFFF', minHeight: '80px', padding: '6px', borderLeft: isToday ? `2px solid ${ORANGE}` : '1px solid transparent' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '22px', height: '22px', borderRadius: '50%', backgroundColor: isToday ? ORANGE : 'transparent', color: isToday ? '#FFF' : '#374151', fontSize: '0.78rem', fontWeight: isToday ? '700' : '400', marginBottom: '4px' }}>
+            <div key={day} style={{ backgroundColor: isToday ? '#FFF4EC' : 'var(--m-surface)', minHeight: '80px', padding: '6px', borderLeft: isToday ? `2px solid ${ORANGE}` : '1px solid transparent' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '22px', height: '22px', borderRadius: '50%', backgroundColor: isToday ? ORANGE : 'transparent', color: isToday ? '#FFF' : 'var(--m-text-secondary)', fontSize: '0.78rem', fontWeight: isToday ? '700' : '400', marginBottom: '4px' }}>
                 {day}
               </span>
               {dayEvents.map((ev, i) => (
@@ -477,7 +477,7 @@ function ContentCalendar({ events }: { events: Record<number, { label: string; c
         {[{ color: '#1877F2', label: 'Facebook' }, { color: '#E1306C', label: 'Instagram' }, { color: '#25D366', label: 'WhatsApp' }].map(l => (
           <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <div style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: l.color }} />
-            <span style={{ fontSize: '0.72rem', color: '#6B7280' }}>{l.label}</span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{l.label}</span>
           </div>
         ))}
       </div>

@@ -103,7 +103,7 @@ function AddressPicker({ value, onChange, onMultiChange }: {
 }) {
   return (
     <div>
-      <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: 6 }}>
+      <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--m-text-muted)', marginBottom: 6 }}>
         Direccion
       </label>
       <GoogleAddressAutocomplete
@@ -249,27 +249,27 @@ export function PersonasView() {
   const sheets = buildSheets(tipoForm);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       {/* Tabla */}
       <div style={{ flex: 1, overflow: 'auto', padding: '20px 28px' }}>
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#9CA3AF' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: 'var(--m-text-muted)' }}>
             <RefreshCw size={20} style={{ animation: 'spin 1s linear infinite', marginRight: 8 }} /> Cargando personas...
           </div>
         ) : personas.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
             <User size={48} style={{ marginBottom: 12, opacity: 0.3 }} />
             <p style={{ fontSize: '1rem', fontWeight: 600 }}>No hay personas registradas</p>
             <p style={{ fontSize: '0.875rem', marginTop: 4 }}>Crea la primera usando el boton "Nueva Persona"</p>
           </div>
         ) : (
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
               <thead>
-                <tr style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
+                <tr style={{ backgroundColor: 'var(--m-surface-2)', borderBottom: '1px solid #E5E7EB' }}>
                   {['Persona', 'Tipo', 'Documento', 'Contacto', 'Estado', 'Acciones'].map(h => (
-                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>{h}</th>
+                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, color: 'var(--m-text-secondary)', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -282,46 +282,46 @@ export function PersonasView() {
                   >
                     <td style={{ padding: '12px 16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: p.tipo === 'natural' ? '#EFF6FF' : '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: p.tipo === 'natural' ? '#EFF6FF' : 'var(--m-warning-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           {p.tipo === 'natural' ? <User size={16} color="#3B82F6" /> : <Building2 size={16} color={ORANGE} />}
                         </div>
                         <div>
-                          <p style={{ margin: 0, fontWeight: 600, color: '#111827' }}>{p.nombre} {p.apellido ?? ''}</p>
-                          {p.email && <p style={{ margin: 0, fontSize: '0.78rem', color: '#6B7280' }}>{p.email}</p>}
+                          <p style={{ margin: 0, fontWeight: 600, color: 'var(--m-text)' }}>{p.nombre} {p.apellido ?? ''}</p>
+                          {p.email && <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>{p.email}</p>}
                         </div>
                       </div>
                     </td>
                     <td style={{ padding: '12px 16px' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: '0.78rem', fontWeight: 600, backgroundColor: p.tipo === 'natural' ? '#EFF6FF' : '#FFF7ED', color: p.tipo === 'natural' ? '#3B82F6' : ORANGE }}>
+                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: '0.78rem', fontWeight: 600, backgroundColor: p.tipo === 'natural' ? '#EFF6FF' : 'var(--m-warning-bg)', color: p.tipo === 'natural' ? '#3B82F6' : ORANGE }}>
                         {p.tipo === 'natural' ? 'Natural' : 'Juridica'}
                       </span>
                     </td>
-                    <td style={{ padding: '12px 16px', color: '#374151' }}>
-                      {p.documento_tipo && p.documento_numero ? `${p.documento_tipo}: ${p.documento_numero}` : <span style={{ color: '#D1D5DB' }}>—</span>}
+                    <td style={{ padding: '12px 16px', color: 'var(--m-text-secondary)' }}>
+                      {p.documento_tipo && p.documento_numero ? `${p.documento_tipo}: ${p.documento_numero}` : <span style={{ color: 'var(--m-border)' }}>—</span>}
                     </td>
                     <td style={{ padding: '12px 16px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        {p.email && <span style={{ color: '#6B7280', fontSize: '0.8rem' }}><Mail size={11} style={{ marginRight: 4, verticalAlign: 'middle' }} />{p.email}</span>}
-                        {p.telefono && <span style={{ color: '#6B7280', fontSize: '0.8rem' }}><Phone size={11} style={{ marginRight: 4, verticalAlign: 'middle' }} />{p.telefono}</span>}
+                        {p.email && <span style={{ color: 'var(--m-text-muted)', fontSize: '0.8rem' }}><Mail size={11} style={{ marginRight: 4, verticalAlign: 'middle' }} />{p.email}</span>}
+                        {p.telefono && <span style={{ color: 'var(--m-text-muted)', fontSize: '0.8rem' }}><Phone size={11} style={{ marginRight: 4, verticalAlign: 'middle' }} />{p.telefono}</span>}
                       </div>
                     </td>
                     <td style={{ padding: '12px 16px' }}>
                       {p.activo
-                        ? <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#10B981', fontSize: '0.8rem', fontWeight: 600 }}><CheckCircle size={14} />Activo</span>
-                        : <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#EF4444', fontSize: '0.8rem', fontWeight: 600 }}><XCircle size={14} />Inactivo</span>
+                        ? <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--m-success)', fontSize: '0.8rem', fontWeight: 600 }}><CheckCircle size={14} />Activo</span>
+                        : <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--m-danger)', fontSize: '0.8rem', fontWeight: 600 }}><XCircle size={14} />Inactivo</span>
                       }
                     </td>
                     <td style={{ padding: '12px 16px' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <button
                           onClick={() => { setEditando(p); setTipoForm(p.tipo); setDrawerOpen(true); }}
-                          style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #E5E7EB', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: '#374151' }}>
+                          style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #E5E7EB', background: 'var(--m-surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: 'var(--m-text-secondary)' }}>
                           <Edit2 size={13} /> Editar
                         </button>
                         <button
                           onClick={() => handleDelete(p.id)}
                           disabled={deletingId === p.id}
-                          style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #FEE2E2', background: '#FFF5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: '#EF4444' }}>
+                          style={{ padding: '6px 10px', borderRadius: 6, border: '1.5px solid #FEE2E2', background: 'var(--m-danger-bg)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: 'var(--m-danger)' }}>
                           <Trash2 size={13} />
                         </button>
                       </div>
@@ -352,6 +352,6 @@ export function PersonasView() {
 
 const selectStyle: React.CSSProperties = {
   height: 34, border: '1.5px solid #E5E7EB', borderRadius: 8,
-  padding: '0 10px', fontSize: '0.875rem', color: '#374151', cursor: 'pointer', outline: 'none',
+  padding: '0 10px', fontSize: '0.875rem', color: 'var(--m-text-secondary)', cursor: 'pointer', outline: 'none',
 };
 

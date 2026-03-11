@@ -153,22 +153,22 @@ const TRANSPORTISTA_SHEETS: SheetDef[] = [
 ];
 
 const TIPO_CFG: Record<string, { label: string; color: string; bg: string }> = {
-  local:         { label: 'Local',         color: '#059669', bg: '#ECFDF5' },
-  nacional:      { label: 'Nacional',      color: '#2563EB', bg: '#EFF6FF' },
-  intercity:     { label: 'Intercity',     color: '#7C3AED', bg: '#F5F3FF' },
-  internacional: { label: 'Internacional', color: '#D97706', bg: '#FFFBEB' },
-  propio:        { label: 'Propio',        color: '#059669', bg: '#ECFDF5' },
-  tercero:       { label: 'Tercero',       color: '#2563EB', bg: '#EFF6FF' },
-  courier:       { label: 'Courier',       color: '#7C3AED', bg: '#F5F3FF' },
+  local:         { label: 'Local',         color: 'var(--m-success)', bg: 'var(--m-success-bg)' },
+  nacional:      { label: 'Nacional',      color: 'var(--m-info)', bg: 'var(--m-info-bg)' },
+  intercity:     { label: 'Intercity',     color: 'var(--m-purple)', bg: 'var(--m-purple-bg)' },
+  internacional: { label: 'Internacional', color: 'var(--m-warning)', bg: 'var(--m-warning-bg)' },
+  propio:        { label: 'Propio',        color: 'var(--m-success)', bg: 'var(--m-success-bg)' },
+  tercero:       { label: 'Tercero',       color: 'var(--m-info)', bg: 'var(--m-info-bg)' },
+  courier:       { label: 'Courier',       color: 'var(--m-purple)', bg: 'var(--m-purple-bg)' },
 };
 
 function Stars({ n }: { n: number }) {
   return (
     <span style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
       {[1,2,3,4,5].map(i => (
-        <Star key={i} size={11} color={i <= Math.round(n) ? '#F59E0B' : '#E5E7EB'} fill={i <= Math.round(n) ? '#F59E0B' : 'none'} />
+        <Star key={i} size={11} color={i <= Math.round(n) ? '#F59E0B' : 'var(--m-border)'} fill={i <= Math.round(n) ? '#F59E0B' : 'none'} />
       ))}
-      <span style={{ fontSize: '11px', color: '#6B7280', marginLeft: '3px' }}>{n}</span>
+      <span style={{ fontSize: '11px', color: 'var(--m-text-muted)', marginLeft: '3px' }}>{n}</span>
     </span>
   );
 }
@@ -294,24 +294,24 @@ export function TransportistasView({ onNavigate }: Props) {
         ]}
       />
 
-      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--m-bg)' }}>
         {/* KPIs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', padding: '20px 20px 0' }}>
           {[
             { label: 'Carriers Activos',      value: activos,                                                                                                   icon: Users, color: ORANGE },
-            { label: 'Envíos en curso',        value: totalEnviosActivos,                                                                                       icon: Truck, color: '#2563EB' },
-            { label: 'Tramos configurados',    value: tramosAdaptados.filter(t => t.activo).length,                                                             icon: MapPin, color: '#7C3AED' },
-            { label: 'Rating promedio',        value: carriersAdaptados.length > 0 ? (carriersAdaptados.reduce((s,t)=>s+(t.rating||0),0)/carriersAdaptados.length).toFixed(1)+'★' : '0★', icon: Star, color: '#F59E0B' },
+            { label: 'Envíos en curso',        value: totalEnviosActivos,                                                                                       icon: Truck, color: 'var(--m-info)' },
+            { label: 'Tramos configurados',    value: tramosAdaptados.filter(t => t.activo).length,                                                             icon: MapPin, color: 'var(--m-purple)' },
+            { label: 'Rating promedio',        value: carriersAdaptados.length > 0 ? (carriersAdaptados.reduce((s,t)=>s+(t.rating||0),0)/carriersAdaptados.length).toFixed(1)+'★' : '0★', icon: Star, color: 'var(--m-warning)' },
           ].map(c => {
             const Icon = c.icon;
             return (
-              <div key={c.label} style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <div key={c.label} style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: `${c.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Icon size={18} color={c.color} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '20px', fontWeight: 800, color: '#111' }}>{c.value}</div>
-                  <div style={{ fontSize: '11px', color: '#6B7280' }}>{c.label}</div>
+                  <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--m-text)' }}>{c.value}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>{c.label}</div>
                 </div>
               </div>
             );
@@ -319,10 +319,10 @@ export function TransportistasView({ onNavigate }: Props) {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '0', padding: '16px 20px 0', borderBottom: '1px solid #E5E7EB', backgroundColor: '#fff', marginTop: '16px' }}>
+        <div style={{ display: 'flex', gap: '0', padding: '16px 20px 0', borderBottom: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)', marginTop: '16px' }}>
           {([['transportistas','Transportistas'],['tramos','Tramos & Zonas'],['tarifas','Simulador de Tarifas']] as [Tab,string][]).map(([id, label]) => (
             <button key={id} onClick={() => setTab(id)}
-              style={{ padding: '10px 20px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '13px', fontWeight: tab === id ? 700 : 500, color: tab === id ? ORANGE : '#6B7280', borderBottom: tab === id ? `2px solid ${ORANGE}` : '2px solid transparent', transition: 'all 0.15s' }}>
+              style={{ padding: '10px 20px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '13px', fontWeight: tab === id ? 700 : 500, color: tab === id ? ORANGE : 'var(--m-text-muted)', borderBottom: tab === id ? `2px solid ${ORANGE}` : '2px solid transparent', transition: 'all 0.15s' }}>
               {label}
             </button>
           ))}
@@ -341,45 +341,45 @@ export function TransportistasView({ onNavigate }: Props) {
           {tab === 'transportistas' && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(340px,1fr))', gap: '12px' }}>
               {filteredCarriers.map(carrier => {
-                const tipoCfg = TIPO_CFG[carrier.tipo] ?? { label: carrier.tipo, color: '#6B7280', bg: '#F3F4F6' };
+                const tipoCfg = TIPO_CFG[carrier.tipo] ?? { label: carrier.tipo, color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)' };
                 const isSelected = selected?.id === carrier.id;
                 return (
                   <div key={carrier.id}
                     onClick={() => setSelected(isSelected ? null : carrier)}
                     style={{
-                      backgroundColor: '#fff', borderRadius: '12px',
-                      border: `1.5px solid ${isSelected ? ORANGE : carrier.activo ? '#E5E7EB' : '#F3F4F6'}`,
+                      backgroundColor: 'var(--m-surface)', borderRadius: '12px',
+                      border: `1.5px solid ${isSelected ? ORANGE : carrier.activo ? '#E5E7EB' : 'var(--m-surface-2)'}`,
                       padding: '18px', cursor: 'pointer',
                       opacity: carrier.activo ? 1 : 0.6,
                       boxShadow: isSelected ? `0 0 0 3px ${ORANGE}22` : '0 1px 4px rgba(0,0,0,0.04)',
                       transition: 'all 0.15s',
                     }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px' }}>
-                      <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
+                      <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: 'var(--m-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
                         {carrier.logo}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 800, color: '#111' }}>{carrier.nombre}</span>
+                          <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--m-text)' }}>{carrier.nombre}</span>
                           <span style={{ fontSize: '10px', fontWeight: 700, color: tipoCfg.color, backgroundColor: tipoCfg.bg, padding: '2px 7px', borderRadius: '10px' }}>{tipoCfg.label}</span>
-                          {!carrier.activo && <span style={{ fontSize: '10px', fontWeight: 700, color: '#9CA3AF', backgroundColor: '#F3F4F6', padding: '2px 7px', borderRadius: '10px' }}>Inactivo</span>}
+                          {!carrier.activo && <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--m-text-muted)', backgroundColor: 'var(--m-surface-2)', padding: '2px 7px', borderRadius: '10px' }}>Inactivo</span>}
                         </div>
                         <Stars n={carrier.rating || 0} />
                       </div>
-                      <div style={{ width: '36px', height: '20px', borderRadius: '10px', backgroundColor: carrier.activo ? '#D1FAE5' : '#F3F4F6', display: 'flex', alignItems: 'center', padding: '0 2px', cursor: 'pointer', flexShrink: 0, justifyContent: carrier.activo ? 'flex-end' : 'flex-start' }}>
-                        <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: carrier.activo ? '#059669' : '#9CA3AF' }} />
+                      <div style={{ width: '36px', height: '20px', borderRadius: '10px', backgroundColor: carrier.activo ? '#D1FAE5' : 'var(--m-surface-2)', display: 'flex', alignItems: 'center', padding: '0 2px', cursor: 'pointer', flexShrink: 0, justifyContent: carrier.activo ? 'flex-end' : 'flex-start' }}>
+                        <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: carrier.activo ? '#059669' : 'var(--m-text-muted)' }} />
                       </div>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
-                      <div style={{ fontSize: '11px', color: '#6B7280' }}>⏱ {carrier.tiempoPromedio || '—'}</div>
-                      <div style={{ fontSize: '11px', color: '#6B7280' }}>📦 {carrier.enviosActivos || 0} activos</div>
-                      <div style={{ fontSize: '11px', color: '#6B7280' }}>📊 {carrier.enviosTotales || 0} totales</div>
-                      <div style={{ fontSize: '11px', color: '#6B7280' }}>☎ {carrier.telefono || '—'}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>⏱ {carrier.tiempoPromedio || '—'}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>📦 {carrier.enviosActivos || 0} activos</div>
+                      <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>📊 {carrier.enviosTotales || 0} totales</div>
+                      <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>☎ {carrier.telefono || '—'}</div>
                     </div>
                     {carrier.cobertura && carrier.cobertura.length > 0 && (
                       <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                         {carrier.cobertura.map(z => (
-                          <span key={z} style={{ fontSize: '10px', color: '#374151', backgroundColor: '#F3F4F6', padding: '2px 7px', borderRadius: '6px' }}>{z}</span>
+                          <span key={z} style={{ fontSize: '10px', color: 'var(--m-text-secondary)', backgroundColor: 'var(--m-surface-2)', padding: '2px 7px', borderRadius: '6px' }}>{z}</span>
                         ))}
                       </div>
                     )}
@@ -388,45 +388,45 @@ export function TransportistasView({ onNavigate }: Props) {
               })}
               <div
                 onClick={() => setDrawerOpen(true)}
-                style={{ backgroundColor: '#FAFAFA', borderRadius: '12px', border: '2px dashed #E5E7EB', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', cursor: 'pointer', minHeight: '160px' }}>
-                <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: '#FFF4EC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                style={{ backgroundColor: 'var(--m-surface-2)', borderRadius: '12px', border: '2px dashed #E5E7EB', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px', cursor: 'pointer', minHeight: '160px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'var(--m-primary-10)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Plus size={22} color={ORANGE} />
                 </div>
                 <span style={{ fontSize: '13px', fontWeight: 700, color: ORANGE }}>Agregar Carrier</span>
-                <span style={{ fontSize: '11px', color: '#9CA3AF', textAlign: 'center' }}>Conectar nuevo transportista al sistema</span>
+                <span style={{ fontSize: '11px', color: 'var(--m-text-muted)', textAlign: 'center' }}>Conectar nuevo transportista al sistema</span>
               </div>
             </div>
           )}
 
           {/* Tab: Tramos */}
           {tab === 'tramos' && (
-            <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+            <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ backgroundColor: '#F9FAFB' }}>
+                  <tr style={{ backgroundColor: 'var(--m-surface-2)' }}>
                     {['Carrier','Origen','Destino','Tipo','Tiempo Est.','Tarifa Base','$/Kg','Estado'].map(h => (
-                      <th key={h} style={{ padding: '12px 14px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E5E7EB' }}>{h}</th>
+                      <th key={h} style={{ padding: '12px 14px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E5E7EB' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {filteredTramos.map((tramo, i) => {
-                    const tipoCfg = TIPO_CFG[tramo.tipo] ?? { label: tramo.tipo, color: '#6B7280', bg: '#F3F4F6' };
+                    const tipoCfg = TIPO_CFG[tramo.tipo] ?? { label: tramo.tipo, color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)' };
                     return (
                       <tr key={tramo.id} style={{ borderBottom: i < filteredTramos.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
-                        <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 600, color: '#374151' }}>{tramo.carrier}</td>
-                        <td style={{ padding: '12px 14px', fontSize: '12px', color: '#6B7280' }}>{tramo.origen}</td>
-                        <td style={{ padding: '12px 14px', fontSize: '12px', color: '#374151', fontWeight: 500 }}>{tramo.destino}</td>
+                        <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 600, color: 'var(--m-text-secondary)' }}>{tramo.carrier}</td>
+                        <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--m-text-muted)' }}>{tramo.origen}</td>
+                        <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--m-text-secondary)', fontWeight: 500 }}>{tramo.destino}</td>
                         <td style={{ padding: '12px 14px' }}>
                           <span style={{ fontSize: '10px', fontWeight: 700, color: tipoCfg.color, backgroundColor: tipoCfg.bg, padding: '3px 8px', borderRadius: '10px' }}>{tipoCfg.label}</span>
                         </td>
-                        <td style={{ padding: '12px 14px', fontSize: '12px', color: '#374151', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--m-text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <Clock size={11} color="#9CA3AF" /> {tramo.tiempoEstimado || '—'}
                         </td>
-                        <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 700, color: '#111' }}>${(tramo.tarifaBase || 0).toLocaleString('es-UY')}</td>
-                        <td style={{ padding: '12px 14px', fontSize: '12px', color: '#6B7280' }}>${tramo.tarifaKg || 0}/kg</td>
+                        <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 700, color: 'var(--m-text)' }}>${(tramo.tarifaBase || 0).toLocaleString('es-UY')}</td>
+                        <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--m-text-muted)' }}>${tramo.tarifaKg || 0}/kg</td>
                         <td style={{ padding: '12px 14px' }}>
-                          <span style={{ fontSize: '10px', fontWeight: 700, color: tramo.activo ? '#059669' : '#9CA3AF', backgroundColor: tramo.activo ? '#ECFDF5' : '#F3F4F6', padding: '3px 8px', borderRadius: '10px' }}>
+                          <span style={{ fontSize: '10px', fontWeight: 700, color: tramo.activo ? '#059669' : 'var(--m-text-muted)', backgroundColor: tramo.activo ? '#ECFDF5' : 'var(--m-surface-2)', padding: '3px 8px', borderRadius: '10px' }}>
                             {tramo.activo ? '● Activo' : '○ Inactivo'}
                           </span>
                         </td>
@@ -441,8 +441,8 @@ export function TransportistasView({ onNavigate }: Props) {
           {/* Tab: Simulador de Tarifas */}
           {tab === 'tarifas' && (
             <div style={{ maxWidth: '560px' }}>
-              <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '24px' }}>
-                <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: 800, color: '#111' }}>Simulador de Tarifa de Envío</h3>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '24px' }}>
+                <h3 style={{ margin: '0 0 20px', fontSize: '15px', fontWeight: 800, color: 'var(--m-text)' }}>Simulador de Tarifa de Envío</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   {[
                     { label: 'Peso (kg)',              type: 'number', placeholder: 'Ej: 2.5' },
@@ -451,17 +451,17 @@ export function TransportistasView({ onNavigate }: Props) {
                     { label: 'Código Postal Destino',  type: 'text',   placeholder: 'Ej: 5000' },
                   ].map(f => (
                     <div key={f.label}>
-                      <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#374151', marginBottom: '6px' }}>{f.label}</label>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)', marginBottom: '6px' }}>{f.label}</label>
                       <input type={f.type} placeholder={f.placeholder}
                         style={{ width: '100%', padding: '10px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '13px', outline: 'none', boxSizing: 'border-box' }} />
                     </div>
                   ))}
-                  <button style={{ marginTop: '6px', padding: '12px', border: 'none', borderRadius: '10px', backgroundColor: ORANGE, color: '#fff', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>
+                  <button style={{ marginTop: '6px', padding: '12px', border: 'none', borderRadius: '10px', backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '14px', fontWeight: 700, cursor: 'pointer' }}>
                     Calcular tarifas disponibles
                   </button>
                 </div>
-                <div style={{ marginTop: '20px', padding: '14px', backgroundColor: '#F9FAFB', borderRadius: '10px', border: '1px solid #E5E7EB' }}>
-                  <p style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 700, color: '#374151' }}>Tarifas estimadas:</p>
+                <div style={{ marginTop: '20px', padding: '14px', backgroundColor: 'var(--m-surface-2)', borderRadius: '10px', border: '1px solid #E5E7EB' }}>
+                  <p style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)' }}>Tarifas estimadas:</p>
                   {[
                     { carrier: 'Express Delivery GBA', tiempo: 'Same day', precio: 1400 },
                     { carrier: 'Correo UY',   tiempo: '3-5 días', precio: 350 },
@@ -469,8 +469,8 @@ export function TransportistasView({ onNavigate }: Props) {
                   ].map(r => (
                     <div key={r.carrier} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #E5E7EB' }}>
                       <div>
-                        <div style={{ fontSize: '12px', fontWeight: 600, color: '#111' }}>{r.carrier}</div>
-                        <div style={{ fontSize: '11px', color: '#9CA3AF' }}>{r.tiempo}</div>
+                        <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--m-text)' }}>{r.carrier}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>{r.tiempo}</div>
                       </div>
                       <div style={{ fontSize: '14px', fontWeight: 800, color: ORANGE }}>${r.precio.toLocaleString('es-UY')}</div>
                     </div>

@@ -96,13 +96,13 @@ const SALUD_ITEMS = [
 ];
 
 function TendenciaIcon({ actual, anterior }: { actual: number; anterior: number }) {
-  if (actual < anterior) return <div style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#059669', fontSize: '11px', fontWeight: 700 }}><ArrowUp size={11} />+{anterior - actual}</div>;
-  if (actual > anterior) return <div style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#DC2626', fontSize: '11px', fontWeight: 700 }}><ArrowDown size={11} />-{actual - anterior}</div>;
-  return <div style={{ color: '#9CA3AF', fontSize: '11px' }}><Minus size={11} /></div>;
+  if (actual < anterior) return <div style={{ display: 'flex', alignItems: 'center', gap: '2px', color: 'var(--m-success)', fontSize: '11px', fontWeight: 700 }}><ArrowUp size={11} />+{anterior - actual}</div>;
+  if (actual > anterior) return <div style={{ display: 'flex', alignItems: 'center', gap: '2px', color: 'var(--m-danger)', fontSize: '11px', fontWeight: 700 }}><ArrowDown size={11} />-{actual - anterior}</div>;
+  return <div style={{ color: 'var(--m-text-muted)', fontSize: '11px' }}><Minus size={11} /></div>;
 }
 
 function ScoreBadge({ score }: { score: number }) {
-  const color = score >= 90 ? '#059669' : score >= 70 ? '#D97706' : '#DC2626';
+  const color = score >= 90 ? '#059669' : score >= 70 ? '#D97706' : 'var(--m-danger)';
   return (
     <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: `3px solid ${color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
       <span style={{ fontSize: '12px', fontWeight: 800, color }}>{score}</span>
@@ -133,35 +133,35 @@ export function SEOView({ onNavigate }: Props) {
         ]}
       />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
         {/* KPIs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '12px', padding: '16px 20px 0' }}>
           {[
             { label: 'Clics Orgánicos', value: totalClics.toLocaleString(), sub: '/mes', icon: Eye, color: ORANGE },
-            { label: 'Impressiones', value: `${(totalImpressiones/1000).toFixed(0)}K`, sub: '/mes', icon: Globe, color: '#2563EB' },
-            { label: 'CTR Promedio', value: `${avgCtr}%`, sub: 'click-through rate', icon: Target, color: '#7C3AED' },
-            { label: 'Posición Media', value: `#${avgPos}`, sub: 'ranking promedio', icon: BarChart3, color: '#D97706' },
-            { label: 'Health Score', value: `${scorePromedio}/100`, sub: 'estado on-page', icon: Zap, color: scorePromedio >= 80 ? '#059669' : '#DC2626' },
+            { label: 'Impressiones', value: `${(totalImpressiones/1000).toFixed(0)}K`, sub: '/mes', icon: Globe, color: 'var(--m-info)' },
+            { label: 'CTR Promedio', value: `${avgCtr}%`, sub: 'click-through rate', icon: Target, color: 'var(--m-purple)' },
+            { label: 'Posición Media', value: `#${avgPos}`, sub: 'ranking promedio', icon: BarChart3, color: 'var(--m-warning)' },
+            { label: 'Health Score', value: `${scorePromedio}/100`, sub: 'estado on-page', icon: Zap, color: scorePromedio >= 80 ? '#059669' : 'var(--m-danger)' },
           ].map(c => {
             const Icon = c.icon;
             return (
-              <div key={c.label} style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px' }}>
+              <div key={c.label} style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#6B7280' }}>{c.label}</span>
+                  <span style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>{c.label}</span>
                   <Icon size={14} color={c.color} />
                 </div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#111' }}>{c.value}</div>
-                <div style={{ fontSize: '10px', color: '#9CA3AF', marginTop: '2px' }}>{c.sub}</div>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--m-text)' }}>{c.value}</div>
+                <div style={{ fontSize: '10px', color: 'var(--m-text-muted)', marginTop: '2px' }}>{c.sub}</div>
               </div>
             );
           })}
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', padding: '12px 20px 0', backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', marginTop: '12px' }}>
+        <div style={{ display: 'flex', padding: '12px 20px 0', backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', marginTop: '12px' }}>
           {([['overview','📊 Overview'],['keywords','🔑 Keywords'],['paginas','📄 Páginas'],['backlinks','🔗 Backlinks'],['salud','🏥 Salud SEO']] as [Tab,string][]).map(([id, label]) => (
             <button key={id} onClick={() => setTab(id)}
-              style={{ padding: '10px 18px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '13px', fontWeight: tab === id ? 700 : 500, color: tab === id ? ORANGE : '#6B7280', borderBottom: tab === id ? `2px solid ${ORANGE}` : '2px solid transparent' }}>
+              style={{ padding: '10px 18px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '13px', fontWeight: tab === id ? 700 : 500, color: tab === id ? ORANGE : 'var(--m-text-muted)', borderBottom: tab === id ? `2px solid ${ORANGE}` : '2px solid transparent' }}>
               {label}
             </button>
           ))}
@@ -173,45 +173,45 @@ export function SEOView({ onNavigate }: Props) {
           {tab === 'overview' && (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {/* Top keywords */}
-              <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
-                <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Top Keywords por Clics</h3>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
+                <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Top Keywords por Clics</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {[...KEYWORDS].sort((a,b) => b.clics - a.clics).slice(0,5).map(kw => (
                     <div key={kw.id} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundColor: kw.posicion <= 3 ? '#ECFDF5' : kw.posicion <= 10 ? '#FFF4EC' : '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, color: kw.posicion <= 3 ? '#059669' : kw.posicion <= 10 ? ORANGE : '#DC2626' }}>#{kw.posicion}</span>
+                      <div style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundColor: kw.posicion <= 3 ? '#ECFDF5' : kw.posicion <= 10 ? '#FFF4EC' : 'var(--m-danger-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, color: kw.posicion <= 3 ? '#059669' : kw.posicion <= 10 ? ORANGE : 'var(--m-danger)' }}>#{kw.posicion}</span>
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: '12px', fontWeight: 600, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{kw.keyword}</div>
-                        <div style={{ width: '100%', height: '4px', backgroundColor: '#F3F4F6', borderRadius: '2px', marginTop: '4px', overflow: 'hidden' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--m-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{kw.keyword}</div>
+                        <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--m-surface-2)', borderRadius: '2px', marginTop: '4px', overflow: 'hidden' }}>
                           <div style={{ width: `${Math.min(100, (kw.clics / 2500) * 100)}%`, height: '100%', backgroundColor: ORANGE, borderRadius: '2px' }} />
                         </div>
                       </div>
-                      <span style={{ fontSize: '12px', fontWeight: 700, color: '#374151', flexShrink: 0 }}>{kw.clics.toLocaleString()}</span>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)', flexShrink: 0 }}>{kw.clics.toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
               </div>
               {/* Salud de páginas */}
-              <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
-                <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Salud de Páginas</h3>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px' }}>
+                <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Salud de Páginas</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {PAGINAS.map(p => (
                     <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <ScoreBadge score={p.score} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: '12px', fontWeight: 600, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.titulo}</div>
-                        <div style={{ fontSize: '10px', color: '#9CA3AF' }}>{p.problemas.length === 0 ? '✓ Sin problemas' : `⚠ ${p.problemas.length} problema${p.problemas.length > 1 ? 's' : ''}`}</div>
+                        <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--m-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.titulo}</div>
+                        <div style={{ fontSize: '10px', color: 'var(--m-text-muted)' }}>{p.problemas.length === 0 ? '✓ Sin problemas' : `⚠ ${p.problemas.length} problema${p.problemas.length > 1 ? 's' : ''}`}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
               {/* Oportunidades IA */}
-              <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px', gridColumn: '1 / -1' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px', gridColumn: '1 / -1' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                   <Zap size={16} color={ORANGE} />
-                  <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sugerencias IA para mejorar el posicionamiento</h3>
+                  <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sugerencias IA para mejorar el posicionamiento</h3>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                   {[
@@ -222,13 +222,13 @@ export function SEOView({ onNavigate }: Props) {
                     { prio: '🟢', titulo: 'Agregar schema markup', desc: 'Rich snippets aumentan CTR en 15% promedio', accion: 'Implementar' },
                     { prio: '🟢', titulo: 'Construir 5 backlinks nuevos', desc: 'DA 40+ con guest posts en medios especializados', accion: 'Ver oportunidades' },
                   ].map(s => (
-                    <div key={s.titulo} style={{ padding: '12px 14px', backgroundColor: '#F9FAFB', borderRadius: '10px', border: '1px solid #E5E7EB' }}>
+                    <div key={s.titulo} style={{ padding: '12px 14px', backgroundColor: 'var(--m-surface-2)', borderRadius: '10px', border: '1px solid #E5E7EB' }}>
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
                         <span style={{ fontSize: '14px', flexShrink: 0 }}>{s.prio}</span>
-                        <span style={{ fontSize: '12px', fontWeight: 700, color: '#111', lineHeight: '1.4' }}>{s.titulo}</span>
+                        <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text)', lineHeight: '1.4' }}>{s.titulo}</span>
                       </div>
-                      <p style={{ margin: '0 0 10px', fontSize: '11px', color: '#6B7280', lineHeight: '1.4' }}>{s.desc}</p>
-                      <button style={{ fontSize: '11px', fontWeight: 700, color: ORANGE, backgroundColor: '#FFF4EC', border: `1px solid ${ORANGE}40`, padding: '4px 10px', borderRadius: '6px', cursor: 'pointer' }}>
+                      <p style={{ margin: '0 0 10px', fontSize: '11px', color: 'var(--m-text-muted)', lineHeight: '1.4' }}>{s.desc}</p>
+                      <button style={{ fontSize: '11px', fontWeight: 700, color: ORANGE, backgroundColor: 'var(--m-primary-10)', border: `1px solid ${ORANGE}40`, padding: '4px 10px', borderRadius: '6px', cursor: 'pointer' }}>
                         {s.accion}
                       </button>
                     </div>
@@ -247,26 +247,26 @@ export function SEOView({ onNavigate }: Props) {
                   <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Filtrar keywords..."
                     style={{ width: '100%', paddingLeft: '30px', paddingRight: '10px', paddingTop: '8px', paddingBottom: '8px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '12px', outline: 'none', boxSizing: 'border-box' }} />
                 </div>
-                <button style={{ padding: '8px 14px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button style={{ padding: '8px 14px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '12px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Plus size={13} /> Agregar keyword
                 </button>
               </div>
-              <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
-                    <tr style={{ backgroundColor: '#F9FAFB' }}>
+                    <tr style={{ backgroundColor: 'var(--m-surface-2)' }}>
                       {['Keyword', 'Posición', 'Cambio', 'Volumen/mes', 'Dificultad', 'CTR', 'Clics', 'URL'].map(h => (
-                        <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E5E7EB', whiteSpace: 'nowrap' }}>{h}</th>
+                        <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E5E7EB', whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {KEYWORDS.filter(k => !search || k.keyword.includes(search.toLowerCase())).map((kw, i) => {
-                      const posColor = kw.posicion <= 3 ? '#059669' : kw.posicion <= 10 ? ORANGE : '#DC2626';
-                      const difColor = kw.dificultad >= 70 ? '#DC2626' : kw.dificultad >= 50 ? '#D97706' : '#059669';
+                      const posColor = kw.posicion <= 3 ? '#059669' : kw.posicion <= 10 ? ORANGE : 'var(--m-danger)';
+                      const difColor = kw.dificultad >= 70 ? '#DC2626' : kw.dificultad >= 50 ? '#D97706' : 'var(--m-success)';
                       return (
                         <tr key={kw.id} style={{ borderBottom: i < KEYWORDS.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
-                          <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 600, color: '#111', maxWidth: '220px' }}>
+                          <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 600, color: 'var(--m-text)', maxWidth: '220px' }}>
                             <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{kw.keyword}</div>
                           </td>
                           <td style={{ padding: '12px 14px' }}>
@@ -275,18 +275,18 @@ export function SEOView({ onNavigate }: Props) {
                             </div>
                           </td>
                           <td style={{ padding: '12px 14px' }}><TendenciaIcon actual={kw.posicion} anterior={kw.posicionAnterior} /></td>
-                          <td style={{ padding: '12px 14px', fontSize: '12px', color: '#374151', fontWeight: 500 }}>{kw.volumeMensual.toLocaleString()}</td>
+                          <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--m-text-secondary)', fontWeight: 500 }}>{kw.volumeMensual.toLocaleString()}</td>
                           <td style={{ padding: '12px 14px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <div style={{ flex: 1, maxWidth: '60px', height: '5px', backgroundColor: '#F3F4F6', borderRadius: '3px', overflow: 'hidden' }}>
+                              <div style={{ flex: 1, maxWidth: '60px', height: '5px', backgroundColor: 'var(--m-surface-2)', borderRadius: '3px', overflow: 'hidden' }}>
                                 <div style={{ width: `${kw.dificultad}%`, height: '100%', backgroundColor: difColor, borderRadius: '3px' }} />
                               </div>
                               <span style={{ fontSize: '11px', color: difColor, fontWeight: 700 }}>{kw.dificultad}</span>
                             </div>
                           </td>
-                          <td style={{ padding: '12px 14px', fontSize: '12px', color: '#374151' }}>{kw.ctr}%</td>
-                          <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 700, color: '#111' }}>{kw.clics.toLocaleString()}</td>
-                          <td style={{ padding: '12px 14px', fontSize: '11px', color: '#6B7280', maxWidth: '120px' }}>
+                          <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--m-text-secondary)' }}>{kw.ctr}%</td>
+                          <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 700, color: 'var(--m-text)' }}>{kw.clics.toLocaleString()}</td>
+                          <td style={{ padding: '12px 14px', fontSize: '11px', color: 'var(--m-text-muted)', maxWidth: '120px' }}>
                             <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{kw.url}</div>
                           </td>
                         </tr>
@@ -304,17 +304,17 @@ export function SEOView({ onNavigate }: Props) {
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {PAGINAS.map(pagina => (
                   <div key={pagina.id} onClick={() => setSelectedPagina(pagina.id === selectedPagina?.id ? null : pagina)}
-                    style={{ backgroundColor: '#fff', borderRadius: '12px', border: `1.5px solid ${selectedPagina?.id === pagina.id ? ORANGE : '#E5E7EB'}`, padding: '16px 20px', cursor: 'pointer', boxShadow: selectedPagina?.id === pagina.id ? `0 0 0 3px ${ORANGE}22` : 'none', transition: 'all 0.15s' }}>
+                    style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: `1.5px solid ${selectedPagina?.id === pagina.id ? ORANGE : 'var(--m-border)'}`, padding: '16px 20px', cursor: 'pointer', boxShadow: selectedPagina?.id === pagina.id ? `0 0 0 3px ${ORANGE}22` : 'none', transition: 'all 0.15s' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                       <ScoreBadge score={pagina.score} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: '13px', fontWeight: 700, color: '#111', marginBottom: '3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pagina.titulo}</div>
-                        <div style={{ fontSize: '11px', color: '#2563EB', marginBottom: '4px' }}>{pagina.url}</div>
-                        <div style={{ display: 'flex', gap: '14px', fontSize: '11px', color: '#6B7280', flexWrap: 'wrap' }}>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--m-text)', marginBottom: '3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pagina.titulo}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--m-info)', marginBottom: '4px' }}>{pagina.url}</div>
+                        <div style={{ display: 'flex', gap: '14px', fontSize: '11px', color: 'var(--m-text-muted)', flexWrap: 'wrap' }}>
                           <span>👁 {pagina.traficoOrganico.toLocaleString()} visitas/mes</span>
                           <span>📊 Pos. media #{pagina.posicionPromedio}</span>
-                          {pagina.problemas.length > 0 && <span style={{ color: '#D97706' }}>⚠ {pagina.problemas.length} problema{pagina.problemas.length > 1 ? 's' : ''}</span>}
-                          {pagina.problemas.length === 0 && <span style={{ color: '#059669' }}>✓ Sin problemas</span>}
+                          {pagina.problemas.length > 0 && <span style={{ color: 'var(--m-warning)' }}>⚠ {pagina.problemas.length} problema{pagina.problemas.length > 1 ? 's' : ''}</span>}
+                          {pagina.problemas.length === 0 && <span style={{ color: 'var(--m-success)' }}>✓ Sin problemas</span>}
                         </div>
                       </div>
                     </div>
@@ -322,32 +322,32 @@ export function SEOView({ onNavigate }: Props) {
                 ))}
               </div>
               {selectedPagina && (
-                <div style={{ width: '300px', flexShrink: 0, backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px', height: 'fit-content' }}>
+                <div style={{ width: '300px', flexShrink: 0, backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px', height: 'fit-content' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                     <ScoreBadge score={selectedPagina.score} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedPagina.url}</div>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedPagina.url}</div>
                     </div>
                   </div>
                   {selectedPagina.problemas.length > 0 && (
                     <>
-                      <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 700, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.05em' }}>⚠ Problemas detectados</h4>
+                      <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 700, color: 'var(--m-warning)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>⚠ Problemas detectados</h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px' }}>
                         {selectedPagina.problemas.map((p, i) => (
-                          <div key={i} style={{ fontSize: '12px', color: '#D97706', padding: '6px 10px', backgroundColor: '#FFFBEB', borderRadius: '6px', border: '1px solid #FDE68A' }}>
+                          <div key={i} style={{ fontSize: '12px', color: 'var(--m-warning)', padding: '6px 10px', backgroundColor: 'var(--m-warning-bg)', borderRadius: '6px', border: '1px solid #FDE68A' }}>
                             {p}
                           </div>
                         ))}
                       </div>
                     </>
                   )}
-                  <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 700, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Keywords posicionadas</h4>
+                  <h4 style={{ margin: '0 0 10px', fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Keywords posicionadas</h4>
                   <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
                     {selectedPagina.keywords.map(k => (
-                      <span key={k} style={{ fontSize: '11px', color: '#374151', backgroundColor: '#F3F4F6', padding: '3px 8px', borderRadius: '6px', border: '1px solid #E5E7EB' }}>{k}</span>
+                      <span key={k} style={{ fontSize: '11px', color: 'var(--m-text-secondary)', backgroundColor: 'var(--m-surface-2)', padding: '3px 8px', borderRadius: '6px', border: '1px solid #E5E7EB' }}>{k}</span>
                     ))}
                   </div>
-                  <button style={{ marginTop: '14px', width: '100%', padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                  <button style={{ marginTop: '14px', width: '100%', padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                     Optimizar con IA
                   </button>
                 </div>
@@ -359,24 +359,24 @@ export function SEOView({ onNavigate }: Props) {
           {tab === 'backlinks' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {BACKLINKS.map(bl => {
-                const estadoCfg = { activo: { color: '#059669', bg: '#ECFDF5', label: '● Activo' }, perdido: { color: '#DC2626', bg: '#FEF2F2', label: '✗ Perdido' }, nuevo: { color: '#2563EB', bg: '#EFF6FF', label: '✦ Nuevo' } }[bl.estado];
+                const estadoCfg = { activo: { color: 'var(--m-success)', bg: 'var(--m-success-bg)', label: '● Activo' }, perdido: { color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', label: '✗ Perdido' }, nuevo: { color: 'var(--m-info)', bg: 'var(--m-info-bg)', label: '✦ Nuevo' } }[bl.estado];
                 return (
-                  <div key={bl.id} style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '20px' }}>
+                  <div key={bl.id} style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: 'var(--m-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '20px' }}>
                       🔗
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '13px', fontWeight: 700, color: '#111' }}>{bl.dominio}</span>
+                        <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--m-text)' }}>{bl.dominio}</span>
                         <span style={{ fontSize: '10px', fontWeight: 700, color: estadoCfg.color, backgroundColor: estadoCfg.bg, padding: '2px 8px', borderRadius: '10px' }}>{estadoCfg.label}</span>
-                        <span style={{ fontSize: '10px', color: bl.tipo === 'dofollow' ? '#059669' : '#9CA3AF', backgroundColor: bl.tipo === 'dofollow' ? '#ECFDF5' : '#F3F4F6', padding: '2px 6px', borderRadius: '6px', fontWeight: 600 }}>{bl.tipo}</span>
+                        <span style={{ fontSize: '10px', color: bl.tipo === 'dofollow' ? '#059669' : 'var(--m-text-muted)', backgroundColor: bl.tipo === 'dofollow' ? '#ECFDF5' : 'var(--m-surface-2)', padding: '2px 6px', borderRadius: '6px', fontWeight: 600 }}>{bl.tipo}</span>
                       </div>
-                      <div style={{ fontSize: '11px', color: '#2563EB', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{bl.url}</div>
-                      <div style={{ fontSize: '10px', color: '#9CA3AF', marginTop: '2px' }}>Detectado: {bl.fechaDeteccion}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--m-info)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{bl.url}</div>
+                      <div style={{ fontSize: '10px', color: 'var(--m-text-muted)', marginTop: '2px' }}>Detectado: {bl.fechaDeteccion}</div>
                     </div>
                     <div style={{ textAlign: 'center', flexShrink: 0 }}>
-                      <div style={{ fontSize: '18px', fontWeight: 800, color: bl.autoridad >= 70 ? '#059669' : bl.autoridad >= 40 ? '#D97706' : '#DC2626' }}>{bl.autoridad}</div>
-                      <div style={{ fontSize: '9px', color: '#9CA3AF', textTransform: 'uppercase' }}>DA</div>
+                      <div style={{ fontSize: '18px', fontWeight: 800, color: bl.autoridad >= 70 ? '#059669' : bl.autoridad >= 40 ? '#D97706' : 'var(--m-danger)' }}>{bl.autoridad}</div>
+                      <div style={{ fontSize: '9px', color: 'var(--m-text-muted)', textTransform: 'uppercase' }}>DA</div>
                     </div>
                   </div>
                 );
@@ -388,8 +388,8 @@ export function SEOView({ onNavigate }: Props) {
           {tab === 'salud' && (
             <div style={{ maxWidth: '800px' }}>
               {(['Técnico', 'Contenido', 'Backlinks'] as const).map(cat => (
-                <div key={cat} style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px', marginBottom: '14px' }}>
-                  <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: '#374151', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{cat}</h3>
+                <div key={cat} style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '20px', marginBottom: '14px' }}>
+                  <h3 style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 800, color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{cat}</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {SALUD_ITEMS.filter(s => s.cat === cat).map(item => {
                       const [iconEl, iconColor, iconBg] = item.estado === 'ok'
@@ -399,13 +399,13 @@ export function SEOView({ onNavigate }: Props) {
                         : [AlertCircle, '#DC2626', '#FEF2F2'];
                       const IconEl = iconEl;
                       return (
-                        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', backgroundColor: '#F9FAFB', borderRadius: '8px', border: `1px solid ${item.estado === 'error' ? '#FCA5A5' : item.estado === 'warn' ? '#FDE68A' : '#E5E7EB'}` }}>
+                        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', backgroundColor: 'var(--m-surface-2)', borderRadius: '8px', border: `1px solid ${item.estado === 'error' ? '#FCA5A5' : item.estado === 'warn' ? '#FDE68A' : 'var(--m-border)'}` }}>
                           <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                             <IconEl size={15} color={iconColor} />
                           </div>
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '12px', fontWeight: 700, color: '#111' }}>{item.label}</div>
-                            <div style={{ fontSize: '11px', color: '#6B7280', marginTop: '1px' }}>{item.desc}</div>
+                            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text)' }}>{item.label}</div>
+                            <div style={{ fontSize: '11px', color: 'var(--m-text-muted)', marginTop: '1px' }}>{item.desc}</div>
                           </div>
                           <div style={{ fontSize: '14px', fontWeight: 800, color: iconColor, flexShrink: 0 }}>{item.valor}</div>
                         </div>

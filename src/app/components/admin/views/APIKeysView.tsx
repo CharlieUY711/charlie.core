@@ -96,20 +96,20 @@ export function APIKeysView({ onNavigate }: Props) {
         actions={[{ label: '← Integraciones', onClick: () => onNavigate('integraciones') }]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: 'var(--m-bg)' }}>
         {/* Stats */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
           {[
-            { label: 'API Keys', value: loading ? '...' : apiKeys.length, color: '#111827' },
-            { label: 'Activas', value: loading ? '...' : activeCount, color: '#10B981' },
-            { label: 'Revocadas', value: loading ? '...' : apiKeys.filter(k => k.estado === 'revocado').length, color: '#9CA3AF' },
+            { label: 'API Keys', value: loading ? '...' : apiKeys.length, color: 'var(--m-text)' },
+            { label: 'Activas', value: loading ? '...' : activeCount, color: 'var(--m-success)' },
+            { label: 'Revocadas', value: loading ? '...' : apiKeys.filter(k => k.estado === 'revocado').length, color: 'var(--m-text-muted)' },
           ].map((s, i) => (
             <div key={i} style={{
-              flex: 1, backgroundColor: '#fff', borderRadius: 10, padding: '12px 16px',
+              flex: 1, backgroundColor: 'var(--m-surface)', borderRadius: 10, padding: '12px 16px',
               border: '1px solid #E5E7EB', textAlign: 'center',
             }}>
               <div style={{ fontSize: '1.5rem', fontWeight: '800', color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: 2 }}>{s.label}</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', marginTop: 2 }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -121,7 +121,7 @@ export function APIKeysView({ onNavigate }: Props) {
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '10px 16px', borderRadius: 8,
-              backgroundColor: ORANGE, color: '#fff', border: 'none',
+              backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none',
               fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer',
             }}
           >
@@ -133,24 +133,24 @@ export function APIKeysView({ onNavigate }: Props) {
         <div style={{ display: 'grid', gap: 12 }}>
           {apiKeys.map(key => (
             <div key={key.id} style={{
-              backgroundColor: '#fff', borderRadius: 12,
+              backgroundColor: 'var(--m-surface)', borderRadius: 12,
               border: '1px solid #E5E7EB',
               padding: '16px 20px',
             }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem' }}>{key.nombre}</span>
+                    <span style={{ fontWeight: '800', color: 'var(--m-text)', fontSize: '0.95rem' }}>{key.nombre}</span>
                     <span style={{
                       padding: '2px 8px', borderRadius: 12, fontSize: '0.65rem', fontWeight: '700',
-                      backgroundColor: key.estado === 'activo' ? '#D1FAE5' : '#F3F4F6',
-                      color: key.estado === 'activo' ? '#10B981' : '#6B7280',
+                      backgroundColor: key.estado === 'activo' ? '#D1FAE5' : 'var(--m-surface-2)',
+                      color: key.estado === 'activo' ? '#10B981' : 'var(--m-text-muted)',
                     }}>
                       {key.estado === 'activo' ? 'Activa' : 'Revocada'}
                     </span>
                   </div>
                   {key.descripcion && (
-                    <p style={{ margin: 0, fontSize: '0.78rem', color: '#6B7280' }}>{key.descripcion}</p>
+                    <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>{key.descripcion}</p>
                   )}
                 </div>
                 <button
@@ -158,8 +158,8 @@ export function APIKeysView({ onNavigate }: Props) {
                   disabled={deletingId === key.id || key.estado === 'revocado'}
                   style={{
                     padding: '6px 10px', borderRadius: 6, border: 'none',
-                    backgroundColor: deletingId === key.id || key.estado === 'revocado' ? '#F3F4F6' : '#FEE2E2',
-                    color: deletingId === key.id || key.estado === 'revocado' ? '#9CA3AF' : '#EF4444',
+                    backgroundColor: deletingId === key.id || key.estado === 'revocado' ? '#F3F4F6' : 'var(--m-danger-bg)',
+                    color: deletingId === key.id || key.estado === 'revocado' ? '#9CA3AF' : 'var(--m-danger)',
                     cursor: deletingId === key.id || key.estado === 'revocado' ? 'not-allowed' : 'pointer',
                     fontSize: '0.72rem', fontWeight: '600',
                     display: 'flex', alignItems: 'center', gap: 4,
@@ -171,44 +171,44 @@ export function APIKeysView({ onNavigate }: Props) {
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
                 <div style={{ flex: '0 0 auto' }}>
-                  <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: '700' }}>Prefijo: </span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', fontWeight: '700' }}>Prefijo: </span>
                   <code style={{
-                    padding: '3px 8px', borderRadius: 4, backgroundColor: '#F9FAFB',
+                    padding: '3px 8px', borderRadius: 4, backgroundColor: 'var(--m-surface-2)',
                     border: '1px solid #E5E7EB', fontSize: '0.75rem', fontFamily: 'monospace',
-                    color: '#374151',
+                    color: 'var(--m-text-secondary)',
                   }}>
                     {key.key_prefix}...
                   </code>
                 </div>
                 {key.ultimo_uso && (
                   <div style={{ flex: '0 0 auto' }}>
-                    <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: '700' }}>Último uso: </span>
-                    <span style={{ fontSize: '0.7rem', color: '#6B7280' }}>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', fontWeight: '700' }}>Último uso: </span>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>
                       {new Date(key.ultimo_uso).toLocaleString()}
                     </span>
                   </div>
                 )}
                 <div style={{ flex: '0 0 auto' }}>
-                  <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: '700' }}>Usos totales: </span>
-                  <span style={{ fontSize: '0.7rem', color: '#6B7280', fontWeight: '600' }}>{key.usos_totales}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', fontWeight: '700' }}>Usos totales: </span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', fontWeight: '600' }}>{key.usos_totales}</span>
                 </div>
               </div>
 
               {/* Permisos */}
               <div style={{ marginBottom: 8 }}>
-                <span style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: '700' }}>Permisos: </span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', fontWeight: '700' }}>Permisos: </span>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
                   {key.permisos.length > 0 ? (
                     key.permisos.map(perm => (
                       <span key={perm} style={{
                         padding: '2px 8px', borderRadius: 4, fontSize: '0.68rem', fontWeight: '600',
-                        backgroundColor: '#EFF6FF', color: '#2563EB',
+                        backgroundColor: 'var(--m-info-bg)', color: 'var(--m-info)',
                       }}>
                         {PERMISOS_DISPONIBLES.find(p => p.id === perm)?.label || perm}
                       </span>
                     ))
                   ) : (
-                    <span style={{ fontSize: '0.68rem', color: '#9CA3AF', fontStyle: 'italic' }}>Sin permisos</span>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)', fontStyle: 'italic' }}>Sin permisos</span>
                   )}
                 </div>
               </div>
@@ -217,7 +217,7 @@ export function APIKeysView({ onNavigate }: Props) {
         </div>
 
         {apiKeys.length === 0 && !loading && (
-          <div style={{ textAlign: 'center', padding: '48px 0', color: '#9CA3AF' }}>
+          <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--m-text-muted)' }}>
             <p style={{ fontSize: '2rem', margin: '0 0 8px' }}>🔑</p>
             <p style={{ fontWeight: '600' }}>No hay API keys creadas</p>
           </div>
@@ -232,31 +232,31 @@ export function APIKeysView({ onNavigate }: Props) {
           zIndex: 1000,
         }}>
           <div style={{
-            backgroundColor: '#fff', borderRadius: 12, padding: '24px',
+            backgroundColor: 'var(--m-surface)', borderRadius: 12, padding: '24px',
             width: '90%', maxWidth: 500, maxHeight: '90vh', overflowY: 'auto',
           }}>
             {createdKey ? (
               <>
-                <div style={{ marginBottom: 16, padding: '12px', backgroundColor: '#FEF3C7', borderRadius: 8, border: '1.5px solid #F59E0B' }}>
+                <div style={{ marginBottom: 16, padding: '12px', backgroundColor: 'var(--m-warning-bg)', borderRadius: 8, border: '1.5px solid #F59E0B' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
                     <AlertTriangle size={16} color="#F59E0B" />
-                    <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#92400E' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--m-warning-text)' }}>
                       ¡Importante! Esta key solo se mostrará UNA VEZ
                     </span>
                   </div>
-                  <p style={{ margin: 0, fontSize: '0.78rem', color: '#78350F' }}>
+                  <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--m-warning-text)' }}>
                     Copiá la key ahora. No podrás verla de nuevo después de cerrar este modal.
                   </p>
                 </div>
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 6 }}>
+                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 6 }}>
                     Tu API Key
                   </label>
                   <div style={{ display: 'flex', gap: 6 }}>
                     <code style={{
-                      flex: 1, padding: '10px 12px', borderRadius: 8, backgroundColor: '#F9FAFB',
+                      flex: 1, padding: '10px 12px', borderRadius: 8, backgroundColor: 'var(--m-surface-2)',
                       border: '1.5px solid #E5E7EB', fontSize: '0.85rem', fontFamily: 'monospace',
-                      color: '#374151', wordBreak: 'break-all',
+                      color: 'var(--m-text-secondary)', wordBreak: 'break-all',
                     }}>
                       {createdKey}
                     </code>
@@ -264,7 +264,7 @@ export function APIKeysView({ onNavigate }: Props) {
                       onClick={() => handleCopy(createdKey, 'new')}
                       style={{
                         padding: '10px 12px', borderRadius: 8, border: '1px solid #E5E7EB',
-                        backgroundColor: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                        backgroundColor: 'var(--m-surface)', cursor: 'pointer', display: 'flex', alignItems: 'center',
                       }}
                     >
                       {copiedId === 'new' ? <Check size={16} color="#10B981" /> : <Copy size={16} />}
@@ -278,7 +278,7 @@ export function APIKeysView({ onNavigate }: Props) {
                   }}
                   style={{
                     width: '100%', padding: '10px', borderRadius: 8,
-                    backgroundColor: ORANGE, color: '#fff', border: 'none',
+                    backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none',
                     fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer',
                   }}
                 >
@@ -287,11 +287,11 @@ export function APIKeysView({ onNavigate }: Props) {
               </>
             ) : (
               <>
-                <h3 style={{ margin: '0 0 20px', fontSize: '1rem', fontWeight: '800', color: '#111827' }}>
+                <h3 style={{ margin: '0 0 20px', fontSize: '1rem', fontWeight: '800', color: 'var(--m-text)' }}>
                   Nueva API Key
                 </h3>
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 6 }}>
+                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 6 }}>
                     Nombre *
                   </label>
                   <input
@@ -308,7 +308,7 @@ export function APIKeysView({ onNavigate }: Props) {
                   />
                 </div>
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 6 }}>
+                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 6 }}>
                     Descripción
                   </label>
                   <input
@@ -325,7 +325,7 @@ export function APIKeysView({ onNavigate }: Props) {
                   />
                 </div>
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 8 }}>
+                  <label style={{ fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 8 }}>
                     Permisos
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -343,7 +343,7 @@ export function APIKeysView({ onNavigate }: Props) {
                           }}
                           style={{ cursor: 'pointer' }}
                         />
-                        <span style={{ fontSize: '0.8rem', color: '#374151' }}>{perm.label}</span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--m-text-secondary)' }}>{perm.label}</span>
                       </label>
                     ))}
                   </div>
@@ -354,8 +354,8 @@ export function APIKeysView({ onNavigate }: Props) {
                     disabled={!newKey.nombre.trim()}
                     style={{
                       flex: 1, padding: '10px', borderRadius: 8,
-                      backgroundColor: newKey.nombre.trim() ? ORANGE : '#E5E7EB',
-                      color: newKey.nombre.trim() ? '#fff' : '#9CA3AF',
+                      backgroundColor: newKey.nombre.trim() ? ORANGE : 'var(--m-border)',
+                      color: newKey.nombre.trim() ? '#fff' : 'var(--m-text-muted)',
                       border: 'none', fontSize: '0.85rem', fontWeight: '700',
                       cursor: newKey.nombre.trim() ? 'pointer' : 'not-allowed',
                     }}
@@ -366,7 +366,7 @@ export function APIKeysView({ onNavigate }: Props) {
                     onClick={() => setShowModal(false)}
                     style={{
                       padding: '10px 16px', borderRadius: 8, border: '1px solid #E5E7EB',
-                      backgroundColor: '#fff', color: '#6B7280', fontSize: '0.85rem', fontWeight: '600',
+                      backgroundColor: 'var(--m-surface)', color: 'var(--m-text-muted)', fontSize: '0.85rem', fontWeight: '600',
                       cursor: 'pointer',
                     }}
                   >

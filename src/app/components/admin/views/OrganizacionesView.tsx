@@ -23,8 +23,8 @@ const INDUSTRIAS = [
 ];
 
 const colorPorTipo: Record<string, string> = {
-  empresa: '#3B82F6', cooperativa: '#10B981', fundacion: '#8B5CF6',
-  gobierno: '#F59E0B', otro: '#6B7280',
+  empresa: 'var(--m-info)', cooperativa: 'var(--m-success)', fundacion: 'var(--m-purple)',
+  gobierno: 'var(--m-warning)', otro: 'var(--m-text-muted)',
 };
 
 const EMPTY: Omit<Organizacion, 'id' | 'created_at'> = {
@@ -157,16 +157,16 @@ export function OrganizacionesView() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       {/* Grid */}
       <div style={{ flex: 1, overflow: 'auto', padding: '20px 28px' }}>
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#9CA3AF' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: 'var(--m-text-muted)' }}>
             <RefreshCw size={20} style={{ animation: 'spin 1s linear infinite', marginRight: 8 }} /> Cargando organizaciones...
           </div>
         ) : orgs.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
             <Building2 size={48} style={{ marginBottom: 12, opacity: 0.3 }} />
             <p style={{ fontSize: '1rem', fontWeight: 600 }}>No hay organizaciones registradas</p>
             <p style={{ fontSize: '0.875rem', marginTop: 4 }}>Creá la primera usando el botón "+ Nueva Organización"</p>
@@ -177,7 +177,7 @@ export function OrganizacionesView() {
               const tipoColor = colorPorTipo[o.tipo ?? ''] ?? '#6B7280';
               return (
                 <div key={o.id}
-                  style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', transition: 'box-shadow 0.2s' }}
+                  style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', transition: 'box-shadow 0.2s' }}
                   onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = ''}
                 >
@@ -189,7 +189,7 @@ export function OrganizacionesView() {
                           <Building2 size={20} color={tipoColor} />
                         </div>
                         <div>
-                          <p style={{ margin: 0, fontWeight: 700, color: '#111827', fontSize: '0.9rem' }}>{o.nombre}</p>
+                          <p style={{ margin: 0, fontWeight: 700, color: 'var(--m-text)', fontSize: '0.9rem' }}>{o.nombre}</p>
                           {o.tipo && (
                             <span style={{ fontSize: '0.72rem', fontWeight: 600, color: tipoColor, backgroundColor: tipoColor + '15', padding: '2px 7px', borderRadius: 20 }}>
                               {o.tipo.charAt(0).toUpperCase() + o.tipo.slice(1)}
@@ -197,26 +197,26 @@ export function OrganizacionesView() {
                           )}
                         </div>
                       </div>
-                      <span style={{ fontSize: '0.72rem', fontWeight: 600, color: o.activo ? '#10B981' : '#EF4444', backgroundColor: o.activo ? '#D1FAE5' : '#FEE2E2', padding: '2px 8px', borderRadius: 20 }}>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 600, color: o.activo ? '#10B981' : 'var(--m-danger)', backgroundColor: o.activo ? '#D1FAE5' : 'var(--m-danger-bg)', padding: '2px 8px', borderRadius: 20 }}>
                         {o.activo ? 'Activa' : 'Inactiva'}
                       </span>
                     </div>
 
                     {o.industria && (
-                      <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: '#6B7280' }}>🏭 {o.industria}</p>
+                      <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>🏭 {o.industria}</p>
                     )}
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 12 }}>
-                      {o.email    && <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#6B7280' }}><Mail  size={13} />{o.email}</div>}
-                      {o.telefono && <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#6B7280' }}><Phone size={13} />{o.telefono}</div>}
+                      {o.email    && <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: 'var(--m-text-muted)' }}><Mail  size={13} />{o.email}</div>}
+                      {o.telefono && <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: 'var(--m-text-muted)' }}><Phone size={13} />{o.telefono}</div>}
                       {o.sitio_web && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#3B82F6' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: 'var(--m-info)' }}>
                           <Globe size={13} />
-                          <a href={o.sitio_web} target="_blank" rel="noopener noreferrer" style={{ color: '#3B82F6', textDecoration: 'none' }}>{o.sitio_web}</a>
+                          <a href={o.sitio_web} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--m-info)', textDecoration: 'none' }}>{o.sitio_web}</a>
                         </div>
                       )}
                       {o.direccion?.ciudad && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#6B7280' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>
                           <MapPin size={13} />{o.direccion.ciudad}{o.direccion.pais ? `, ${o.direccion.pais}` : ''}
                         </div>
                       )}
@@ -225,13 +225,13 @@ export function OrganizacionesView() {
                     <div style={{ display: 'flex', gap: 8, borderTop: '1px solid #F3F4F6', paddingTop: 12 }}>
                       <button
                         onClick={() => { setEditando(o); setDrawerOpen(true); }}
-                        style={{ flex: 1, padding: '7px', borderRadius: 7, border: '1.5px solid #E5E7EB', background: '#fff', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, color: '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                        style={{ flex: 1, padding: '7px', borderRadius: 7, border: '1.5px solid #E5E7EB', background: 'var(--m-surface)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, color: 'var(--m-text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
                         <Edit2 size={13} /> Editar
                       </button>
                       <button
                         onClick={() => handleDelete(o.id)}
                         disabled={deletingId === o.id}
-                        style={{ padding: '7px 12px', borderRadius: 7, border: '1.5px solid #FEE2E2', background: '#FFF5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#EF4444' }}>
+                        style={{ padding: '7px 12px', borderRadius: 7, border: '1.5px solid #FEE2E2', background: 'var(--m-danger-bg)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: 'var(--m-danger)' }}>
                         <Trash2 size={13} />
                       </button>
                     </div>

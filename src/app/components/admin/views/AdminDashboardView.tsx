@@ -19,11 +19,11 @@ interface Props { onNavigate: (s: MainSection) => void; }
 
 /* ── Data de ejemplo ── */
 const ROLES_COLORS: Record<string, string> = {
-  SuperAdmin: '#7C3AED',
-  Administrador: '#FF6835',
-  Editor: '#3B82F6',
-  Colaborador: '#10B981',
-  Cliente: '#6B7280',
+  SuperAdmin: 'var(--m-purple)',
+  Administrador: 'var(--m-primary)',
+  Editor: 'var(--m-info)',
+  Colaborador: 'var(--m-success)',
+  Cliente: 'var(--m-text-muted)',
 };
 
 const users = [
@@ -72,32 +72,32 @@ const roleDist = [
 function Stat({ icon: Icon, label, value, change, color }: { icon: React.ElementType; label: string; value: string; change: string; color: string }) {
   const up = change.startsWith('+');
   return (
-    <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '20px' }}>
+    <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', padding: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
         <div style={{ width: 38, height: 38, borderRadius: 10, backgroundColor: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Icon size={18} color={color} strokeWidth={2.2} />
         </div>
-        <span style={{ fontSize: '0.74rem', fontWeight: '700', color: up ? '#10B981' : '#EF4444', backgroundColor: up ? '#D1FAE5' : '#FEE2E2', padding: '3px 8px', borderRadius: '6px' }}>
+        <span style={{ fontSize: '0.74rem', fontWeight: '700', color: up ? '#10B981' : 'var(--m-danger)', backgroundColor: up ? '#D1FAE5' : 'var(--m-danger-bg)', padding: '3px 8px', borderRadius: '6px' }}>
           {change}
         </span>
       </div>
-      <p style={{ margin: '0 0 2px', fontSize: '0.75rem', color: '#6B7280' }}>{label}</p>
-      <p style={{ margin: 0, fontSize: '1.6rem', fontWeight: '800', color: '#111827', lineHeight: 1 }}>{value}</p>
+      <p style={{ margin: '0 0 2px', fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>{label}</p>
+      <p style={{ margin: 0, fontSize: '1.6rem', fontWeight: '800', color: 'var(--m-text)', lineHeight: 1 }}>{value}</p>
     </div>
   );
 }
 
 function ServiceRow({ svc }: { svc: typeof services[0] }) {
-  const color = svc.status === 'ok' ? '#10B981' : svc.status === 'warn' ? '#F59E0B' : '#EF4444';
-  const bg    = svc.status === 'ok' ? '#D1FAE5' : svc.status === 'warn' ? '#FEF3C7' : '#FEE2E2';
+  const color = svc.status === 'ok' ? '#10B981' : svc.status === 'warn' ? '#F59E0B' : 'var(--m-danger)';
+  const bg    = svc.status === 'ok' ? '#D1FAE5' : svc.status === 'warn' ? '#FEF3C7' : 'var(--m-danger-bg)';
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid #F3F4F6' }}>
       <div style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         <svc.icon size={15} color={color} />
       </div>
       <div style={{ flex: 1 }}>
-        <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: '#111827' }}>{svc.name}</p>
-        <p style={{ margin: 0, fontSize: '0.72rem', color: '#9CA3AF' }}>Uptime {svc.uptime} · {svc.latency}</p>
+        <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '600', color: 'var(--m-text)' }}>{svc.name}</p>
+        <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>Uptime {svc.uptime} · {svc.latency}</p>
       </div>
       <span style={{ fontSize: '0.7rem', fontWeight: '700', color, backgroundColor: bg, padding: '3px 9px', borderRadius: '6px' }}>
         {svc.status === 'ok' ? 'Operativo' : svc.status === 'warn' ? 'Degradado' : 'Error'}
@@ -120,7 +120,7 @@ export function AdminDashboardView({ onNavigate }: Props) {
   const maxCount   = Math.max(...roleDist.map(r => r.count));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       <OrangeHeader
         icon={Shield}
@@ -162,10 +162,10 @@ export function AdminDashboardView({ onNavigate }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
 
           {/* Usuarios por rol */}
-          <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>Distribución por Rol</h3>
-              <span style={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: '600' }}>{totalUsers} usuarios</span>
+              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>Distribución por Rol</h3>
+              <span style={{ fontSize: '0.75rem', color: 'var(--m-text-muted)', fontWeight: '600' }}>{totalUsers} usuarios</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {roleDist.map(r => (
@@ -173,11 +173,11 @@ export function AdminDashboardView({ onNavigate }: Props) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                       <div style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: ROLES_COLORS[r.role] }} />
-                      <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#374151' }}>{r.role}</span>
+                      <span style={{ fontSize: '0.8rem', fontWeight: '600', color: 'var(--m-text-secondary)' }}>{r.role}</span>
                     </div>
-                    <span style={{ fontSize: '0.78rem', color: '#6B7280', fontWeight: '600' }}>{r.count}</span>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--m-text-muted)', fontWeight: '600' }}>{r.count}</span>
                   </div>
-                  <div style={{ height: 6, backgroundColor: '#F3F4F6', borderRadius: 3, overflow: 'hidden' }}>
+                  <div style={{ height: 6, backgroundColor: 'var(--m-surface-2)', borderRadius: 3, overflow: 'hidden' }}>
                     <div style={{ width: `${(r.count / maxCount) * 100}%`, height: '100%', backgroundColor: ROLES_COLORS[r.role], borderRadius: 3, transition: 'width 0.5s ease' }} />
                   </div>
                 </div>
@@ -186,10 +186,10 @@ export function AdminDashboardView({ onNavigate }: Props) {
           </div>
 
           {/* Estado de servicios */}
-          <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>Estado de Servicios</h3>
-              <span style={{ fontSize: '0.72rem', fontWeight: '700', color: '#10B981', backgroundColor: '#D1FAE5', padding: '3px 9px', borderRadius: 6 }}>
+              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>Estado de Servicios</h3>
+              <span style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-success)', backgroundColor: 'var(--m-success-bg)', padding: '3px 9px', borderRadius: 6 }}>
                 5/6 OK
               </span>
             </div>
@@ -203,9 +203,9 @@ export function AdminDashboardView({ onNavigate }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
 
           {/* Lista de usuarios */}
-          <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>Usuarios Recientes</h3>
+              <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>Usuarios Recientes</h3>
               <button
                 style={{ fontSize: '0.75rem', color: ORANGE, fontWeight: '700', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3 }}
                 onClick={() => onNavigate('personas')}
@@ -215,7 +215,7 @@ export function AdminDashboardView({ onNavigate }: Props) {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {users.map(u => {
-                const statusColor = u.status === 'online' ? '#10B981' : u.status === 'away' ? '#F59E0B' : '#D1D5DB';
+                const statusColor = u.status === 'online' ? '#10B981' : u.status === 'away' ? '#F59E0B' : 'var(--m-border)';
                 const initials = u.name.split(' ').map(n => n[0]).join('').slice(0, 2);
                 return (
                   <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid #F3F4F6' }}>
@@ -226,14 +226,14 @@ export function AdminDashboardView({ onNavigate }: Props) {
                       <div style={{ position: 'absolute', bottom: 0, right: 0, width: 9, height: 9, borderRadius: '50%', backgroundColor: statusColor, border: '2px solid #fff' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: '600', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.name}</p>
-                      <p style={{ margin: 0, fontSize: '0.7rem', color: '#9CA3AF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.email}</p>
+                      <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: '600', color: 'var(--m-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.name}</p>
+                      <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--m-text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{u.email}</p>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
                       <span style={{ display: 'inline-block', fontSize: '0.65rem', fontWeight: '700', color: ROLES_COLORS[u.role], backgroundColor: `${ROLES_COLORS[u.role]}15`, padding: '2px 7px', borderRadius: 5 }}>
                         {u.role}
                       </span>
-                      <p style={{ margin: '3px 0 0', fontSize: '0.65rem', color: '#D1D5DB' }}>{u.last}</p>
+                      <p style={{ margin: '3px 0 0', fontSize: '0.65rem', color: 'var(--m-border)' }}>{u.last}</p>
                     </div>
                   </div>
                 );
@@ -242,18 +242,18 @@ export function AdminDashboardView({ onNavigate }: Props) {
           </div>
 
           {/* Alertas */}
-          <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>Alertas del Sistema</h3>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>Alertas del Sistema</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {alerts.map((a, i) => {
-                const color = a.level === 'warn' ? '#F59E0B' : a.level === 'ok' ? '#10B981' : '#6B7280';
-                const bg    = a.level === 'warn' ? '#FFFBEB' : a.level === 'ok' ? '#F0FDF4' : '#F9FAFB';
+                const color = a.level === 'warn' ? '#F59E0B' : a.level === 'ok' ? '#10B981' : 'var(--m-text-muted)';
+                const bg    = a.level === 'warn' ? '#FFFBEB' : a.level === 'ok' ? '#F0FDF4' : 'var(--m-surface-2)';
                 return (
                   <div key={i} style={{ display: 'flex', gap: 10, padding: '10px', borderRadius: 10, backgroundColor: bg }}>
                     <a.icon size={15} color={color} style={{ flexShrink: 0, marginTop: 1 }} />
                     <div>
-                      <p style={{ margin: '0 0 2px', fontSize: '0.76rem', color: '#374151', lineHeight: 1.4 }}>{a.msg}</p>
-                      <p style={{ margin: 0, fontSize: '0.67rem', color: '#9CA3AF' }}>{a.time}</p>
+                      <p style={{ margin: '0 0 2px', fontSize: '0.76rem', color: 'var(--m-text-secondary)', lineHeight: 1.4 }}>{a.msg}</p>
+                      <p style={{ margin: 0, fontSize: '0.67rem', color: 'var(--m-text-muted)' }}>{a.time}</p>
                     </div>
                   </div>
                 );
@@ -262,8 +262,8 @@ export function AdminDashboardView({ onNavigate }: Props) {
           </div>
 
           {/* Actividad de admin */}
-          <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>Actividad de Admin</h3>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '22px 24px' }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>Actividad de Admin</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {adminActivity.map((a, i) => (
                 <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
@@ -271,8 +271,8 @@ export function AdminDashboardView({ onNavigate }: Props) {
                     <a.icon size={13} color={ORANGE} />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ margin: '0 0 2px', fontSize: '0.77rem', color: '#374151', lineHeight: 1.3 }}>{a.text}</p>
-                    <p style={{ margin: 0, fontSize: '0.67rem', color: '#9CA3AF' }}>{a.who} · {a.time}</p>
+                    <p style={{ margin: '0 0 2px', fontSize: '0.77rem', color: 'var(--m-text-secondary)', lineHeight: 1.3 }}>{a.text}</p>
+                    <p style={{ margin: 0, fontSize: '0.67rem', color: 'var(--m-text-muted)' }}>{a.who} · {a.time}</p>
                   </div>
                 </div>
               ))}
@@ -281,18 +281,18 @@ export function AdminDashboardView({ onNavigate }: Props) {
         </div>
 
         {/* ── Accesos rápidos de admin ── */}
-        <div style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
-          <p style={{ margin: '0 0 14px', fontSize: '0.75rem', fontWeight: '800', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+        <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
+          <p style={{ margin: '0 0 14px', fontSize: '0.75rem', fontWeight: '800', color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
             Acciones rápidas de administración
           </p>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             {[
-              { label: 'Gestionar Usuarios',   icon: Users,     color: '#7C3AED', section: 'personas'      as MainSection },
+              { label: 'Gestionar Usuarios',   icon: Users,     color: 'var(--m-purple)', section: 'personas'      as MainSection },
               { label: 'Config. de Vistas',    icon: Eye,       color: ORANGE,    section: 'config-vistas' as MainSection },
-              { label: 'Logs del Sistema',     icon: BarChart2, color: '#3B82F6', section: 'auditoria-logs'as MainSection },
-              { label: 'Health Monitor',       icon: Activity,  color: '#10B981', section: 'auditoria-health'as MainSection},
-              { label: 'Integraciones',        icon: Zap,       color: '#14B8A6', section: 'integraciones' as MainSection },
-              { label: 'Documentación',        icon: Server,    color: '#6B7280', section: 'documentacion' as MainSection },
+              { label: 'Logs del Sistema',     icon: BarChart2, color: 'var(--m-info)', section: 'auditoria-logs'as MainSection },
+              { label: 'Health Monitor',       icon: Activity,  color: 'var(--m-success)', section: 'auditoria-health'as MainSection},
+              { label: 'Integraciones',        icon: Zap,       color: 'var(--m-success)', section: 'integraciones' as MainSection },
+              { label: 'Documentación',        icon: Server,    color: 'var(--m-text-muted)', section: 'documentacion' as MainSection },
             ].map(btn => (
               <button
                 key={btn.label}

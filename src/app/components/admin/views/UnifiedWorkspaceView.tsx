@@ -25,7 +25,7 @@ interface Note { id: string; content: string; color: string; createdAt: Date; }
 interface Message { id: string; author: string; avatar: string; text: string; time: Date; }
 
 const NOTE_COLORS = ['#FEF9C3', '#DCFCE7', '#DBEAFE', '#FCE7F3', '#FEF3C7', '#F3E8FF'];
-const PRIORITY_COLOR = { low: '#22C55E', medium: '#F59E0B', high: '#EF4444' } as const;
+const PRIORITY_COLOR = { low: '#22C55E', medium: 'var(--m-warning)', high: 'var(--m-danger)' } as const;
 const PRIORITY_LABEL = { low: 'Baja', medium: 'Media', high: 'Alta' } as const;
 
 const DAYS_ES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
@@ -63,7 +63,7 @@ const CALENDAR_EVENTS: { date: number; title: string; color: string }[] = [
   { date: 24, title: 'Reunión cliente',       color: META_BLUE    },
   { date: 24, title: 'Demo Auth módulo',      color: ORANGE       },
   { date: 28, title: 'Sprint review',         color: '#22C55E'    },
-  { date: 3,  title: 'Deploy producción',     color: '#8B5CF6'    },
+  { date: 3,  title: 'Deploy producción',     color: 'var(--m-purple)'    },
 ];
 
 export function UnifiedWorkspaceView({ onNavigate }: Props) {
@@ -145,16 +145,16 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
   ] as const;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       {/* Top Bar */}
       <div style={{
-        height: '56px', flexShrink: 0, backgroundColor: '#fff',
+        height: '56px', flexShrink: 0, backgroundColor: 'var(--m-surface)',
         borderBottom: '1px solid #E5E7EB',
         display: 'flex', alignItems: 'center', padding: '0 28px', gap: '14px',
       }}>
         <LayoutGrid size={20} color={ORANGE} />
-        <h1 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#111' }}>Unified Workspace</h1>
+        <h1 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: 'var(--m-text)' }}>Unified Workspace</h1>
         <span style={{ fontSize: '0.7rem', backgroundColor: `${ORANGE}15`, color: ORANGE, padding: '2px 8px', borderRadius: '20px', fontWeight: '700' }}>
           5 herramientas
         </span>
@@ -164,7 +164,7 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
 
         {/* ── Left sidebar ── */}
         <div style={{
-          width: '200px', flexShrink: 0, backgroundColor: '#fff',
+          width: '200px', flexShrink: 0, backgroundColor: 'var(--m-surface)',
           borderRight: '1px solid #E5E7EB', padding: '16px 10px',
           display: 'flex', flexDirection: 'column', gap: '4px',
         }}>
@@ -175,7 +175,7 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                 width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
                 padding: '9px 12px', borderRadius: '9px', border: 'none', cursor: 'pointer',
                 backgroundColor: isActive ? `${ORANGE}12` : 'transparent',
-                color: isActive ? ORANGE : '#6B7280',
+                color: isActive ? ORANGE : 'var(--m-text-muted)',
                 fontSize: '0.83rem', fontWeight: isActive ? '700' : '500',
                 transition: 'all 0.12s',
               }}>
@@ -194,23 +194,23 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
             activeDoc ? (
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px', gap: '14px', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <button onClick={() => setActiveDoc(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', display: 'flex' }}>
+                  <button onClick={() => setActiveDoc(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-text-muted)', display: 'flex' }}>
                     <ChevronLeft size={20} />
                   </button>
                   <input value={editTitle} onChange={e => setEditTitle(e.target.value)}
-                    style={{ flex: 1, fontSize: '1.2rem', fontWeight: '800', color: '#111', border: 'none', outline: 'none', backgroundColor: 'transparent' }} />
+                    style={{ flex: 1, fontSize: '1.2rem', fontWeight: '800', color: 'var(--m-text)', border: 'none', outline: 'none', backgroundColor: 'transparent' }} />
                   <button onClick={saveDoc} style={{
                     display: 'flex', alignItems: 'center', gap: '6px',
                     padding: '7px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                    backgroundColor: ORANGE, color: '#fff', fontSize: '0.8rem', fontWeight: '700',
+                    backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '0.8rem', fontWeight: '700',
                   }}>
                     <Check size={13} /> Guardar
                   </button>
                 </div>
                 {/* Toolbar */}
-                <div style={{ display: 'flex', gap: '4px', padding: '6px 8px', backgroundColor: '#F9FAFB', borderRadius: '8px', border: '1px solid #E5E7EB' }}>
+                <div style={{ display: 'flex', gap: '4px', padding: '6px 8px', backgroundColor: 'var(--m-surface-2)', borderRadius: '8px', border: '1px solid #E5E7EB' }}>
                   {[Bold, Italic, List, Hash].map((Icon, i) => (
-                    <button key={i} style={{ padding: '5px 8px', borderRadius: '5px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: '#6B7280' }}>
+                    <button key={i} style={{ padding: '5px 8px', borderRadius: '5px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: 'var(--m-text-muted)' }}>
                       <Icon size={14} />
                     </button>
                   ))}
@@ -220,18 +220,18 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                   style={{
                     flex: 1, minHeight: '400px', padding: '16px', borderRadius: '10px',
                     border: '1.5px solid #E5E7EB', fontSize: '0.88rem', lineHeight: '1.7',
-                    color: '#374151', resize: 'none', outline: 'none', fontFamily: 'inherit',
+                    color: 'var(--m-text-secondary)', resize: 'none', outline: 'none', fontFamily: 'inherit',
                   }} />
               </div>
             ) : (
               <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '18px' }}>
-                  <h2 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#111' }}>Documentos ({docs.length})</h2>
+                  <h2 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>Documentos ({docs.length})</h2>
                   <div style={{ flex: 1 }} />
                   <button onClick={newDoc} style={{
                     display: 'flex', alignItems: 'center', gap: '6px',
                     padding: '7px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                    backgroundColor: ORANGE, color: '#fff', fontSize: '0.8rem', fontWeight: '700',
+                    backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '0.8rem', fontWeight: '700',
                   }}>
                     <Plus size={13} /> Nuevo doc
                   </button>
@@ -239,14 +239,14 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {docs.map(doc => (
                     <div key={doc.id} style={{
-                      backgroundColor: '#fff', borderRadius: '10px', padding: '14px 16px',
+                      backgroundColor: 'var(--m-surface)', borderRadius: '10px', padding: '14px 16px',
                       border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '12px',
                       cursor: 'pointer',
                     }} onClick={() => openDoc(doc)}>
                       <FileText size={18} color={ORANGE} />
                       <div style={{ flex: 1 }}>
-                        <p style={{ margin: 0, fontWeight: '700', fontSize: '0.85rem', color: '#111' }}>{doc.title}</p>
-                        <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#9CA3AF' }}>
+                        <p style={{ margin: 0, fontWeight: '700', fontSize: '0.85rem', color: 'var(--m-text)' }}>{doc.title}</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
                           Editado {doc.updatedAt.toLocaleDateString('es-UY')} · {doc.content.slice(0, 60)}...
                         </p>
                       </div>
@@ -271,7 +271,7 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                   style={{ flex: 1, padding: '9px 14px', borderRadius: '9px', border: '1.5px solid #E5E7EB', fontSize: '0.85rem', outline: 'none' }} />
                 <button onClick={addTask} style={{
                   padding: '9px 16px', borderRadius: '9px', border: 'none', cursor: 'pointer',
-                  backgroundColor: ORANGE, color: '#fff', fontSize: '0.82rem', fontWeight: '700',
+                  backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '0.82rem', fontWeight: '700',
                 }}>
                   <Plus size={15} />
                 </button>
@@ -280,26 +280,26 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
               {/* Kanban columns */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px' }}>
                 {([
-                  { status: 'todo',  label: 'Por hacer',    color: '#6B7280', bg: '#F9FAFB' },
-                  { status: 'doing', label: 'En progreso',  color: '#F59E0B', bg: '#FFFBEB' },
-                  { status: 'done',  label: 'Completado',   color: '#22C55E', bg: '#F0FDF4' },
+                  { status: 'todo',  label: 'Por hacer',    color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)' },
+                  { status: 'doing', label: 'En progreso',  color: 'var(--m-warning)', bg: 'var(--m-warning-bg)' },
+                  { status: 'done',  label: 'Completado',   color: '#22C55E', bg: 'var(--m-success-bg)' },
                 ] as const).map(col => {
                   const colTasks = tasks.filter(t => t.status === col.status);
                   return (
                     <div key={col.status}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: col.color }} />
-                        <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#374151' }}>{col.label}</span>
-                        <span style={{ fontSize: '0.72rem', color: '#9CA3AF', backgroundColor: '#F3F4F6', padding: '1px 7px', borderRadius: '20px' }}>{colTasks.length}</span>
+                        <span style={{ fontSize: '0.78rem', fontWeight: '700', color: 'var(--m-text-secondary)' }}>{col.label}</span>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)', backgroundColor: 'var(--m-surface-2)', padding: '1px 7px', borderRadius: '20px' }}>{colTasks.length}</span>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '120px', backgroundColor: col.bg, borderRadius: '12px', padding: '10px' }}>
                         {colTasks.map(task => (
-                          <div key={task.id} style={{ backgroundColor: '#fff', borderRadius: '9px', padding: '10px 12px', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                          <div key={task.id} style={{ backgroundColor: 'var(--m-surface)', borderRadius: '9px', padding: '10px 12px', border: '1px solid #E5E7EB', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                               <button onClick={() => moveTask(task.id, col.status === 'done' ? 'todo' : col.status === 'todo' ? 'doing' : 'done')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: '1px', flexShrink: 0 }}>
                                 {task.status === 'done' ? <CheckSquare size={14} color="#22C55E" /> : <Circle size={14} color="#D1D5DB" />}
                               </button>
-                              <p style={{ margin: 0, flex: 1, fontSize: '0.8rem', fontWeight: '600', color: task.status === 'done' ? '#9CA3AF' : '#111', textDecoration: task.status === 'done' ? 'line-through' : 'none', lineHeight: '1.3' }}>
+                              <p style={{ margin: 0, flex: 1, fontSize: '0.8rem', fontWeight: '600', color: task.status === 'done' ? '#9CA3AF' : 'var(--m-text)', textDecoration: task.status === 'done' ? 'line-through' : 'none', lineHeight: '1.3' }}>
                                 {task.title}
                               </p>
                               <button onClick={() => deleteTask(task.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}>
@@ -314,12 +314,12 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                               }}>
                                 {PRIORITY_LABEL[task.priority]}
                               </span>
-                              <span style={{ fontSize: '0.65rem', color: '#9CA3AF', marginLeft: 'auto' }}>{task.assignee}</span>
+                              <span style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)', marginLeft: 'auto' }}>{task.assignee}</span>
                             </div>
                           </div>
                         ))}
                         {colTasks.length === 0 && (
-                          <p style={{ margin: 0, fontSize: '0.75rem', color: '#D1D5DB', textAlign: 'center', paddingTop: '20px' }}>Sin tareas</p>
+                          <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--m-border)', textAlign: 'center', paddingTop: '20px' }}>Sin tareas</p>
                         )}
                       </div>
                     </div>
@@ -333,11 +333,11 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
           {section === 'notas' && (
             <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
               {/* Add note */}
-              <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '16px', border: '1px solid #E5E7EB', marginBottom: '20px' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', padding: '16px', border: '1px solid #E5E7EB', marginBottom: '20px' }}>
                 <textarea value={newNote} onChange={e => setNewNote(e.target.value)}
                   placeholder="Escribí una nota..."
                   rows={3}
-                  style={{ width: '100%', border: 'none', outline: 'none', fontSize: '0.85rem', resize: 'none', fontFamily: 'inherit', color: '#374151', boxSizing: 'border-box' }} />
+                  style={{ width: '100%', border: 'none', outline: 'none', fontSize: '0.85rem', resize: 'none', fontFamily: 'inherit', color: 'var(--m-text-secondary)', boxSizing: 'border-box' }} />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px' }}>
                   {NOTE_COLORS.map(c => (
                     <button key={c} onClick={() => setNoteColor(c)} style={{
@@ -348,7 +348,7 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                   <div style={{ flex: 1 }} />
                   <button onClick={addNote} style={{
                     padding: '6px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                    backgroundColor: ORANGE, color: '#fff', fontSize: '0.8rem', fontWeight: '700',
+                    backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '0.8rem', fontWeight: '700',
                   }}>
                     Agregar
                   </button>
@@ -362,9 +362,9 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                     border: '1px solid rgba(0,0,0,0.06)', minHeight: '120px',
                     display: 'flex', flexDirection: 'column', position: 'relative',
                   }}>
-                    <p style={{ margin: 0, flex: 1, fontSize: '0.82rem', color: '#374151', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>{note.content}</p>
+                    <p style={{ margin: 0, flex: 1, fontSize: '0.82rem', color: 'var(--m-text-secondary)', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>{note.content}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-                      <span style={{ fontSize: '0.68rem', color: '#9CA3AF' }}>{note.createdAt.toLocaleDateString('es-UY')}</span>
+                      <span style={{ fontSize: '0.68rem', color: 'var(--m-text-muted)' }}>{note.createdAt.toLocaleDateString('es-UY')}</span>
                       <button onClick={() => deleteNote(note.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}>
                         <Trash2 size={13} color="#9CA3AF" />
                       </button>
@@ -378,14 +378,14 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
           {/* ─── CALENDARIO ─── */}
           {section === 'calendario' && (
             <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
-              <div style={{ backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '14px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #E5E7EB' }}>
                   <button onClick={() => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y - 1); } else setCalMonth(m => m - 1); }}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
                     <ChevronLeft size={18} color="#374151" />
                   </button>
-                  <h2 style={{ flex: 1, textAlign: 'center', margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#111' }}>
+                  <h2 style={{ flex: 1, textAlign: 'center', margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>
                     {MONTHS_ES[calMonth]} {calYear}
                   </h2>
                   <button onClick={() => { if (calMonth === 11) { setCalMonth(0); setCalYear(y => y + 1); } else setCalMonth(m => m + 1); }}
@@ -397,14 +397,14 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                 {/* Day headers */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid #F3F4F6' }}>
                   {DAYS_ES.map(d => (
-                    <div key={d} style={{ padding: '10px', textAlign: 'center', fontSize: '0.72rem', fontWeight: '700', color: '#9CA3AF' }}>{d}</div>
+                    <div key={d} style={{ padding: '10px', textAlign: 'center', fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-text-muted)' }}>{d}</div>
                   ))}
                 </div>
 
                 {/* Days grid */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
                   {Array.from({ length: firstDay }).map((_, i) => (
-                    <div key={`empty-${i}`} style={{ minHeight: '80px', borderRight: '1px solid #F9FAFB', borderBottom: '1px solid #F9FAFB', backgroundColor: '#FAFAFA' }} />
+                    <div key={`empty-${i}`} style={{ minHeight: '80px', borderRight: '1px solid #F9FAFB', borderBottom: '1px solid #F9FAFB', backgroundColor: 'var(--m-surface-2)' }} />
                   ))}
                   {Array.from({ length: daysInMonth }).map((_, i) => {
                     const day = i + 1;
@@ -413,13 +413,13 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                     return (
                       <div key={day} style={{
                         minHeight: '80px', padding: '8px', borderRight: '1px solid #F3F4F6', borderBottom: '1px solid #F3F4F6',
-                        backgroundColor: today ? `${ORANGE}05` : '#fff',
+                        backgroundColor: today ? `${ORANGE}05` : 'var(--m-surface)',
                       }}>
                         <div style={{
                           width: '26px', height: '26px', borderRadius: '50%', display: 'inline-flex',
                           alignItems: 'center', justifyContent: 'center',
                           backgroundColor: today ? ORANGE : 'transparent',
-                          color: today ? '#fff' : '#374151',
+                          color: today ? '#fff' : 'var(--m-text-secondary)',
                           fontSize: '0.8rem', fontWeight: today ? '700' : '400',
                           marginBottom: '4px',
                         }}>
@@ -427,7 +427,7 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                         </div>
                         {evs.map((ev, j) => (
                           <div key={j} style={{
-                            backgroundColor: ev.color, color: '#fff',
+                            backgroundColor: ev.color, color: 'var(--m-surface)',
                             fontSize: '0.65rem', fontWeight: '600',
                             padding: '2px 6px', borderRadius: '4px',
                             marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
@@ -447,10 +447,10 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
           {section === 'chat' && (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
               {/* Channel header */}
-              <div style={{ padding: '12px 20px', backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ padding: '12px 20px', backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Hash size={14} color="#6B7280" />
-                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#111' }}>general</span>
-                <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>· 4 miembros</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--m-text)' }}>general</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>· 4 miembros</span>
               </div>
 
               {/* Messages */}
@@ -462,7 +462,7 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                       {!isMe && (
                         <div style={{
                           width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
-                          backgroundColor: ORANGE, color: '#fff',
+                          backgroundColor: ORANGE, color: 'var(--m-surface)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           fontSize: '0.65rem', fontWeight: '700',
                         }}>
@@ -470,17 +470,17 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                         </div>
                       )}
                       <div style={{ maxWidth: '65%' }}>
-                        {!isMe && <p style={{ margin: '0 0 3px', fontSize: '0.72rem', color: '#6B7280', fontWeight: '600' }}>{msg.author}</p>}
+                        {!isMe && <p style={{ margin: '0 0 3px', fontSize: '0.72rem', color: 'var(--m-text-muted)', fontWeight: '600' }}>{msg.author}</p>}
                         <div style={{
                           padding: '9px 13px', borderRadius: isMe ? '14px 14px 4px 14px' : '4px 14px 14px 14px',
-                          backgroundColor: isMe ? ORANGE : '#fff',
+                          backgroundColor: isMe ? ORANGE : 'var(--m-surface)',
                           border: isMe ? 'none' : '1px solid #E5E7EB',
-                          color: isMe ? '#fff' : '#374151',
+                          color: isMe ? '#fff' : 'var(--m-text-secondary)',
                           fontSize: '0.83rem', lineHeight: '1.4',
                         }}>
                           {msg.text}
                         </div>
-                        <p style={{ margin: '3px 0 0', fontSize: '0.65rem', color: '#9CA3AF', textAlign: isMe ? 'right' : 'left' }}>
+                        <p style={{ margin: '3px 0 0', fontSize: '0.65rem', color: 'var(--m-text-muted)', textAlign: isMe ? 'right' : 'left' }}>
                           {msg.time.toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
@@ -491,7 +491,7 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
               </div>
 
               {/* Input */}
-              <div style={{ padding: '14px 20px', backgroundColor: '#fff', borderTop: '1px solid #E5E7EB', display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <div style={{ padding: '14px 20px', backgroundColor: 'var(--m-surface)', borderTop: '1px solid #E5E7EB', display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}><Paperclip size={16} color="#9CA3AF" /></button>
                 <input
                   value={chatInput}
@@ -506,8 +506,8 @@ export function UnifiedWorkspaceView({ onNavigate }: Props) {
                 <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}><Smile size={16} color="#9CA3AF" /></button>
                 <button onClick={sendMessage} disabled={!chatInput.trim()} style={{
                   width: '36px', height: '36px', borderRadius: '50%', border: 'none', cursor: 'pointer',
-                  backgroundColor: chatInput.trim() ? ORANGE : '#E5E7EB',
-                  color: chatInput.trim() ? '#fff' : '#9CA3AF',
+                  backgroundColor: chatInput.trim() ? ORANGE : 'var(--m-border)',
+                  color: chatInput.trim() ? '#fff' : 'var(--m-text-muted)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <Send size={15} />

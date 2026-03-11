@@ -148,32 +148,32 @@ function agruparPorPedido(envios: Envio[]): PedidoMadre[] {
 }
 
 const ESTADO_CFG: Record<EstadoEnvio, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  creado:      { label: 'Creado',      color: '#6B7280', bg: '#F3F4F6', icon: Package      },
-  despachado:  { label: 'Despachado',  color: '#2563EB', bg: '#EFF6FF', icon: Truck        },
-  en_transito: { label: 'En tránsito', color: '#7C3AED', bg: '#F5F3FF', icon: Navigation   },
-  en_deposito: { label: 'En depósito', color: '#D97706', bg: '#FFFBEB', icon: Layers       },
-  en_reparto:  { label: 'En reparto',  color: '#FF6835', bg: '#FFF4EC', icon: MapPin       },
-  entregado:   { label: 'Entregado',   color: '#059669', bg: '#ECFDF5', icon: CheckCircle2 },
-  fallido:     { label: 'Fallido',     color: '#DC2626', bg: '#FEF2F2', icon: XCircle      },
-  devuelto:    { label: 'Devuelto',    color: '#9CA3AF', bg: '#F9FAFB', icon: RotateCcw    },
+  creado:      { label: 'Creado',      color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', icon: Package      },
+  despachado:  { label: 'Despachado',  color: 'var(--m-info)', bg: 'var(--m-info-bg)', icon: Truck        },
+  en_transito: { label: 'En tránsito', color: 'var(--m-purple)', bg: 'var(--m-purple-bg)', icon: Navigation   },
+  en_deposito: { label: 'En depósito', color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', icon: Layers       },
+  en_reparto:  { label: 'En reparto',  color: 'var(--m-primary)', bg: 'var(--m-primary-10)', icon: MapPin       },
+  entregado:   { label: 'Entregado',   color: 'var(--m-success)', bg: 'var(--m-success-bg)', icon: CheckCircle2 },
+  fallido:     { label: 'Fallido',     color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', icon: XCircle      },
+  devuelto:    { label: 'Devuelto',    color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', icon: RotateCcw    },
 };
 
 const TRAMO_CFG: Record<string, { label: string; color: string }> = {
-  local:         { label: 'Local',         color: '#059669' },
-  intercity:     { label: 'Intercity',     color: '#2563EB' },
-  internacional: { label: 'Internacional', color: '#7C3AED' },
-  last_mile:     { label: 'Last Mile',     color: '#D97706' },
+  local:         { label: 'Local',         color: 'var(--m-success)' },
+  intercity:     { label: 'Intercity',     color: 'var(--m-info)' },
+  internacional: { label: 'Internacional', color: 'var(--m-purple)' },
+  last_mile:     { label: 'Last Mile',     color: 'var(--m-warning)' },
 };
 
 function StatCard({ label, value, sub, color, icon: Icon }: { label: string; value: string | number; sub?: string; color: string; icon: React.ElementType }) {
   return (
-    <div style={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px 20px', display: 'flex', gap: '14px', alignItems: 'center' }}>
+    <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px 20px', display: 'flex', gap: '14px', alignItems: 'center' }}>
       <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         <Icon size={20} color={color} />
       </div>
       <div>
-        <div style={{ fontSize: '22px', fontWeight: 800, color: '#111', lineHeight: 1 }}>{value}</div>
-        <div style={{ fontSize: '12px', color: '#6B7280', marginTop: '3px' }}>{label}</div>
+        <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--m-text)', lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: '12px', color: 'var(--m-text-muted)', marginTop: '3px' }}>{label}</div>
         {sub && <div style={{ fontSize: '11px', color, marginTop: '2px', fontWeight: 600 }}>{sub}</div>}
       </div>
     </div>
@@ -347,10 +347,10 @@ export function EnviosView({ onNavigate }: Props) {
 
   if (loading) {
     return (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--m-bg)' }}>
         <div style={{ textAlign: 'center' }}>
           <Loader2 size={32} color={ORANGE} style={{ animation: 'spin 1s linear infinite' }} />
-          <p style={{ color: '#6B7280', marginTop: 12, fontSize: '0.875rem' }}>Cargando envíos...</p>
+          <p style={{ color: 'var(--m-text-muted)', marginTop: 12, fontSize: '0.875rem' }}>Cargando envíos...</p>
         </div>
       </div>
     );
@@ -359,7 +359,7 @@ export function EnviosView({ onNavigate }: Props) {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
         {/* ── Panel principal ── */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
@@ -381,24 +381,24 @@ export function EnviosView({ onNavigate }: Props) {
                 const hayFallido     = estadosEnvios.includes('fallido');
                 const todosEntregados = estadosEnvios.every(s => s === 'entregado');
                 return (
-                  <div key={pedido.id} style={{ backgroundColor: '#fff', borderRadius: '12px', border: `1px solid ${hayFallido ? '#FCA5A5' : todosEntregados ? '#A7F3D0' : '#E5E7EB'}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                  <div key={pedido.id} style={{ backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: `1px solid ${hayFallido ? '#FCA5A5' : todosEntregados ? '#A7F3D0' : 'var(--m-border)'}`, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
                     <button
                       onClick={() => togglePedido(pedido.id)}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 18px', border: 'none', backgroundColor: todosEntregados ? '#F0FDF4' : hayFallido ? '#FFF5F5' : '#FAFAFA', cursor: 'pointer', textAlign: 'left' }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 18px', border: 'none', backgroundColor: todosEntregados ? '#F0FDF4' : hayFallido ? '#FFF5F5' : 'var(--m-surface-2)', cursor: 'pointer', textAlign: 'left' }}
                     >
                       {isOpen ? <ChevronDown size={16} color="#6B7280" /> : <ChevronRight size={16} color="#6B7280" />}
-                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: todosEntregados ? '#D1FAE5' : hayFallido ? '#FEE2E2' : '#FFF4EC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: todosEntregados ? '#D1FAE5' : hayFallido ? '#FEE2E2' : 'var(--m-primary-10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <Package size={16} color={todosEntregados ? '#059669' : hayFallido ? '#DC2626' : ORANGE} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 800, color: '#111' }}>{pedido.numero}</span>
-                          <span style={{ fontSize: '12px', color: '#6B7280' }}>·</span>
-                          <span style={{ fontSize: '13px', color: '#374151', fontWeight: 500 }}>{pedido.cliente}</span>
-                          {hayFallido      && <span style={{ fontSize: '10px', fontWeight: 700, color: '#DC2626', backgroundColor: '#FEE2E2', padding: '2px 7px', borderRadius: '10px' }}>⚠ Tiene fallidos</span>}
-                          {todosEntregados && <span style={{ fontSize: '10px', fontWeight: 700, color: '#059669', backgroundColor: '#D1FAE5', padding: '2px 7px', borderRadius: '10px' }}>✓ Todo entregado</span>}
+                          <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--m-text)' }}>{pedido.numero}</span>
+                          <span style={{ fontSize: '12px', color: 'var(--m-text-muted)' }}>·</span>
+                          <span style={{ fontSize: '13px', color: 'var(--m-text-secondary)', fontWeight: 500 }}>{pedido.cliente}</span>
+                          {hayFallido      && <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--m-danger)', backgroundColor: 'var(--m-danger-bg)', padding: '2px 7px', borderRadius: '10px' }}>⚠ Tiene fallidos</span>}
+                          {todosEntregados && <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--m-success)', backgroundColor: 'var(--m-success-bg)', padding: '2px 7px', borderRadius: '10px' }}>✓ Todo entregado</span>}
                         </div>
-                        <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '2px' }}>
+                        <div style={{ fontSize: '12px', color: 'var(--m-text-muted)', marginTop: '2px' }}>
                           {pedido.envios.length} envío{pedido.envios.length > 1 ? 's' : ''} · Total: ${pedido.total.toLocaleString('es-UY')}
                         </div>
                       </div>
@@ -422,20 +422,20 @@ export function EnviosView({ onNavigate }: Props) {
                               <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: cfg.color, flexShrink: 0 }} />
                               <div style={{ minWidth: 0, flex: 1 }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#374151', fontFamily: 'monospace' }}>{envio.numero}</span>
+                                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)', fontFamily: 'monospace' }}>{envio.numero}</span>
                                   <EstadoBadge estado={envio.estado} />
                                   <span style={{ fontSize: '10px', fontWeight: 600, color: tramoCfg.color, backgroundColor: `${tramoCfg.color}18`, padding: '2px 7px', borderRadius: '10px' }}>{tramoCfg.label}</span>
-                                  <span style={{ fontSize: '11px', color: '#9CA3AF' }}>{envio.transportista}</span>
+                                  <span style={{ fontSize: '11px', color: 'var(--m-text-muted)' }}>{envio.transportista}</span>
                                 </div>
-                                <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '3px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                <div style={{ fontSize: '11px', color: 'var(--m-text-muted)', marginTop: '3px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                                   <span>📍 {envio.destino}</span>
                                   <span>👤 {envio.destinatario}</span>
                                   <span>📦 {envio.peso}kg · {envio.bultos} bulto{envio.bultos > 1 ? 's' : ''}</span>
                                   <span>📅 Est. {envio.fechaEstimada}</span>
-                                  {envio.tracking && <span style={{ color: '#2563EB', fontWeight: 600 }}>🔍 {envio.tracking}</span>}
+                                  {envio.tracking && <span style={{ color: 'var(--m-info)', fontWeight: 600 }}>🔍 {envio.tracking}</span>}
                                 </div>
                               </div>
-                              <Eye size={14} color={isSelected ? ORANGE : '#D1D5DB'} />
+                              <Eye size={14} color={isSelected ? ORANGE : 'var(--m-border)'} />
                             </div>
                           );
                         })}
@@ -446,9 +446,9 @@ export function EnviosView({ onNavigate }: Props) {
               })}
 
               {pedidosFiltrados.length === 0 && !loading && (
-                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#9CA3AF' }}>
+                <div style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--m-text-muted)' }}>
                   <Package size={40} color="#E5E7EB" style={{ margin: '0 auto 12px' }} />
-                  <p style={{ fontSize: '14px', fontWeight: 600, color: '#374151', margin: '0 0 6px' }}>No hay envíos</p>
+                  <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--m-text-secondary)', margin: '0 0 6px' }}>No hay envíos</p>
                   <p style={{ fontSize: '12px', margin: 0 }}>Creá el primer envío con el botón "+ Nuevo Envío"</p>
                 </div>
               )}
@@ -458,11 +458,11 @@ export function EnviosView({ onNavigate }: Props) {
 
         {/* ── Panel de detalle ── */}
         {selectedEnvio && (
-          <div style={{ width: '360px', backgroundColor: '#fff', borderLeft: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', overflow: 'hidden', flexShrink: 0 }}>
+          <div style={{ width: '360px', backgroundColor: 'var(--m-surface)', borderLeft: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', overflow: 'hidden', flexShrink: 0 }}>
             <div style={{ padding: '20px', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <span style={{ fontSize: '13px', fontWeight: 800, color: '#374151', fontFamily: 'monospace' }}>{selectedEnvio.numero}</span>
-                <button onClick={() => setSelectedEnvio(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#9CA3AF', fontSize: '18px', lineHeight: 1, padding: '2px' }}>×</button>
+                <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--m-text-secondary)', fontFamily: 'monospace' }}>{selectedEnvio.numero}</span>
+                <button onClick={() => setSelectedEnvio(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--m-text-muted)', fontSize: '18px', lineHeight: 1, padding: '2px' }}>×</button>
               </div>
               <EstadoBadge estado={selectedEnvio.estado} />
               <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -478,15 +478,15 @@ export function EnviosView({ onNavigate }: Props) {
                   ...(selectedEnvio.tracking ? [['Tracking #', selectedEnvio.tracking]] : []),
                 ].map(([label, value]) => (
                   <div key={label} style={{ display: 'flex', gap: '8px', fontSize: '12px' }}>
-                    <span style={{ color: '#9CA3AF', width: '90px', flexShrink: 0 }}>{label}</span>
-                    <span style={{ color: '#111', fontWeight: 500, flex: 1 }}>{value}</span>
+                    <span style={{ color: 'var(--m-text-muted)', width: '90px', flexShrink: 0 }}>{label}</span>
+                    <span style={{ color: 'var(--m-text)', fontWeight: 500, flex: 1 }}>{value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
-              <p style={{ fontSize: '12px', fontWeight: 700, color: '#374151', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Historial de seguimiento</p>
+              <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Historial de seguimiento</p>
               <div style={{ position: 'relative' }}>
                 {selectedEnvio.eventos.map((ev, idx) => {
                   const cfg   = ESTADO_CFG[ev.estado];
@@ -495,20 +495,20 @@ export function EnviosView({ onNavigate }: Props) {
                   return (
                     <div key={idx} style={{ display: 'flex', gap: '12px', paddingBottom: '16px', position: 'relative' }}>
                       {idx < selectedEnvio.eventos.length - 1 && (
-                        <div style={{ position: 'absolute', left: '14px', top: '28px', bottom: 0, width: '2px', backgroundColor: '#E5E7EB' }} />
+                        <div style={{ position: 'absolute', left: '14px', top: '28px', bottom: 0, width: '2px', backgroundColor: 'var(--m-border)' }} />
                       )}
-                      <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: isFirst ? cfg.bg : '#F3F4F6', border: `2px solid ${isFirst ? cfg.color : '#E5E7EB'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>
-                        <Icon size={12} color={isFirst ? cfg.color : '#9CA3AF'} />
+                      <div style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: isFirst ? cfg.bg : 'var(--m-surface-2)', border: `2px solid ${isFirst ? cfg.color : 'var(--m-border)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>
+                        <Icon size={12} color={isFirst ? cfg.color : 'var(--m-text-muted)'} />
                       </div>
                       <div style={{ flex: 1, paddingTop: '4px' }}>
-                        <div style={{ fontSize: '12px', fontWeight: isFirst ? 700 : 500, color: isFirst ? cfg.color : '#374151' }}>{ev.descripcion}</div>
-                        <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>{ev.ubicacion} · {ev.fecha} {ev.hora}</div>
+                        <div style={{ fontSize: '12px', fontWeight: isFirst ? 700 : 500, color: isFirst ? cfg.color : 'var(--m-text-secondary)' }}>{ev.descripcion}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--m-text-muted)', marginTop: '2px' }}>{ev.ubicacion} · {ev.fecha} {ev.hora}</div>
                       </div>
                     </div>
                   );
                 })}
                 {selectedEnvio.eventos.length === 0 && (
-                  <p style={{ fontSize: '12px', color: '#9CA3AF', margin: 0 }}>Sin eventos registrados aún.</p>
+                  <p style={{ fontSize: '12px', color: 'var(--m-text-muted)', margin: 0 }}>Sin eventos registrados aún.</p>
                 )}
               </div>
             </div>
@@ -519,13 +519,13 @@ export function EnviosView({ onNavigate }: Props) {
               </button>
               {selectedEnvio.estado === 'fallido' && (
                 <button onClick={() => handleUpdateEstado(selectedEnvio.id, 'creado', 'Re-despachado después de fallo')}
-                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                   Re-despachar
                 </button>
               )}
               {selectedEnvio.estado === 'creado' && (
                 <button onClick={() => handleUpdateEstado(selectedEnvio.id, 'despachado', 'Envío despachado')}
-                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: '#2563EB', color: '#fff', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
+                  style={{ flex: 1, padding: '9px', border: 'none', borderRadius: '8px', backgroundColor: 'var(--m-info)', color: 'var(--m-surface)', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
                   Despachar
                 </button>
               )}

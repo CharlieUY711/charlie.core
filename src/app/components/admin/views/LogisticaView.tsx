@@ -10,7 +10,7 @@ import { OrangeHeader } from '../OrangeHeader';
 interface Props { onNavigate: (s: MainSection) => void; }
 
 const CARD_STYLE: React.CSSProperties = {
-  backgroundColor: '#fff',
+  backgroundColor: 'var(--m-surface)',
   borderRadius: '16px',
   border: '1px solid #E5E7EB',
   padding: '24px',
@@ -35,7 +35,7 @@ const CARDS: Card[] = [
     icon: Truck,
     label: 'Envíos',
     description: 'Tracking operativo árbol pedido madre → envíos hijos. Estados, timeline y panel de detalle por envío.',
-    color: '#FF6835',
+    color: 'var(--m-primary)',
     gradient: 'linear-gradient(135deg, #FF6835 0%, #e04e20 100%)',
   },
   {
@@ -43,7 +43,7 @@ const CARDS: Card[] = [
     icon: Users,
     label: 'Transportistas',
     description: 'Catálogo de carriers, tramos, tarifas multi-carrier local, intercity e internacional.',
-    color: '#0EA5E9',
+    color: 'var(--m-info)',
     gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%)',
   },
 ];
@@ -60,7 +60,7 @@ export function LogisticaView({ onNavigate }: Props) {
         onBackClick={() => onNavigate('dashboard')}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA', padding: '32px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)', padding: '32px' }}>
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
           {CARDS.map(card => {
             const Icon = card.icon;
@@ -87,9 +87,9 @@ export function LogisticaView({ onNavigate }: Props) {
                   }}>
                     <Icon size={22} color="#fff" />
                   </div>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#111', margin: 0 }}>{card.label}</h3>
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--m-text)', margin: 0 }}>{card.label}</h3>
                 </div>
-                <p style={{ fontSize: '13px', color: '#6B7280', margin: '0 0 16px', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '13px', color: 'var(--m-text-muted)', margin: '0 0 16px', lineHeight: '1.5' }}>
                   {card.description}
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: card.color, fontSize: '13px', fontWeight: 700 }}>

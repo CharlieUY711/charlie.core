@@ -6,10 +6,10 @@ import { toast } from 'sonner';
 
 const ORANGE = '#FF6835';
 const ESTADO_CFG: any = {
-  entregado:    { label: 'Entregado',    color: '#059669', bg: '#ECFDF5', Icon: CheckCircle2 },
-  no_entregado: { label: 'No entregado', color: '#EF4444', bg: '#FEF2F2', Icon: XCircle },
-  parcial:      { label: 'Parcial',      color: '#D97706', bg: '#FFFBEB', Icon: Clock },
-  devuelto:     { label: 'Devuelto',     color: '#6B7280', bg: '#F3F4F6', Icon: XCircle },
+  entregado:    { label: 'Entregado',    color: 'var(--m-success)', bg: 'var(--m-success-bg)', Icon: CheckCircle2 },
+  no_entregado: { label: 'No entregado', color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', Icon: XCircle },
+  parcial:      { label: 'Parcial',      color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', Icon: Clock },
+  devuelto:     { label: 'Devuelto',     color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', Icon: XCircle },
 };
 
 export function EntregasView({ onNavigate }: any) {
@@ -42,7 +42,7 @@ export function EntregasView({ onNavigate }: any) {
   );
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F8FAFC' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--m-surface-2)' }}>
       <OrangeHeader title="Entregas" subtitle="Confirmaciones y acuses de recibo" onBack={() => onNavigate('logistica')} />
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '24px 16px' }}>
 
@@ -51,10 +51,10 @@ export function EntregasView({ onNavigate }: any) {
             const { Icon } = s;
             return (
               <button key={k} onClick={() => setFiltroEstado(filtroEstado === k ? '' : k)}
-                style={{ background: filtroEstado === k ? s.bg : '#fff', border: '2px solid ' + (filtroEstado === k ? s.color : '#E5E7EB'), borderRadius: 10, padding: 14, textAlign: 'center', cursor: 'pointer' }}>
+                style={{ background: filtroEstado === k ? s.bg : 'var(--m-surface)', border: '2px solid ' + (filtroEstado === k ? s.color : 'var(--m-border)'), borderRadius: 10, padding: 14, textAlign: 'center', cursor: 'pointer' }}>
                 <Icon size={20} style={{ color: s.color, marginBottom: 6 }} />
                 <div style={{ fontSize: 22, fontWeight: 700, color: s.color }}>{items.filter((e: any) => e.estado === k).length}</div>
-                <div style={{ fontSize: 12, color: '#6B7280' }}>{s.label}</div>
+                <div style={{ fontSize: 12, color: 'var(--m-text-muted)' }}>{s.label}</div>
               </button>
             );
           })}
@@ -70,7 +70,7 @@ export function EntregasView({ onNavigate }: any) {
         {loading
           ? <div style={{ textAlign: 'center', padding: 60 }}><Loader2 size={32} style={{ color: ORANGE }} /></div>
           : filtered.length === 0
-            ? <div style={{ textAlign: 'center', padding: 60, color: '#9CA3AF' }}>No hay entregas.</div>
+            ? <div style={{ textAlign: 'center', padding: 60, color: 'var(--m-text-muted)' }}>No hay entregas.</div>
             : (
               <div style={{ display: 'grid', gap: 10 }}>
                 {filtered.map((e: any) => {
@@ -79,7 +79,7 @@ export function EntregasView({ onNavigate }: any) {
                   const isOpen = selected === e.id;
                   return (
                     <div key={e.id} onClick={() => setSelected(isOpen ? null : e.id)}
-                      style={{ background: '#fff', border: '1px solid ' + (isOpen ? ORANGE : '#E5E7EB'), borderRadius: 10, padding: '16px 20px', cursor: 'pointer' }}>
+                      style={{ background: 'var(--m-surface)', border: '1px solid ' + (isOpen ? ORANGE : 'var(--m-border)'), borderRadius: 10, padding: '16px 20px', cursor: 'pointer' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                         <div style={{ width: 40, height: 40, borderRadius: 10, background: cfg.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           <Icon size={18} style={{ color: cfg.color }} />
@@ -89,21 +89,21 @@ export function EntregasView({ onNavigate }: any) {
                             {e.envios?.numero || e.envio_id.slice(0, 8)}
                             <span style={{ marginLeft: 8, background: cfg.bg, color: cfg.color, fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 20 }}>{cfg.label}</span>
                           </div>
-                          <div style={{ fontSize: 13, color: '#6B7280' }}>
+                          <div style={{ fontSize: 13, color: 'var(--m-text-muted)' }}>
                             {e.envios?.destinatario}{e.envios?.destino && ' - ' + e.envios.destino}
                           </div>
                         </div>
-                        <div style={{ textAlign: 'right', fontSize: 12, color: '#9CA3AF' }}>
+                        <div style={{ textAlign: 'right', fontSize: 12, color: 'var(--m-text-muted)' }}>
                           <div>{new Date(e.fecha_entrega).toLocaleDateString('es-UY')}</div>
                           <div>{new Date(e.fecha_entrega).toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit' })}</div>
                         </div>
                       </div>
                       {isOpen && (
                         <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #F3F4F6', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 12 }}>
-                          {e.firmado_por && <div><span style={{ fontSize: 11, color: '#9CA3AF', display: 'block' }}>Firmado por</span><strong>{e.firmado_por}</strong></div>}
-                          {e.notas && <div><span style={{ fontSize: 11, color: '#9CA3AF', display: 'block' }}>Notas</span><span style={{ fontSize: 13 }}>{e.notas}</span></div>}
-                          {e.motivo_no_entrega && <div><span style={{ fontSize: 11, color: '#9CA3AF', display: 'block' }}>Motivo</span><span style={{ fontSize: 13, color: '#EF4444' }}>{e.motivo_no_entrega}</span></div>}
-                          {e.foto_url && <div><span style={{ fontSize: 11, color: '#9CA3AF', display: 'block' }}>Foto</span><a href={e.foto_url} target="_blank" rel="noopener noreferrer" style={{ color: ORANGE, fontSize: 13 }}>Ver foto</a></div>}
+                          {e.firmado_por && <div><span style={{ fontSize: 11, color: 'var(--m-text-muted)', display: 'block' }}>Firmado por</span><strong>{e.firmado_por}</strong></div>}
+                          {e.notas && <div><span style={{ fontSize: 11, color: 'var(--m-text-muted)', display: 'block' }}>Notas</span><span style={{ fontSize: 13 }}>{e.notas}</span></div>}
+                          {e.motivo_no_entrega && <div><span style={{ fontSize: 11, color: 'var(--m-text-muted)', display: 'block' }}>Motivo</span><span style={{ fontSize: 13, color: 'var(--m-danger)' }}>{e.motivo_no_entrega}</span></div>}
+                          {e.foto_url && <div><span style={{ fontSize: 11, color: 'var(--m-text-muted)', display: 'block' }}>Foto</span><a href={e.foto_url} target="_blank" rel="noopener noreferrer" style={{ color: ORANGE, fontSize: 13 }}>Ver foto</a></div>}
                         </div>
                       )}
                     </div>

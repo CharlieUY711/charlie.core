@@ -42,7 +42,7 @@ function PlatformChip({ icon: Icon, platform, status, statusColor, onClick }: {
       <Icon size={16} color='#fff' />
       <div>
         <p style={{ margin: 0, fontSize: '0.68rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1 }}>{platform}</p>
-        <p style={{ margin: '3px 0 0', fontSize: '0.82rem', fontWeight: '800', color: '#fff', lineHeight: 1 }}>{status}</p>
+        <p style={{ margin: '3px 0 0', fontSize: '0.82rem', fontWeight: '800', color: 'var(--m-surface)', lineHeight: 1 }}>{status}</p>
       </div>
     </button>
   );
@@ -65,10 +65,10 @@ export function RRSSHubView({ onNavigate }: Props) {
   /* Derive chip props from real status */
   function chipProps(p: PlatformStatus | undefined): { status: string; dot: string } {
     if (!p) return { status: 'Cargando…', dot: 'rgba(255,255,255,0.5)' };
-    if (p.status === 'connected')    return { status: `✓ ${p.accountName ?? 'Conectado'}`, dot: '#4ADE80' };
-    if (p.status === 'pending')      return { status: 'Sin verificar', dot: '#FCD34D' };
-    if (p.status === 'coming_soon')  return { status: 'Próximamente', dot: '#94A3B8' };
-    return { status: 'Sin credenciales', dot: '#F87171' };
+    if (p.status === 'connected')    return { status: `✓ ${p.accountName ?? 'Conectado'}`, dot: 'var(--m-success)' };
+    if (p.status === 'pending')      return { status: 'Sin verificar', dot: 'var(--m-warning)' };
+    if (p.status === 'coming_soon')  return { status: 'Próximamente', dot: 'var(--m-text-muted)' };
+    return { status: 'Sin credenciales', dot: 'var(--m-danger-bg)' };
   }
 
   const igChip = chipProps(platformStatus?.instagram);
@@ -129,7 +129,7 @@ export function RRSSHubView({ onNavigate }: Props) {
       icon: Zap,
       onClick: () => {},
       gradient: 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)',
-      color: '#0284C7',
+      color: 'var(--m-info)',
       badge: 'RRSS · Próximamente',
       label: 'Publicador Unificado',
       description: 'Publicá en Instagram y Facebook simultáneamente',
@@ -144,7 +144,7 @@ export function RRSSHubView({ onNavigate }: Props) {
       icon: BarChart2,
       onClick: () => {},
       gradient: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
-      color: '#D97706',
+      color: 'var(--m-warning)',
       badge: 'RRSS · Próximamente',
       label: 'Analytics',
       description: 'Estadísticas avanzadas y reportes',
@@ -159,7 +159,7 @@ export function RRSSHubView({ onNavigate }: Props) {
       icon: Calendar,
       onClick: () => onNavigate('redes-sociales'),
       gradient: 'linear-gradient(135deg, #C026D3 0%, #A21CAF 100%)',
-      color: '#C026D3',
+      color: 'var(--m-purple)',
       badge: 'RRSS · Centro',
       label: 'Calendario Social',
       description: 'Planificación y programación de contenido',
@@ -174,7 +174,7 @@ export function RRSSHubView({ onNavigate }: Props) {
       icon: BookOpen,
       onClick: () => onNavigate('documentacion'),
       gradient: 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)',
-      color: '#0284C7',
+      color: 'var(--m-info)',
       badge: 'RRSS · Docs',
       label: 'Documentación',
       description: 'Guías completas y tutoriales',
@@ -208,10 +208,10 @@ export function RRSSHubView({ onNavigate }: Props) {
       ) && (
         <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', backgroundColor: 'rgba(251,191,36,0.15)', borderRadius: '8px', border: '1px solid rgba(251,191,36,0.3)' }}>
           <AlertCircle size={14} color="#FCD34D" />
-          <span style={{ fontSize: '12px', color: '#FCD34D', fontWeight: 600 }}>
+          <span style={{ fontSize: '12px', color: 'var(--m-warning)', fontWeight: 600 }}>
             Credenciales pendientes — configurá tu API en{' '}
             <button onClick={() => onNavigate('migracion-rrss')}
-              style={{ background: 'none', border: 'none', color: '#FCD34D', fontWeight: 800, cursor: 'pointer', textDecoration: 'underline', padding: 0, fontSize: '12px' }}>
+              style={{ background: 'none', border: 'none', color: 'var(--m-warning)', fontWeight: 800, cursor: 'pointer', textDecoration: 'underline', padding: 0, fontSize: '12px' }}>
               Migración RRSS → Configuración
             </button>
           </span>

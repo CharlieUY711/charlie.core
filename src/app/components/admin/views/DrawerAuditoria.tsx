@@ -101,7 +101,13 @@ export function DrawerAuditoria({ modulo, onClose, onGuardado }: Props) {
 
   if (!modulo) return null;
 
-  const criterioIds = (criteriosFS.length > 0 ? criteriosFS : modulo.criteriosIniciales ?? []).map(c => c.id);
+  // Siempre mostrar C1-C8. Fuente de IDs: criteriosFS > criteriosIniciales > C1-C8 fijo
+  const CRITERIOS_BASE = ['C1','C2','C3','C4','C5','C6','C7','C8'];
+  const criterioIds = criteriosFS.length > 0
+    ? criteriosFS.map(c => c.id)
+    : (modulo.criteriosIniciales ?? []).length > 0
+      ? modulo.criteriosIniciales!.map(c => c.id)
+      : CRITERIOS_BASE;
 
   const getStatus = (cid: string): CriterioStatus => {
     if (localStatus[cid]) return localStatus[cid];
@@ -121,8 +127,13 @@ export function DrawerAuditoria({ modulo, onClose, onGuardado }: Props) {
     return modulo.criteriosIniciales?.find(c => c.id === cid)?.detalle ?? '';
   };
 
+  const LABEL_MAP: Record<string,string> = {
+    C1: 'View.tsx existe', C2: 'Tabla Supabase conectada', C3: 'Service layer (Api.ts)',
+    C4: 'module.config.ts', C5: 'Sin colores hardcodeados', C6: 'tokens.css con var(--m-*)',
+    C7: 'Party Model', C8: 'Sin .from() en View',
+  };
   const isAuto   = (cid: string) => (criteriosFS.length > 0 ? criteriosFS : modulo.criteriosIniciales ?? []).find(c => c.id === cid)?.auto ?? false;
-  const getLabel = (cid: string) => (criteriosFS.length > 0 ? criteriosFS : modulo.criteriosIniciales ?? []).find(c => c.id === cid)?.label ?? cid;
+  const getLabel = (cid: string) => (criteriosFS.length > 0 ? criteriosFS : modulo.criteriosIniciales ?? []).find(c => c.id === cid)?.label ?? LABEL_MAP[cid] ?? cid;
 
   const cycleStatus = (cid: string) => {
     if (isAuto(cid)) return;

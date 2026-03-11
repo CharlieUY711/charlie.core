@@ -17,9 +17,9 @@ interface Props { onNavigate: (section: MainSection) => void; }
 const ORANGE  = '#FF6835';
 
 const TIPOS = [
-  { value: 'flat_rate',     label: 'Tarifa fija',    icon: DollarSign, color: '#2563EB' },
-  { value: 'gratis',        label: 'Envío gratis',   icon: Package,    color: '#059669' },
-  { value: 'calculado',     label: 'Calculado',      icon: Globe,      color: '#7C3AED' },
+  { value: 'flat_rate',     label: 'Tarifa fija',    icon: DollarSign, color: 'var(--m-info)' },
+  { value: 'gratis',        label: 'Envío gratis',   icon: Package,    color: 'var(--m-success)' },
+  { value: 'calculado',     label: 'Calculado',      icon: Globe,      color: 'var(--m-purple)' },
   { value: 'retiro_local',  label: 'Retiro en local',icon: Home,       color: ORANGE    },
 ];
 
@@ -111,19 +111,19 @@ export function MetodosEnvioView({ onNavigate }: Props) {
       />
 
       {/* Stats */}
-      <div style={{ padding: '14px 28px', backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 12 }}>
+      <div style={{ padding: '14px 28px', backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 12 }}>
         {[
           { label: 'Total métodos', value: metodos.length, icon: Truck,        color: ORANGE    },
-          { label: 'Activos',       value: activos,        icon: CheckCircle,  color: '#059669' },
-          { label: 'Inactivos',     value: inactivos,      icon: XCircle,      color: '#EF4444' },
+          { label: 'Activos',       value: activos,        icon: CheckCircle,  color: 'var(--m-success)' },
+          { label: 'Inactivos',     value: inactivos,      icon: XCircle,      color: 'var(--m-danger)' },
         ].map(s => (
-          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB' }}>
+          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB' }}>
             <div style={{ width: 34, height: 34, borderRadius: 8, backgroundColor: s.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <s.icon size={16} color={s.color} />
             </div>
             <div>
-              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{s.value}</p>
-              <p style={{ margin: 0, fontSize: '0.7rem', color: '#6B7280' }}>{s.label}</p>
+              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'var(--m-text)', lineHeight: 1 }}>{s.value}</p>
+              <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>{s.label}</p>
             </div>
           </div>
         ))}
@@ -132,22 +132,22 @@ export function MetodosEnvioView({ onNavigate }: Props) {
       {/* Tabla */}
       <div style={{ flex: 1, overflow: 'auto', padding: '20px 28px' }}>
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#9CA3AF' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: 'var(--m-text-muted)' }}>
             <RefreshCw size={18} style={{ animation: 'spin 1s linear infinite', marginRight: 8 }} /> Cargando…
           </div>
         ) : metodos.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
             <Truck size={44} style={{ marginBottom: 12, opacity: 0.25 }} />
             <p style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>No hay métodos de envío</p>
             <p style={{ fontSize: '0.875rem', marginTop: 6 }}>Agregá el primero con "+ Nuevo Método"</p>
           </div>
         ) : (
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
               <thead>
-                <tr style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
+                <tr style={{ backgroundColor: 'var(--m-surface-2)', borderBottom: '1px solid #E5E7EB' }}>
                   {['Método', 'Tipo', 'Precio', 'Zona', 'Tiempo estimado', 'Estado', 'Acciones'].map(h => (
-                    <th key={h} style={{ padding: '11px 16px', textAlign: 'left', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap', fontSize: '0.8rem' }}>{h}</th>
+                    <th key={h} style={{ padding: '11px 16px', textAlign: 'left', fontWeight: 600, color: 'var(--m-text-secondary)', whiteSpace: 'nowrap', fontSize: '0.8rem' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -167,8 +167,8 @@ export function MetodosEnvioView({ onNavigate }: Props) {
                             <TIcon size={16} color={tipoCfg?.color ?? '#6B7280'} />
                           </div>
                           <div>
-                            <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: '0.875rem' }}>{m.nombre}</p>
-                            {m.descripcion && <p style={{ margin: 0, fontSize: '0.72rem', color: '#9CA3AF' }}>{m.descripcion}</p>}
+                            <p style={{ margin: 0, fontWeight: 600, color: 'var(--m-text)', fontSize: '0.875rem' }}>{m.nombre}</p>
+                            {m.descripcion && <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{m.descripcion}</p>}
                           </div>
                         </div>
                       </td>
@@ -177,37 +177,37 @@ export function MetodosEnvioView({ onNavigate }: Props) {
                           {tipoCfg?.label ?? m.tipo}
                         </span>
                       </td>
-                      <td style={{ padding: '12px 16px', fontWeight: 700, color: m.tipo === 'gratis' ? '#059669' : '#111827' }}>
+                      <td style={{ padding: '12px 16px', fontWeight: 700, color: m.tipo === 'gratis' ? '#059669' : 'var(--m-text)' }}>
                         {m.tipo === 'gratis' ? 'Gratis' : `$${(m.precio ?? 0).toLocaleString('es-UY')}`}
                       </td>
-                      <td style={{ padding: '12px 16px', color: '#6B7280', fontSize: '0.8rem' }}>
+                      <td style={{ padding: '12px 16px', color: 'var(--m-text-muted)', fontSize: '0.8rem' }}>
                         {m.zona ? (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                             <MapPin size={12} /> {m.zona}
                           </div>
-                        ) : <span style={{ color: '#D1D5DB' }}>—</span>}
+                        ) : <span style={{ color: 'var(--m-border)' }}>—</span>}
                       </td>
-                      <td style={{ padding: '12px 16px', color: '#6B7280', fontSize: '0.8rem' }}>
+                      <td style={{ padding: '12px 16px', color: 'var(--m-text-muted)', fontSize: '0.8rem' }}>
                         {m.tiempo_estimado ? (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                             <Clock size={12} /> {m.tiempo_estimado}
                           </div>
-                        ) : <span style={{ color: '#D1D5DB' }}>—</span>}
+                        ) : <span style={{ color: 'var(--m-border)' }}>—</span>}
                       </td>
                       <td style={{ padding: '12px 16px' }}>
                         <button onClick={() => toggleActivo(m)}
-                          style={{ padding: '3px 10px', borderRadius: 20, border: 'none', cursor: 'pointer', fontSize: '0.76rem', fontWeight: 700, backgroundColor: m.activo ? '#D1FAE5' : '#FEE2E2', color: m.activo ? '#059669' : '#DC2626' }}>
+                          style={{ padding: '3px 10px', borderRadius: 20, border: 'none', cursor: 'pointer', fontSize: '0.76rem', fontWeight: 700, backgroundColor: m.activo ? '#D1FAE5' : 'var(--m-danger-bg)', color: m.activo ? '#059669' : 'var(--m-danger)' }}>
                           {m.activo ? '● Activo' : '● Inactivo'}
                         </button>
                       </td>
                       <td style={{ padding: '12px 16px' }}>
                         <div style={{ display: 'flex', gap: 6 }}>
                           <button onClick={() => openEdit(m)}
-                            style={{ width: 30, height: 30, borderRadius: 6, border: '1.5px solid #E5E7EB', background: '#F9FAFB', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            style={{ width: 30, height: 30, borderRadius: 6, border: '1.5px solid #E5E7EB', background: 'var(--m-surface-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Edit2 size={13} color="#374151" />
                           </button>
                           <button onClick={() => setConfirmDelete(m)}
-                            style={{ width: 30, height: 30, borderRadius: 6, border: '1.5px solid #FEE2E2', background: '#FFF5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            style={{ width: 30, height: 30, borderRadius: 6, border: '1.5px solid #FEE2E2', background: 'var(--m-danger-bg)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Trash2 size={13} color="#DC2626" />
                           </button>
                         </div>
@@ -226,7 +226,7 @@ export function MetodosEnvioView({ onNavigate }: Props) {
         <div style={overlayStyle} onClick={() => setShowModal(false)}>
           <div style={modalStyle} onClick={e => e.stopPropagation()}>
             <div style={modalHeaderStyle}>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#111827' }}>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--m-text)' }}>
                 {editId ? 'Editar método de envío' : 'Nuevo método de envío'}
               </h2>
               <button onClick={() => setShowModal(false)} style={closeBtnStyle}><X size={18} /></button>
@@ -245,12 +245,12 @@ export function MetodosEnvioView({ onNavigate }: Props) {
                     <button key={t.value} onClick={() => setForm(f => ({ ...f, tipo: t.value }))}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px',
-                        borderRadius: 8, border: `1.5px solid ${form.tipo === t.value ? t.color : '#E5E7EB'}`,
-                        backgroundColor: form.tipo === t.value ? t.color + '12' : '#F9FAFB',
-                        cursor: 'pointer', color: form.tipo === t.value ? t.color : '#374151',
+                        borderRadius: 8, border: `1.5px solid ${form.tipo === t.value ? t.color : 'var(--m-border)'}`,
+                        backgroundColor: form.tipo === t.value ? t.color + '12' : 'var(--m-surface-2)',
+                        cursor: 'pointer', color: form.tipo === t.value ? t.color : 'var(--m-text-secondary)',
                         fontWeight: form.tipo === t.value ? 700 : 500, fontSize: '0.84rem',
                       }}>
-                      <t.icon size={15} color={form.tipo === t.value ? t.color : '#9CA3AF'} />
+                      <t.icon size={15} color={form.tipo === t.value ? t.color : 'var(--m-text-muted)'} />
                       {t.label}
                     </button>
                   ))}
@@ -260,11 +260,11 @@ export function MetodosEnvioView({ onNavigate }: Props) {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div>
                   <label style={labelStyle}>
-                    Precio ($) {form.tipo === 'gratis' && <span style={{ color: '#059669', fontWeight: 400 }}>— automático $0</span>}
+                    Precio ($) {form.tipo === 'gratis' && <span style={{ color: 'var(--m-success)', fontWeight: 400 }}>— automático $0</span>}
                   </label>
                   <input type="number" value={form.tipo === 'gratis' ? 0 : form.precio}
                     onChange={e => setForm(f => ({ ...f, precio: parseFloat(e.target.value) || 0 }))}
-                    style={{ ...inputStyle, backgroundColor: form.tipo === 'gratis' ? '#F3F4F6' : '#fff' }}
+                    style={{ ...inputStyle, backgroundColor: form.tipo === 'gratis' ? '#F3F4F6' : 'var(--m-surface)' }}
                     min={0} disabled={form.tipo === 'gratis'} />
                 </div>
                 <div>
@@ -287,7 +287,7 @@ export function MetodosEnvioView({ onNavigate }: Props) {
                   <input type="number" value={form.orden} onChange={e => setForm(f => ({ ...f, orden: parseInt(e.target.value) || 0 }))} style={inputStyle} min={0} />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: 2 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.875rem', color: '#374151' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.875rem', color: 'var(--m-text-secondary)' }}>
                     <input type="checkbox" checked={form.activo} onChange={e => setForm(f => ({ ...f, activo: e.target.checked }))} style={{ width: 16, height: 16, accentColor: ORANGE }} />
                     Método activo
                   </label>
@@ -309,19 +309,19 @@ export function MetodosEnvioView({ onNavigate }: Props) {
         <div style={overlayStyle} onClick={() => setConfirmDelete(null)}>
           <div style={{ ...modalStyle, maxWidth: 420 }} onClick={e => e.stopPropagation()}>
             <div style={{ padding: 28, textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center' }}>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', backgroundColor: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 52, height: 52, borderRadius: '50%', backgroundColor: 'var(--m-danger-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Trash2 size={24} color="#DC2626" />
               </div>
               <div>
-                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#111827' }}>¿Eliminar método?</h3>
-                <p style={{ margin: '6px 0 0', fontSize: '0.875rem', color: '#6B7280' }}>
+                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--m-text)' }}>¿Eliminar método?</h3>
+                <p style={{ margin: '6px 0 0', fontSize: '0.875rem', color: 'var(--m-text-muted)' }}>
                   Se eliminará <strong>{confirmDelete.nombre}</strong>. Esta acción no se puede deshacer.
                 </p>
               </div>
               <div style={{ display: 'flex', gap: 10, width: '100%' }}>
                 <button onClick={() => setConfirmDelete(null)} style={{ ...cancelBtnStyle, flex: 1 }}>Cancelar</button>
                 <button onClick={() => handleDelete(confirmDelete)}
-                  style={{ flex: 1, padding: '9px 0', borderRadius: 8, border: 'none', backgroundColor: '#DC2626', color: '#fff', cursor: 'pointer', fontWeight: 700, fontSize: '0.875rem' }}>
+                  style={{ flex: 1, padding: '9px 0', borderRadius: 8, border: 'none', backgroundColor: 'var(--m-danger)', color: 'var(--m-surface)', cursor: 'pointer', fontWeight: 700, fontSize: '0.875rem' }}>
                   Eliminar
                 </button>
               </div>
@@ -335,11 +335,11 @@ export function MetodosEnvioView({ onNavigate }: Props) {
 }
 
 const overlayStyle: React.CSSProperties     = { position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 };
-const modalStyle: React.CSSProperties       = { backgroundColor: '#fff', borderRadius: 16, width: '100%', maxWidth: 520, boxShadow: '0 20px 60px rgba(0,0,0,0.25)' };
+const modalStyle: React.CSSProperties       = { backgroundColor: 'var(--m-surface)', borderRadius: 16, width: '100%', maxWidth: 520, boxShadow: '0 20px 60px rgba(0,0,0,0.25)' };
 const modalHeaderStyle: React.CSSProperties = { padding: '18px 24px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between' };
 const modalFooterStyle: React.CSSProperties = { padding: '14px 24px', borderTop: '1px solid #E5E7EB', display: 'flex', justifyContent: 'flex-end', gap: 10 };
-const closeBtnStyle: React.CSSProperties    = { background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF' };
-const labelStyle: React.CSSProperties       = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: 5 };
-const inputStyle: React.CSSProperties       = { width: '100%', height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: '#111827', outline: 'none', boxSizing: 'border-box' };
-const cancelBtnStyle: React.CSSProperties   = { padding: '9px 20px', borderRadius: 8, border: '1.5px solid #E5E7EB', background: '#fff', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, color: '#374151' };
-const saveBtnStyle: React.CSSProperties     = { padding: '9px 22px', borderRadius: 8, border: 'none', backgroundColor: '#FF6835', color: '#fff', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 };
+const closeBtnStyle: React.CSSProperties    = { background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-text-muted)' };
+const labelStyle: React.CSSProperties       = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--m-text-secondary)', marginBottom: 5 };
+const inputStyle: React.CSSProperties       = { width: '100%', height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: 'var(--m-text)', outline: 'none', boxSizing: 'border-box' };
+const cancelBtnStyle: React.CSSProperties   = { padding: '9px 20px', borderRadius: 8, border: '1.5px solid #E5E7EB', background: 'var(--m-surface)', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text-secondary)' };
+const saveBtnStyle: React.CSSProperties     = { padding: '9px 22px', borderRadius: 8, border: 'none', backgroundColor: 'var(--m-primary)', color: 'var(--m-surface)', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 };

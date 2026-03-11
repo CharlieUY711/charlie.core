@@ -29,21 +29,21 @@ interface EnvioOpt    { id: string; nombre: string; tipo: string; precio: number
 
 // ── Estado config ──────────────────────────────────
 const ESTADO_CFG: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  pendiente:      { label: 'Pendiente',      color: '#D97706', bg: '#FEF3C7', icon: Clock        },
-  confirmado:     { label: 'Confirmado',     color: '#2563EB', bg: '#EFF6FF', icon: CheckCircle  },
-  en_preparacion: { label: 'En preparación', color: '#7C3AED', bg: '#F5F3FF', icon: Package      },
-  enviado:        { label: 'Enviado',        color: '#0891B2', bg: '#ECFEFF', icon: Truck        },
-  entregado:      { label: 'Entregado',      color: '#059669', bg: '#D1FAE5', icon: CheckCircle  },
-  cancelado:      { label: 'Cancelado',      color: '#DC2626', bg: '#FEE2E2', icon: XCircle      },
-  devuelto:       { label: 'Devuelto',       color: '#6B7280', bg: '#F3F4F6', icon: RotateCcw    },
+  pendiente:      { label: 'Pendiente',      color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', icon: Clock        },
+  confirmado:     { label: 'Confirmado',     color: 'var(--m-info)', bg: 'var(--m-info-bg)', icon: CheckCircle  },
+  en_preparacion: { label: 'En preparación', color: 'var(--m-purple)', bg: 'var(--m-purple-bg)', icon: Package      },
+  enviado:        { label: 'Enviado',        color: 'var(--m-cyan)', bg: 'var(--m-cyan-bg)', icon: Truck        },
+  entregado:      { label: 'Entregado',      color: 'var(--m-success)', bg: 'var(--m-success-bg)', icon: CheckCircle  },
+  cancelado:      { label: 'Cancelado',      color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', icon: XCircle      },
+  devuelto:       { label: 'Devuelto',       color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', icon: RotateCcw    },
 };
 
 const PAGO_CFG: Record<string, { label: string; color: string; bg: string }> = {
-  pendiente:   { label: 'Pago pendiente', color: '#D97706', bg: '#FEF3C7' },
-  pagado:      { label: 'Pagado',         color: '#059669', bg: '#D1FAE5' },
-  parcial:     { label: 'Parcial',        color: '#7C3AED', bg: '#F5F3FF' },
-  fallido:     { label: 'Fallido',        color: '#DC2626', bg: '#FEE2E2' },
-  reembolsado: { label: 'Reembolsado',    color: '#6B7280', bg: '#F3F4F6' },
+  pendiente:   { label: 'Pago pendiente', color: 'var(--m-warning)', bg: 'var(--m-warning-bg)' },
+  pagado:      { label: 'Pagado',         color: 'var(--m-success)', bg: 'var(--m-success-bg)' },
+  parcial:     { label: 'Parcial',        color: 'var(--m-purple)', bg: 'var(--m-purple-bg)' },
+  fallido:     { label: 'Fallido',        color: 'var(--m-danger)', bg: 'var(--m-danger-bg)' },
+  reembolsado: { label: 'Reembolsado',    color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)' },
 };
 
 const TRANSICIONES: Record<string, string[]> = {
@@ -220,28 +220,28 @@ export function PedidosView({ onNavigate }: Props) {
       />
 
       {/* ── Stats ── */}
-      <div style={{ padding: '14px 28px', backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+      <div style={{ padding: '14px 28px', backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         {[
           { label: 'Total pedidos',   value: stats.total,                          icon: ShoppingCart, color: ORANGE     },
-          { label: 'Pendientes',      value: stats.pendiente,                      icon: Clock,        color: '#D97706'  },
-          { label: 'En curso',        value: stats.enCurso,                        icon: Truck,        color: '#2563EB'  },
-          { label: 'Entregados',      value: stats.entregado,                      icon: CheckCircle,  color: '#059669'  },
-          { label: 'Facturado',       value: `$${stats.facturado.toLocaleString('es-UY')}`, icon: DollarSign, color: '#7C3AED' },
+          { label: 'Pendientes',      value: stats.pendiente,                      icon: Clock,        color: 'var(--m-warning)'  },
+          { label: 'En curso',        value: stats.enCurso,                        icon: Truck,        color: 'var(--m-info)'  },
+          { label: 'Entregados',      value: stats.entregado,                      icon: CheckCircle,  color: 'var(--m-success)'  },
+          { label: 'Facturado',       value: `$${stats.facturado.toLocaleString('es-UY')}`, icon: DollarSign, color: 'var(--m-purple)' },
         ].map(s => (
-          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB' }}>
+          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB' }}>
             <div style={{ width: 34, height: 34, borderRadius: 8, backgroundColor: s.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <s.icon size={16} color={s.color} />
             </div>
             <div>
-              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{s.value}</p>
-              <p style={{ margin: 0, fontSize: '0.7rem', color: '#6B7280' }}>{s.label}</p>
+              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'var(--m-text)', lineHeight: 1 }}>{s.value}</p>
+              <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>{s.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* ── Pipeline visual ── */}
-      <div style={{ padding: '12px 28px', backgroundColor: '#FAFAFA', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 8, alignItems: 'center', overflowX: 'auto' }}>
+      <div style={{ padding: '12px 28px', backgroundColor: 'var(--m-surface-2)', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 8, alignItems: 'center', overflowX: 'auto' }}>
         {PIPELINE.map((e, idx) => {
           const cfg = ESTADO_CFG[e];
           const count = pipelineCounts[e] ?? 0;
@@ -252,8 +252,8 @@ export function PedidosView({ onNavigate }: Props) {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 7,
                   padding: '6px 14px', borderRadius: 20, border: '1.5px solid',
-                  borderColor: filterEstado === e ? cfg.color : '#E5E7EB',
-                  backgroundColor: filterEstado === e ? cfg.bg : '#fff',
+                  borderColor: filterEstado === e ? cfg.color : 'var(--m-border)',
+                  backgroundColor: filterEstado === e ? cfg.bg : 'var(--m-surface)',
                   color: cfg.color, cursor: 'pointer', whiteSpace: 'nowrap',
                   fontWeight: filterEstado === e ? 700 : 500, fontSize: '0.8rem',
                   transition: 'all 0.15s',
@@ -267,7 +267,7 @@ export function PedidosView({ onNavigate }: Props) {
             </React.Fragment>
           );
         })}
-        <div style={{ width: 1, height: 24, backgroundColor: '#E5E7EB', margin: '0 4px' }} />
+        <div style={{ width: 1, height: 24, backgroundColor: 'var(--m-border)', margin: '0 4px' }} />
         {['cancelado', 'devuelto'].map(e => {
           const cfg = ESTADO_CFG[e];
           const count = pedidosList.filter(p => p.estado === e).length;
@@ -278,8 +278,8 @@ export function PedidosView({ onNavigate }: Props) {
               style={{
                 display: 'flex', alignItems: 'center', gap: 7,
                 padding: '6px 14px', borderRadius: 20, border: '1.5px solid',
-                borderColor: filterEstado === e ? cfg.color : '#E5E7EB',
-                backgroundColor: filterEstado === e ? cfg.bg : '#fff',
+                borderColor: filterEstado === e ? cfg.color : 'var(--m-border)',
+                backgroundColor: filterEstado === e ? cfg.bg : 'var(--m-surface)',
                 color: cfg.color, cursor: 'pointer', whiteSpace: 'nowrap',
                 fontWeight: filterEstado === e ? 700 : 500, fontSize: '0.8rem',
               }}
@@ -292,9 +292,9 @@ export function PedidosView({ onNavigate }: Props) {
       </div>
 
       {/* ── Filtros ── */}
-      <div style={{ padding: '10px 28px', backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 10, alignItems: 'center' }}>
+      <div style={{ padding: '10px 28px', backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 10, alignItems: 'center' }}>
         <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
-          <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
+          <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--m-text-muted)' }} />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -308,7 +308,7 @@ export function PedidosView({ onNavigate }: Props) {
           <option value="">Todos los pagos</option>
           {Object.entries(PAGO_CFG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
         </select>
-        <button onClick={fetchPedidos} style={{ height: 34, width: 34, border: '1.5px solid #E5E7EB', borderRadius: 8, background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <button onClick={fetchPedidos} style={{ height: 34, width: 34, border: '1.5px solid #E5E7EB', borderRadius: 8, background: 'var(--m-surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <RefreshCw size={14} color="#6B7280" />
         </button>
       </div>
@@ -320,12 +320,12 @@ export function PedidosView({ onNavigate }: Props) {
         ) : pedidosList.length === 0 ? (
           <EmptyState icon={ShoppingCart} title="No hay pedidos aún" sub='Creá el primero con "+ Nuevo Pedido"' />
         ) : (
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
               <thead>
-                <tr style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
+                <tr style={{ backgroundColor: 'var(--m-surface-2)', borderBottom: '1px solid #E5E7EB' }}>
                   {['N° Pedido', 'Cliente', 'Items', 'Total', 'Estado', 'Pago', 'Fecha', ''].map(h => (
-                    <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap', fontSize: '0.8rem' }}>{h}</th>
+                    <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontWeight: 600, color: 'var(--m-text-secondary)', whiteSpace: 'nowrap', fontSize: '0.8rem' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -345,20 +345,20 @@ export function PedidosView({ onNavigate }: Props) {
                       </td>
                       <td style={{ padding: '12px 14px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <div style={{ width: 30, height: 30, borderRadius: '50%', backgroundColor: p.cliente_persona ? '#FFF7ED' : '#EDE9FE', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <div style={{ width: 30, height: 30, borderRadius: '50%', backgroundColor: p.cliente_persona ? '#FFF7ED' : 'var(--m-purple-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                             {p.cliente_persona ? <User size={14} color={ORANGE} /> : <Building2 size={14} color="#8B5CF6" />}
                           </div>
                           <div>
-                            <p style={{ margin: 0, fontWeight: 600, color: '#111827', fontSize: '0.84rem' }}>{clienteLabel(p)}</p>
-                            {p.cliente_persona?.email && <p style={{ margin: 0, fontSize: '0.72rem', color: '#9CA3AF' }}>{p.cliente_persona.email}</p>}
+                            <p style={{ margin: 0, fontWeight: 600, color: 'var(--m-text)', fontSize: '0.84rem' }}>{clienteLabel(p)}</p>
+                            {p.cliente_persona?.email && <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{p.cliente_persona.email}</p>}
                           </div>
                         </div>
                       </td>
-                      <td style={{ padding: '12px 14px', color: '#6B7280', fontSize: '0.8rem' }}>
+                      <td style={{ padding: '12px 14px', color: 'var(--m-text-muted)', fontSize: '0.8rem' }}>
                         {(p.items?.length ?? 0)} ítem{(p.items?.length ?? 0) !== 1 ? 's' : ''}
                       </td>
                       <td style={{ padding: '12px 14px' }}>
-                        <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--m-text)', fontSize: '0.9rem' }}>
                           ${(p.total ?? 0).toLocaleString('es-UY')}
                         </span>
                       </td>
@@ -372,11 +372,11 @@ export function PedidosView({ onNavigate }: Props) {
                           {pgCfg.label}
                         </span>
                       </td>
-                      <td style={{ padding: '12px 14px', color: '#9CA3AF', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
+                      <td style={{ padding: '12px 14px', color: 'var(--m-text-muted)', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
                         {new Date(p.created_at).toLocaleDateString('es-UY')}
                       </td>
                       <td style={{ padding: '12px 14px' }}>
-                        <div style={{ width: 28, height: 28, borderRadius: 6, backgroundColor: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ width: 28, height: 28, borderRadius: 6, backgroundColor: 'var(--m-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <Eye size={13} color="#6B7280" />
                         </div>
                       </td>
@@ -395,10 +395,10 @@ export function PedidosView({ onNavigate }: Props) {
           <div style={{ ...modalStyle, maxWidth: 680 }} onClick={e => e.stopPropagation()}>
             <div style={modalHeaderStyle}>
               <div>
-                <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#111827' }}>
+                <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--m-text)' }}>
                   Pedido <span style={{ color: ORANGE, fontFamily: 'monospace' }}>{detailPedido.numero_pedido}</span>
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.76rem', color: '#9CA3AF' }}>
+                <p style={{ margin: '2px 0 0', fontSize: '0.76rem', color: 'var(--m-text-muted)' }}>
                   {new Date(detailPedido.created_at).toLocaleString('es-UY')}
                 </p>
               </div>
@@ -408,7 +408,7 @@ export function PedidosView({ onNavigate }: Props) {
             <div style={{ padding: '20px 24px', overflowY: 'auto', maxHeight: 'calc(90vh - 140px)', display: 'flex', flexDirection: 'column', gap: 20 }}>
               {/* Estado + Pago */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                <div style={{ padding: 14, backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB' }}>
+                <div style={{ padding: 14, backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB' }}>
                   <p style={sectionLabel}>Estado del pedido</p>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
                     {(TRANSICIONES[detailPedido.estado] ?? []).map(e => {
@@ -421,7 +421,7 @@ export function PedidosView({ onNavigate }: Props) {
                       );
                     })}
                     {(TRANSICIONES[detailPedido.estado] ?? []).length === 0 && (
-                      <span style={{ fontSize: '0.78rem', color: '#9CA3AF' }}>Sin transiciones disponibles</span>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>Sin transiciones disponibles</span>
                     )}
                   </div>
                   <div style={{ marginTop: 8 }}>
@@ -430,7 +430,7 @@ export function PedidosView({ onNavigate }: Props) {
                     </span>
                   </div>
                 </div>
-                <div style={{ padding: 14, backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB' }}>
+                <div style={{ padding: 14, backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB' }}>
                   <p style={sectionLabel}>Estado de pago</p>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
                     {Object.keys(PAGO_CFG).filter(k => k !== detailPedido.estado_pago).map(k => {
@@ -459,7 +459,7 @@ export function PedidosView({ onNavigate }: Props) {
                   {detailPedido.cliente_org?.tipo && <p style={infoSub}>{detailPedido.cliente_org.tipo}</p>}
                 </InfoBlock>
                 <InfoBlock icon={CreditCard} label="Pago / Envío" color="#8B5CF6">
-                  <p style={infoText}>{detailPedido.metodo_pago?.nombre ?? <span style={{ color: '#D1D5DB' }}>Sin método de pago</span>}</p>
+                  <p style={infoText}>{detailPedido.metodo_pago?.nombre ?? <span style={{ color: 'var(--m-border)' }}>Sin método de pago</span>}</p>
                   <p style={infoSub}>{detailPedido.metodo_envio?.nombre ?? 'Sin método de envío'}</p>
                 </InfoBlock>
               </div>
@@ -476,22 +476,22 @@ export function PedidosView({ onNavigate }: Props) {
               {/* Items */}
               <div>
                 <p style={sectionLabel}>Ítems del pedido</p>
-                <div style={{ backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB', overflow: 'hidden', marginTop: 8 }}>
+                <div style={{ backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB', overflow: 'hidden', marginTop: 8 }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.84rem' }}>
                     <thead>
                       <tr style={{ borderBottom: '1px solid #E5E7EB' }}>
                         {['Producto', 'Cant.', 'Precio unit.', 'Subtotal'].map(h => (
-                          <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, color: '#374151', fontSize: '0.76rem' }}>{h}</th>
+                          <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, color: 'var(--m-text-secondary)', fontSize: '0.76rem' }}>{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {(detailPedido.items ?? []).map((item, i) => (
                         <tr key={i} style={{ borderBottom: i < (detailPedido.items?.length ?? 0) - 1 ? '1px solid #F3F4F6' : 'none' }}>
-                          <td style={{ padding: '8px 12px', color: '#111827', fontWeight: 500 }}>{item.nombre}</td>
-                          <td style={{ padding: '8px 12px', color: '#6B7280' }}>{item.cantidad}</td>
-                          <td style={{ padding: '8px 12px', color: '#6B7280' }}>${(item.precio_unitario ?? 0).toLocaleString('es-UY')}</td>
-                          <td style={{ padding: '8px 12px', fontWeight: 700, color: '#111827' }}>${(item.subtotal ?? 0).toLocaleString('es-UY')}</td>
+                          <td style={{ padding: '8px 12px', color: 'var(--m-text)', fontWeight: 500 }}>{item.nombre}</td>
+                          <td style={{ padding: '8px 12px', color: 'var(--m-text-muted)' }}>{item.cantidad}</td>
+                          <td style={{ padding: '8px 12px', color: 'var(--m-text-muted)' }}>${(item.precio_unitario ?? 0).toLocaleString('es-UY')}</td>
+                          <td style={{ padding: '8px 12px', fontWeight: 700, color: 'var(--m-text)' }}>${(item.subtotal ?? 0).toLocaleString('es-UY')}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -500,10 +500,10 @@ export function PedidosView({ onNavigate }: Props) {
               </div>
 
               {/* Totales */}
-              <div style={{ backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB', padding: '14px 16px' }}>
+              <div style={{ backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB', padding: '14px 16px' }}>
                 {[
                   { label: 'Subtotal',  value: detailPedido.subtotal ?? 0,  bold: false },
-                  { label: 'Descuento', value: -(detailPedido.descuento ?? 0), bold: false, color: '#059669' },
+                  { label: 'Descuento', value: -(detailPedido.descuento ?? 0), bold: false, color: 'var(--m-success)' },
                   { label: 'Impuestos', value: detailPedido.impuestos ?? 0,   bold: false },
                 ].map(r => (
                   <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, fontSize: '0.84rem', color: r.color ?? '#6B7280' }}>
@@ -511,7 +511,7 @@ export function PedidosView({ onNavigate }: Props) {
                     <span>${r.value.toLocaleString('es-UY')}</span>
                   </div>
                 ))}
-                <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: 8, marginTop: 4, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '1rem', color: '#111827' }}>
+                <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: 8, marginTop: 4, display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '1rem', color: 'var(--m-text)' }}>
                   <span>Total</span>
                   <span style={{ color: ORANGE }}>${(detailPedido.total ?? 0).toLocaleString('es-UY')}</span>
                 </div>
@@ -534,8 +534,8 @@ export function PedidosView({ onNavigate }: Props) {
           <div style={{ ...modalStyle, maxWidth: 660 }} onClick={e => e.stopPropagation()}>
             <div style={modalHeaderStyle}>
               <div>
-                <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#111827' }}>Nuevo Pedido</h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.76rem', color: '#9CA3AF' }}>Completá los datos del pedido</p>
+                <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--m-text)' }}>Nuevo Pedido</h2>
+                <p style={{ margin: '2px 0 0', fontSize: '0.76rem', color: 'var(--m-text-muted)' }}>Completá los datos del pedido</p>
               </div>
               <button onClick={() => setShowNew(false)} style={closeBtnStyle}><X size={18} /></button>
             </div>
@@ -592,7 +592,7 @@ export function PedidosView({ onNavigate }: Props) {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                   <label style={labelStyle}>Ítems del pedido *</label>
-                  <button onClick={addItem} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 10px', borderRadius: 6, border: `1.5px solid ${ORANGE}`, background: '#FFF7ED', color: ORANGE, cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>
+                  <button onClick={addItem} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 10px', borderRadius: 6, border: `1.5px solid ${ORANGE}`, background: 'var(--m-warning-bg)', color: ORANGE, cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>
                     <Plus size={13} /> Agregar ítem
                   </button>
                 </div>
@@ -602,7 +602,7 @@ export function PedidosView({ onNavigate }: Props) {
                       <input value={item.nombre} onChange={e => updateItem(idx, 'nombre', e.target.value)} style={inputStyle} placeholder="Nombre del producto" />
                       <input type="number" value={item.cantidad} onChange={e => updateItem(idx, 'cantidad', parseFloat(e.target.value) || 0)} style={inputStyle} placeholder="Cant." min={1} />
                       <input type="number" value={item.precio_unitario} onChange={e => updateItem(idx, 'precio_unitario', parseFloat(e.target.value) || 0)} style={inputStyle} placeholder="Precio" min={0} />
-                      <button onClick={() => removeItem(idx)} style={{ width: 32, height: 32, borderRadius: 6, border: '1.5px solid #FEE2E2', background: '#FFF5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <button onClick={() => removeItem(idx)} style={{ width: 32, height: 32, borderRadius: 6, border: '1.5px solid #FEE2E2', background: 'var(--m-danger-bg)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Trash2 size={13} color="#DC2626" />
                       </button>
                     </div>
@@ -623,8 +623,8 @@ export function PedidosView({ onNavigate }: Props) {
               </div>
 
               {/* Total preview */}
-              <div style={{ backgroundColor: '#FFF7ED', borderRadius: 10, border: `1.5px solid ${ORANGE}30`, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.875rem', color: '#92400E', fontWeight: 600 }}>Total del pedido</span>
+              <div style={{ backgroundColor: 'var(--m-warning-bg)', borderRadius: 10, border: `1.5px solid ${ORANGE}30`, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.875rem', color: 'var(--m-warning-text)', fontWeight: 600 }}>Total del pedido</span>
                 <span style={{ fontSize: '1.25rem', fontWeight: 900, color: ORANGE }}>${totalForm.toLocaleString('es-UY')}</span>
               </div>
 
@@ -654,14 +654,14 @@ export function PedidosView({ onNavigate }: Props) {
 // ── Helpers UI ──────────────────────────────────────
 function LoadingSpinner({ text }: { text: string }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#9CA3AF' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: 'var(--m-text-muted)' }}>
       <RefreshCw size={18} style={{ animation: 'spin 1s linear infinite', marginRight: 8 }} /> {text}
     </div>
   );
 }
 function EmptyState({ icon: Icon, title, sub }: { icon: React.ElementType; title: string; sub: string }) {
   return (
-    <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
       <Icon size={44} style={{ marginBottom: 12, opacity: 0.25 }} />
       <p style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>{title}</p>
       <p style={{ fontSize: '0.875rem', marginTop: 6 }}>{sub}</p>
@@ -670,12 +670,12 @@ function EmptyState({ icon: Icon, title, sub }: { icon: React.ElementType; title
 }
 function InfoBlock({ icon: Icon, label, color, children }: { icon: React.ElementType; label: string; color: string; children: React.ReactNode }) {
   return (
-    <div style={{ padding: 14, backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB' }}>
+    <div style={{ padding: 14, backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
         <div style={{ width: 22, height: 22, borderRadius: 5, backgroundColor: color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Icon size={12} color={color} />
         </div>
-        <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
+        <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: 700, color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
       </div>
       {children}
     </div>
@@ -684,15 +684,15 @@ function InfoBlock({ icon: Icon, label, color, children }: { icon: React.Element
 
 // ── Styles ──────────────────────────────────────────
 const overlayStyle: React.CSSProperties = { position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 };
-const modalStyle: React.CSSProperties   = { backgroundColor: '#fff', borderRadius: 16, width: '100%', boxShadow: '0 20px 60px rgba(0,0,0,0.25)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' };
+const modalStyle: React.CSSProperties   = { backgroundColor: 'var(--m-surface)', borderRadius: 16, width: '100%', boxShadow: '0 20px 60px rgba(0,0,0,0.25)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' };
 const modalHeaderStyle: React.CSSProperties = { padding: '18px 24px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexShrink: 0 };
-const closeBtnStyle: React.CSSProperties   = { background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: 4 };
-const sectionLabel: React.CSSProperties    = { margin: 0, fontSize: '0.72rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em' };
-const infoText: React.CSSProperties        = { margin: 0, fontSize: '0.875rem', fontWeight: 600, color: '#111827' };
-const infoSub: React.CSSProperties         = { margin: '2px 0 0', fontSize: '0.76rem', color: '#6B7280' };
-const labelStyle: React.CSSProperties      = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: 5 };
-const inputStyle: React.CSSProperties      = { width: '100%', height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: '#111827', outline: 'none', boxSizing: 'border-box' };
-const selStyle: React.CSSProperties        = { height: 34, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: '#374151', cursor: 'pointer', backgroundColor: '#fff' };
-const selFormStyle: React.CSSProperties    = { width: '100%', height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: '#374151', cursor: 'pointer', outline: 'none', boxSizing: 'border-box' };
-const cancelBtnStyle: React.CSSProperties  = { padding: '9px 20px', borderRadius: 8, border: '1.5px solid #E5E7EB', background: '#fff', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, color: '#374151' };
-const saveBtnStyle: React.CSSProperties    = { padding: '9px 22px', borderRadius: 8, border: 'none', backgroundColor: '#FF6835', color: '#fff', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 };
+const closeBtnStyle: React.CSSProperties   = { background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-text-muted)', padding: 4 };
+const sectionLabel: React.CSSProperties    = { margin: 0, fontSize: '0.72rem', fontWeight: 700, color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' };
+const infoText: React.CSSProperties        = { margin: 0, fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text)' };
+const infoSub: React.CSSProperties         = { margin: '2px 0 0', fontSize: '0.76rem', color: 'var(--m-text-muted)' };
+const labelStyle: React.CSSProperties      = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--m-text-secondary)', marginBottom: 5 };
+const inputStyle: React.CSSProperties      = { width: '100%', height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: 'var(--m-text)', outline: 'none', boxSizing: 'border-box' };
+const selStyle: React.CSSProperties        = { height: 34, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: 'var(--m-text-secondary)', cursor: 'pointer', backgroundColor: 'var(--m-surface)' };
+const selFormStyle: React.CSSProperties    = { width: '100%', height: 36, border: '1.5px solid #E5E7EB', borderRadius: 8, padding: '0 10px', fontSize: '0.84rem', color: 'var(--m-text-secondary)', cursor: 'pointer', outline: 'none', boxSizing: 'border-box' };
+const cancelBtnStyle: React.CSSProperties  = { padding: '9px 20px', borderRadius: 8, border: '1.5px solid #E5E7EB', background: 'var(--m-surface)', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text-secondary)' };
+const saveBtnStyle: React.CSSProperties    = { padding: '9px 22px', borderRadius: 8, border: 'none', backgroundColor: 'var(--m-primary)', color: 'var(--m-surface)', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 };

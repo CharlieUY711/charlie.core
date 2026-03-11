@@ -101,7 +101,7 @@ function SpinWheel({ prizes, spinning, onSpinEnd }: { prizes: Prize[]; spinning:
 
   if (n === 0) {
     return (
-      <div style={{ position: 'relative', width: '300px', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF' }}>
+      <div style={{ position: 'relative', width: '300px', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--m-text-muted)' }}>
         <p>No hay premios configurados</p>
       </div>
     );
@@ -277,17 +277,17 @@ export function RuedaSorteosView({ onNavigate }: Props) {
         ]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)' }}>
         {loading ? (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-            <div style={{ textAlign: 'center', color: '#6B7280' }}>
+            <div style={{ textAlign: 'center', color: 'var(--m-text-muted)' }}>
               <Loader2 size={32} className="animate-spin" style={{ margin: '0 auto 12px', display: 'block' }} />
               <p>Cargando sorteos...</p>
             </div>
           </div>
         ) : error ? (
           <div style={{ padding: '24px 28px' }}>
-            <div style={{ backgroundColor: '#FEF2F2', borderRadius: '10px', border: '1px solid #FECACA', padding: '14px 18px', color: '#991B1B' }}>
+            <div style={{ backgroundColor: 'var(--m-danger-bg)', borderRadius: '10px', border: '1px solid #FECACA', padding: '14px 18px', color: 'var(--m-danger-text)' }}>
               <p style={{ margin: 0, fontWeight: '700' }}>⚠️ Error: {error}</p>
             </div>
           </div>
@@ -297,15 +297,15 @@ export function RuedaSorteosView({ onNavigate }: Props) {
             <div style={{ flex: 1, padding: '24px 28px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '16px' }}>
                 <div>
-                  <h3 style={{ margin: 0, fontWeight: '800', color: '#111827', fontSize: '0.95rem' }}>
+                  <h3 style={{ margin: 0, fontWeight: '800', color: 'var(--m-text)', fontSize: '0.95rem' }}>
                     {selectedSorteo?.nombre || config.name}
                   </h3>
-                  <p style={{ margin: '3px 0 0', color: selectedSorteo?.estado === 'activo' ? '#16A34A' : '#9CA3AF', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: selectedSorteo?.estado === 'activo' ? '#16A34A' : '#9CA3AF', display: 'inline-block' }} />
+                  <p style={{ margin: '3px 0 0', color: selectedSorteo?.estado === 'activo' ? '#16A34A' : 'var(--m-text-muted)', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: selectedSorteo?.estado === 'activo' ? '#16A34A' : 'var(--m-text-muted)', display: 'inline-block' }} />
                     {selectedSorteo?.estado === 'activo' ? 'Activo' : selectedSorteo?.estado === 'finalizado' ? 'Finalizado' : 'Borrador'}
                   </p>
                 </div>
-                <button onClick={() => {}} style={{ padding: '8px 16px', border: '1px solid #E5E7EB', borderRadius: '8px', backgroundColor: '#FFF', color: '#374151', fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button onClick={() => {}} style={{ padding: '8px 16px', border: '1px solid #E5E7EB', borderRadius: '8px', backgroundColor: 'var(--m-surface)', color: 'var(--m-text-secondary)', fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Save size={14} /> Guardar
                 </button>
               </div>
@@ -315,29 +315,29 @@ export function RuedaSorteosView({ onNavigate }: Props) {
                 <button
                   onClick={handleGirar}
                   disabled={spinning || !selectedSorteo || selectedSorteo.estado !== 'activo'}
-                  style={{ padding: '12px 32px', backgroundColor: ORANGE, color: '#FFF', border: 'none', borderRadius: '10px', fontWeight: '800', fontSize: '1rem', cursor: spinning || !selectedSorteo || selectedSorteo.estado !== 'activo' ? 'not-allowed' : 'pointer', opacity: spinning || !selectedSorteo || selectedSorteo.estado !== 'activo' ? 0.7 : 1, transition: 'all 0.2s' }}
+                  style={{ padding: '12px 32px', backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none', borderRadius: '10px', fontWeight: '800', fontSize: '1rem', cursor: spinning || !selectedSorteo || selectedSorteo.estado !== 'activo' ? 'not-allowed' : 'pointer', opacity: spinning || !selectedSorteo || selectedSorteo.estado !== 'activo' ? 0.7 : 1, transition: 'all 0.2s' }}
                 >
                   {spinning ? 'Girando…' : '🎰 ¡Girar!'}
                 </button>
 
                 {winner && (
                   <div style={{ padding: '14px 22px', backgroundColor: winner.color + '20', border: `2px solid ${winner.color}`, borderRadius: '12px', textAlign: 'center', animation: 'fadeIn 0.4s ease' }}>
-                    <p style={{ margin: '0 0 4px', fontWeight: '800', color: '#111827', fontSize: '1rem' }}>🎉 ¡Ganaste!</p>
+                    <p style={{ margin: '0 0 4px', fontWeight: '800', color: 'var(--m-text)', fontSize: '1rem' }}>🎉 ¡Ganaste!</p>
                     <p style={{ margin: 0, color: winner.color, fontWeight: '700', fontSize: '1.2rem' }}>{winner.label}</p>
                   </div>
                 )}
 
                 {selectedSorteo && (
-                  <div style={{ width: '100%', backgroundColor: '#FFFFFF', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px', marginTop: '20px' }}>
-                    <h4 style={{ margin: '0 0 12px', fontSize: '0.9rem', fontWeight: '700', color: '#111827' }}>Información del Sorteo</h4>
+                  <div style={{ width: '100%', backgroundColor: 'var(--m-surface)', borderRadius: '12px', border: '1px solid #E5E7EB', padding: '16px', marginTop: '20px' }}>
+                    <h4 style={{ margin: '0 0 12px', fontSize: '0.9rem', fontWeight: '700', color: 'var(--m-text)' }}>Información del Sorteo</h4>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.82rem' }}>
                       <div>
-                        <p style={{ margin: '0 0 4px', color: '#6B7280' }}>Participantes</p>
-                        <p style={{ margin: 0, fontWeight: '700', color: '#111827' }}>{selectedSorteo.total_participantes}</p>
+                        <p style={{ margin: '0 0 4px', color: 'var(--m-text-muted)' }}>Participantes</p>
+                        <p style={{ margin: 0, fontWeight: '700', color: 'var(--m-text)' }}>{selectedSorteo.total_participantes}</p>
                       </div>
                       <div>
-                        <p style={{ margin: '0 0 4px', color: '#6B7280' }}>Premio</p>
-                        <p style={{ margin: 0, fontWeight: '700', color: '#111827' }}>{selectedSorteo.premio || '—'}</p>
+                        <p style={{ margin: '0 0 4px', color: 'var(--m-text-muted)' }}>Premio</p>
+                        <p style={{ margin: 0, fontWeight: '700', color: 'var(--m-text)' }}>{selectedSorteo.premio || '—'}</p>
                       </div>
                     </div>
                   </div>
@@ -346,12 +346,12 @@ export function RuedaSorteosView({ onNavigate }: Props) {
             </div>
 
             {/* Right panel — sorteos list + prizes + config */}
-            <div style={{ width: '360px', borderLeft: '1px solid #E5E7EB', backgroundColor: '#FFFFFF', overflowY: 'auto', padding: '20px', flexShrink: 0 }}>
+            <div style={{ width: '360px', borderLeft: '1px solid #E5E7EB', backgroundColor: 'var(--m-surface)', overflowY: 'auto', padding: '20px', flexShrink: 0 }}>
               {/* Saved sorteos */}
               <div style={{ marginBottom: '20px' }}>
-                <h4 style={{ margin: '0 0 10px', fontSize: '0.85rem', fontWeight: '700', color: '#111827' }}>Sorteos Guardados</h4>
+                <h4 style={{ margin: '0 0 10px', fontSize: '0.85rem', fontWeight: '700', color: 'var(--m-text)' }}>Sorteos Guardados</h4>
                 {sorteos.length === 0 ? (
-                  <div style={{ padding: '20px', backgroundColor: '#F9FAFB', borderRadius: '8px', textAlign: 'center', color: '#9CA3AF', fontSize: '0.78rem' }}>
+                  <div style={{ padding: '20px', backgroundColor: 'var(--m-surface-2)', borderRadius: '8px', textAlign: 'center', color: 'var(--m-text-muted)', fontSize: '0.78rem' }}>
                     No hay sorteos guardados
                   </div>
                 ) : (
@@ -362,14 +362,14 @@ export function RuedaSorteosView({ onNavigate }: Props) {
                         onClick={() => setSelectedSorteo(s)}
                         style={{
                           padding: '12px',
-                          backgroundColor: selectedSorteo?.id === s.id ? '#FFF4EC' : '#F9FAFB',
-                          border: `1px solid ${selectedSorteo?.id === s.id ? ORANGE : '#E5E7EB'}`,
+                          backgroundColor: selectedSorteo?.id === s.id ? '#FFF4EC' : 'var(--m-surface-2)',
+                          border: `1px solid ${selectedSorteo?.id === s.id ? ORANGE : 'var(--m-border)'}`,
                           borderRadius: '8px',
                           cursor: 'pointer',
                         }}
                       >
-                        <p style={{ margin: '0 0 4px', fontWeight: '700', color: '#111827', fontSize: '0.82rem' }}>{s.nombre}</p>
-                        <p style={{ margin: 0, fontSize: '0.72rem', color: '#6B7280' }}>
+                        <p style={{ margin: '0 0 4px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.82rem' }}>{s.nombre}</p>
+                        <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
                           {s.estado} · {s.total_participantes} participantes
                         </p>
                       </div>
@@ -382,12 +382,12 @@ export function RuedaSorteosView({ onNavigate }: Props) {
               <div style={{ marginBottom: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                   <div>
-                    <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: '#111827' }}>Editar Premios</h4>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: totalProb === 100 ? '#16A34A' : '#EF4444' }}>
+                    <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: 'var(--m-text)' }}>Editar Premios</h4>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: totalProb === 100 ? '#16A34A' : 'var(--m-danger)' }}>
                       Total probabilidad: {totalProb}%
                     </p>
                   </div>
-                  <button onClick={addPrize} style={{ width: '26px', height: '26px', borderRadius: '50%', backgroundColor: ORANGE, color: '#FFF', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <button onClick={addPrize} style={{ width: '26px', height: '26px', borderRadius: '50%', backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Plus size={14} />
                   </button>
                 </div>
@@ -401,7 +401,7 @@ export function RuedaSorteosView({ onNavigate }: Props) {
                         <input type="color" value={prize.color} onChange={e => updatePrize(prize.id, 'color', e.target.value)}
                           style={{ width: '32px', height: '32px', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: 0 }} />
                         <button onClick={() => setPrizes(prev => prev.filter(p => p.id !== prize.id))}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#EF4444', padding: '4px' }}>
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--m-danger)', padding: '4px' }}>
                           <Trash2 size={13} />
                         </button>
                       </div>
@@ -420,7 +420,7 @@ export function RuedaSorteosView({ onNavigate }: Props) {
                         )}
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.72rem', color: '#6B7280' }}>Prob: {prize.probability}%</span>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>Prob: {prize.probability}%</span>
                         <input type="range" min={1} max={100} value={prize.probability}
                           onChange={e => updatePrize(prize.id, 'probability', +e.target.value)}
                           style={{ flex: 1, margin: '0 8px', accentColor: ORANGE }} />
@@ -432,7 +432,7 @@ export function RuedaSorteosView({ onNavigate }: Props) {
                           { key: 'checkStock', label: '📦 Verificar stock' },
                           { key: 'discountStock', label: '➖ Descontar stock' },
                         ].map(({ key, label }) => (
-                          <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', color: '#374151', cursor: 'pointer' }}>
+                          <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', color: 'var(--m-text-secondary)', cursor: 'pointer' }}>
                             <input type="checkbox" checked={prize[key as keyof Prize] as boolean}
                               onChange={e => updatePrize(prize.id, key as keyof Prize, e.target.checked)}
                               style={{ accentColor: ORANGE }} />
@@ -449,16 +449,16 @@ export function RuedaSorteosView({ onNavigate }: Props) {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
                   <Settings size={14} color="#6B7280" />
-                  <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: '#111827' }}>Configuración</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: 'var(--m-text)' }}>Configuración</h4>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#374151', fontWeight: '600', marginBottom: '4px' }}>Nombre de la Rueda</label>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--m-text-secondary)', fontWeight: '600', marginBottom: '4px' }}>Nombre de la Rueda</label>
                     <input value={config.name} onChange={e => setConfig(p => ({ ...p, name: e.target.value }))}
                       style={{ width: '100%', padding: '8px 10px', border: '1px solid #E5E7EB', borderRadius: '6px', fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box' }} />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#374151', fontWeight: '600', marginBottom: '4px' }}>Duración del giro (ms): {config.spinDuration}</label>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--m-text-secondary)', fontWeight: '600', marginBottom: '4px' }}>Duración del giro (ms): {config.spinDuration}</label>
                     <input type="range" min={1000} max={6000} step={500} value={config.spinDuration}
                       onChange={e => setConfig(p => ({ ...p, spinDuration: +e.target.value }))}
                       style={{ width: '100%', accentColor: ORANGE }} />
@@ -472,7 +472,7 @@ export function RuedaSorteosView({ onNavigate }: Props) {
                     { key: 'shareOnSocial', label: '📲 Compartir en redes sociales' },
                     { key: 'activeOnSite',  label: '🌐 Activar en el sitio web' },
                   ].map(({ key, label }) => (
-                    <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: '#374151', cursor: 'pointer' }}>
+                    <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.78rem', color: 'var(--m-text-secondary)', cursor: 'pointer' }}>
                       <input type="checkbox" checked={config[key as keyof WheelConfig] as boolean}
                         onChange={e => setConfig(p => ({ ...p, [key]: e.target.checked }))}
                         style={{ accentColor: ORANGE }} />
@@ -482,7 +482,7 @@ export function RuedaSorteosView({ onNavigate }: Props) {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                     {[{ key: 'maxSpinsUser', label: 'Máx giros/usuario' }, { key: 'maxSpinsDay', label: 'Máx giros/día' }].map(({ key, label }) => (
                       <div key={key}>
-                        <label style={{ display: 'block', fontSize: '0.72rem', color: '#374151', fontWeight: '600', marginBottom: '3px' }}>{label}</label>
+                        <label style={{ display: 'block', fontSize: '0.72rem', color: 'var(--m-text-secondary)', fontWeight: '600', marginBottom: '3px' }}>{label}</label>
                         <input type="text" placeholder="Sin límite" value={config[key as keyof WheelConfig] as string}
                           onChange={e => setConfig(p => ({ ...p, [key]: e.target.value }))}
                           style={{ width: '100%', padding: '7px 8px', border: '1px solid #E5E7EB', borderRadius: '6px', fontSize: '0.75rem', outline: 'none', boxSizing: 'border-box' }} />

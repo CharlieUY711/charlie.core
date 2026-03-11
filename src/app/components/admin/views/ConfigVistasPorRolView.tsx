@@ -47,11 +47,11 @@ interface GrupoModulos {
 
 /* ── Colores por rol ── */
 const ROL_COLORS: Record<RolKey, { color: string; badge: string }> = {
-  Cliente:       { color: '#6B7280', badge: 'Acceso básico'     },
-  Colaborador:   { color: '#10B981', badge: 'Acceso operativo'  },
-  Editor:        { color: '#3B82F6', badge: 'Acceso editorial'  },
+  Cliente:       { color: 'var(--m-text-muted)', badge: 'Acceso básico'     },
+  Colaborador:   { color: 'var(--m-success)', badge: 'Acceso operativo'  },
+  Editor:        { color: 'var(--m-info)', badge: 'Acceso editorial'  },
   Administrador: { color: ORANGE,    badge: 'Acceso avanzado'   },
-  SuperAdmin:    { color: '#7C3AED', badge: 'Acceso total'      },
+  SuperAdmin:    { color: 'var(--m-purple)', badge: 'Acceso total'      },
 };
 
 /* ── Factory de permisos por defecto ── */
@@ -141,7 +141,7 @@ const buildDefaultPermisos = (rol: RolKey): GrupoModulos[] => {
       ],
     },
     {
-      id: 'gestion', label: 'Gestión ERP', icon: Database, color: '#3B82F6', expanded: false,
+      id: 'gestion', label: 'Gestión ERP', icon: Database, color: 'var(--m-info)', expanded: false,
       modulos: [
         mkMod('inventario','Inventario', Package, !isCli, [
           ['ver',    'Ver stock',       !isCli],
@@ -164,7 +164,7 @@ const buildDefaultPermisos = (rol: RolKey): GrupoModulos[] => {
       ],
     },
     {
-      id: 'logistica', label: 'Logística', icon: Truck, color: '#10B981', expanded: false,
+      id: 'logistica', label: 'Logística', icon: Truck, color: 'var(--m-success)', expanded: false,
       modulos: [
         mkMod('envios',     'Envíos',       Truck, true, [
           ['ver',    'Ver envíos',      true ],
@@ -181,7 +181,7 @@ const buildDefaultPermisos = (rol: RolKey): GrupoModulos[] => {
       ],
     },
     {
-      id: 'integraciones-pagos', label: 'Pasarelas de Pago', icon: CreditCard, color: '#8B5CF6', expanded: false,
+      id: 'integraciones-pagos', label: 'Pasarelas de Pago', icon: CreditCard, color: 'var(--m-purple)', expanded: false,
       modulos: [
         mkPasarela('mp',       'Mercado Pago',    !isCli),
         mkPasarela('plexo',    'Plexo',           isAdm || isSup),
@@ -192,7 +192,7 @@ const buildDefaultPermisos = (rol: RolKey): GrupoModulos[] => {
       ],
     },
     {
-      id: 'integraciones-logistica-group', label: 'Logística Integrada', icon: Truck, color: '#14B8A6', expanded: false,
+      id: 'integraciones-logistica-group', label: 'Logística Integrada', icon: Truck, color: 'var(--m-success)', expanded: false,
       modulos: [
         mkLogistica('correouy', 'Correo UY', isAdm || isSup),
         mkLogistica('correo',   'Correo UY', isAdm || isSup),
@@ -200,7 +200,7 @@ const buildDefaultPermisos = (rol: RolKey): GrupoModulos[] => {
       ],
     },
     {
-      id: 'sistema-group', label: 'Sistema & Config', icon: Settings, color: '#6B7280', expanded: false,
+      id: 'sistema-group', label: 'Sistema & Config', icon: Settings, color: 'var(--m-text-muted)', expanded: false,
       modulos: [
         mkMod('sistema',    'Sistema',        Settings, isAdm || isSup, [
           ['ver',    'Ver configuración', isAdm || isSup],
@@ -231,7 +231,7 @@ function Toggle({ enabled, onChange, color }: { enabled: boolean; onChange: () =
       onClick={onChange}
       style={{
         width: 40, height: 22, borderRadius: 11,
-        backgroundColor: enabled ? color : '#D1D5DB',
+        backgroundColor: enabled ? color : 'var(--m-border)',
         border: 'none', cursor: 'pointer',
         position: 'relative', flexShrink: 0,
         transition: 'background 0.2s',
@@ -240,7 +240,7 @@ function Toggle({ enabled, onChange, color }: { enabled: boolean; onChange: () =
       <div style={{
         position: 'absolute', top: 3, left: enabled ? 21 : 3,
         width: 16, height: 16, borderRadius: '50%',
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--m-surface)',
         boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
         transition: 'left 0.2s',
       }} />
@@ -319,7 +319,7 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
   const visibleModules= currentGrupos.reduce((a, g) => a + g.modulos.filter(m => m.visible).length, 0);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: '#F8F9FA' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', backgroundColor: 'var(--m-bg)' }}>
 
       <OrangeHeader
         icon={Eye}
@@ -349,7 +349,7 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 
         {/* ── Tabs de roles ── */}
-        <div style={{ backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', padding: '0 28px', display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
+        <div style={{ backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', padding: '0 28px', display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
           {ROLES.map(rol => {
             const active = rol === activeRol;
             const color  = ROL_COLORS[rol].color;
@@ -361,13 +361,13 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
                   padding: '14px 20px',
                   border: 'none', borderBottom: active ? `3px solid ${color}` : '3px solid transparent',
                   backgroundColor: 'transparent',
-                  color: active ? color : '#6B7280',
+                  color: active ? color : 'var(--m-text-muted)',
                   fontSize: '0.85rem', fontWeight: active ? '800' : '600',
                   cursor: 'pointer', transition: 'all 0.15s',
                   display: 'flex', alignItems: 'center', gap: 7,
                 }}
               >
-                <Shield size={14} color={active ? color : '#9CA3AF'} />
+                <Shield size={14} color={active ? color : 'var(--m-text-muted)'} />
                 {rol}
                 {active && (
                   <span style={{ fontSize: '0.65rem', fontWeight: '700', color, backgroundColor: `${color}15`, padding: '2px 7px', borderRadius: 5 }}>
@@ -381,7 +381,7 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
           <div style={{ flex: 1 }} />
 
           {hasChanges && (
-            <span style={{ fontSize: '0.75rem', color: '#F59E0B', fontWeight: '700', display: 'flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--m-warning)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: 5 }}>
               <AlertTriangle size={12} /> Cambios sin guardar
             </span>
           )}
@@ -392,22 +392,22 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
 
           {/* Resumen del rol */}
           <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
-            <div style={{ flex: 1, backgroundColor: '#fff', borderRadius: 12, border: `1.5px solid ${rolColor}30`, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ flex: 1, backgroundColor: 'var(--m-surface)', borderRadius: 12, border: `1.5px solid ${rolColor}30`, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: `${rolColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Shield size={18} color={rolColor} />
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: '#111827' }}>{activeRol}</p>
-                <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#6B7280' }}>{ROL_COLORS[activeRol].badge}</p>
+                <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: 'var(--m-text)' }}>{activeRol}</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>{ROL_COLORS[activeRol].badge}</p>
               </div>
             </div>
-            <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '16px 22px', textAlign: 'center' }}>
+            <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', padding: '16px 22px', textAlign: 'center' }}>
               <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: '800', color: rolColor }}>{visibleModules}/{totalModules}</p>
-              <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#9CA3AF' }}>Módulos visibles</p>
+              <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>Módulos visibles</p>
             </div>
-            <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '16px 22px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', padding: '16px 22px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <Info size={15} color='#9CA3AF' />
-              <p style={{ margin: 0, fontSize: '0.75rem', color: '#6B7280', maxWidth: 200 }}>
+              <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--m-text-muted)', maxWidth: 200 }}>
                 Los cambios son visuales. Conectar a backend para aplicar en tiempo real.
               </p>
             </div>
@@ -418,7 +418,7 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
             {currentGrupos.map(grupo => {
               const visiblesEnGrupo = grupo.modulos.filter(m => m.visible).length;
               return (
-                <div key={grupo.id} style={{ backgroundColor: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+                <div key={grupo.id} style={{ backgroundColor: 'var(--m-surface)', borderRadius: 14, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
 
                   {/* Header del grupo */}
                   <button
@@ -434,16 +434,16 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
                       <grupo.icon size={16} color={grupo.color} />
                     </div>
                     <div style={{ flex: 1 }}>
-                      <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: '700', color: '#111827' }}>{grupo.label}</p>
-                      <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#9CA3AF' }}>
+                      <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: '700', color: 'var(--m-text)' }}>{grupo.label}</p>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>
                         {visiblesEnGrupo}/{grupo.modulos.length} módulos habilitados
                       </p>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <span style={{
                         fontSize: '0.7rem', fontWeight: '700',
-                        color: visiblesEnGrupo > 0 ? grupo.color : '#9CA3AF',
-                        backgroundColor: visiblesEnGrupo > 0 ? `${grupo.color}15` : '#F3F4F6',
+                        color: visiblesEnGrupo > 0 ? grupo.color : 'var(--m-text-muted)',
+                        backgroundColor: visiblesEnGrupo > 0 ? `${grupo.color}15` : 'var(--m-surface-2)',
                         padding: '3px 9px', borderRadius: 6,
                       }}>
                         {visiblesEnGrupo > 0 ? `${visiblesEnGrupo} activos` : 'Sin acceso'}
@@ -460,18 +460,18 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
                           <div
                             key={mod.id}
                             style={{
-                              borderRadius: 12, border: `1.5px solid ${mod.visible ? grupo.color + '30' : '#E5E7EB'}`,
-                              backgroundColor: mod.visible ? `${grupo.color}04` : '#FAFAFA',
+                              borderRadius: 12, border: `1.5px solid ${mod.visible ? grupo.color + '30' : 'var(--m-border)'}`,
+                              backgroundColor: mod.visible ? `${grupo.color}04` : 'var(--m-surface-2)',
                               overflow: 'hidden', transition: 'all 0.15s',
                             }}
                           >
                             {/* Módulo header */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderBottom: mod.visible ? `1px solid ${grupo.color}15` : 'none' }}>
-                              <div style={{ width: 28, height: 28, borderRadius: 7, backgroundColor: mod.visible ? `${grupo.color}18` : '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <mod.icon size={13} color={mod.visible ? grupo.color : '#9CA3AF'} />
+                              <div style={{ width: 28, height: 28, borderRadius: 7, backgroundColor: mod.visible ? `${grupo.color}18` : 'var(--m-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <mod.icon size={13} color={mod.visible ? grupo.color : 'var(--m-text-muted)'} />
                               </div>
                               <div style={{ flex: 1 }}>
-                                <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', color: mod.visible ? '#111827' : '#9CA3AF' }}>{mod.label}</p>
+                                <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', color: mod.visible ? '#111827' : 'var(--m-text-muted)' }}>{mod.label}</p>
                               </div>
                               <Toggle enabled={mod.visible} onChange={() => toggleModulo(grupo.id, mod.id)} color={grupo.color} />
                             </div>
@@ -486,7 +486,7 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
                                         ? <Unlock size={11} color={grupo.color} />
                                         : <Lock    size={11} color='#D1D5DB'    />
                                       }
-                                      <span style={{ fontSize: '0.74rem', color: sp.enabled ? '#374151' : '#9CA3AF', fontWeight: sp.enabled ? '600' : '400' }}>
+                                      <span style={{ fontSize: '0.74rem', color: sp.enabled ? '#374151' : 'var(--m-text-muted)', fontWeight: sp.enabled ? '600' : '400' }}>
                                         {sp.label}
                                       </span>
                                     </div>
@@ -509,8 +509,8 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
           <div style={{ marginTop: 24, padding: '16px 20px', backgroundColor: `${ORANGE}08`, borderRadius: 12, border: `1.5px solid ${ORANGE}20`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <CheckCircle size={15} color={ORANGE} />
-              <p style={{ margin: 0, fontSize: '0.8rem', color: '#6B7280' }}>
-                <strong style={{ color: '#374151' }}>Nivel 1 — Visual:</strong> Los permisos se guardan localmente.
+              <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>
+                <strong style={{ color: 'var(--m-text-secondary)' }}>Nivel 1 — Visual:</strong> Los permisos se guardan localmente.
                 Conectar a Supabase Auth para aplicar en tiempo real (Nivel 2).
               </p>
             </div>
@@ -520,7 +520,7 @@ export function ConfigVistasPorRolView({ onNavigate: _ }: Props) {
                 display: 'flex', alignItems: 'center', gap: 7,
                 padding: '10px 20px', borderRadius: 9,
                 border: 'none', backgroundColor: ORANGE,
-                color: '#fff', fontSize: '0.82rem', fontWeight: '700',
+                color: 'var(--m-surface)', fontSize: '0.82rem', fontWeight: '700',
                 cursor: 'pointer', flexShrink: 0,
               }}
             >

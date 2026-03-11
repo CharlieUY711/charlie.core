@@ -35,11 +35,11 @@ interface Pedido {
 }
 
 const ESTADO_PAGO_CONFIG: Record<string, { label: string; color: string; bg: string; icon: React.ElementType }> = {
-  pendiente:    { label: 'Pendiente',    color: '#D97706', bg: '#FFFBEB', icon: Clock        },
-  pagado:       { label: 'Pagado',       color: '#059669', bg: '#ECFDF5', icon: CheckCircle  },
-  parcial:      { label: 'Pago parcial', color: '#2563EB', bg: '#EFF6FF', icon: TrendingUp   },
-  fallido:      { label: 'Fallido',      color: '#DC2626', bg: '#FEF2F2', icon: XCircle      },
-  reembolsado:  { label: 'Reembolsado', color: '#7C3AED', bg: '#F5F3FF', icon: RotateCcw    },
+  pendiente:    { label: 'Pendiente',    color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', icon: Clock        },
+  pagado:       { label: 'Pagado',       color: 'var(--m-success)', bg: 'var(--m-success-bg)', icon: CheckCircle  },
+  parcial:      { label: 'Pago parcial', color: 'var(--m-info)', bg: 'var(--m-info-bg)', icon: TrendingUp   },
+  fallido:      { label: 'Fallido',      color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', icon: XCircle      },
+  reembolsado:  { label: 'Reembolsado', color: 'var(--m-purple)', bg: 'var(--m-purple-bg)', icon: RotateCcw    },
 };
 
 const FILTROS = [
@@ -125,28 +125,28 @@ export function PagosView({ onNavigate }: Props) {
       />
 
       {/* Stats */}
-      <div style={{ padding: '12px 28px', backgroundColor: '#fff', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <div style={{ padding: '12px 28px', backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         {[
           { label: 'Transacciones',    value: total,                       icon: CreditCard,  color: ORANGE,    sub: 'total' },
-          { label: 'Cobrado',          value: fmtMonto(montoCobrado),      icon: CheckCircle, color: '#059669', sub: `${pagados} pedidos` },
-          { label: 'Pendiente cobro',  value: fmtMonto(montoPendiente),    icon: Clock,       color: '#D97706', sub: `${pendientes} pedidos` },
-          { label: 'Fallidos',         value: fallidos,                    icon: XCircle,     color: '#DC2626', sub: 'requieren atención' },
+          { label: 'Cobrado',          value: fmtMonto(montoCobrado),      icon: CheckCircle, color: 'var(--m-success)', sub: `${pagados} pedidos` },
+          { label: 'Pendiente cobro',  value: fmtMonto(montoPendiente),    icon: Clock,       color: 'var(--m-warning)', sub: `${pendientes} pedidos` },
+          { label: 'Fallidos',         value: fallidos,                    icon: XCircle,     color: 'var(--m-danger)', sub: 'requieren atención' },
         ].map(s => (
-          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB', minWidth: 150 }}>
+          <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB', minWidth: 150 }}>
             <div style={{ width: 34, height: 34, borderRadius: 8, backgroundColor: s.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <s.icon size={16} color={s.color} />
             </div>
             <div>
-              <p style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>{s.value}</p>
-              <p style={{ margin: '2px 0 0', fontSize: '0.68rem', color: '#9CA3AF' }}>{s.sub}</p>
-              <p style={{ margin: 0, fontSize: '0.7rem', color: '#6B7280' }}>{s.label}</p>
+              <p style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: 'var(--m-text)', lineHeight: 1 }}>{s.value}</p>
+              <p style={{ margin: '2px 0 0', fontSize: '0.68rem', color: 'var(--m-text-muted)' }}>{s.sub}</p>
+              <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--m-text-muted)' }}>{s.label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Filtros */}
-      <div style={{ padding: '10px 28px', backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ padding: '10px 28px', backgroundColor: 'var(--m-surface-2)', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
         {/* Búsqueda */}
         <div style={{ position: 'relative' }}>
           <Search size={14} color="#9CA3AF" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)' }} />
@@ -154,7 +154,7 @@ export function PagosView({ onNavigate }: Props) {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar por nº pedido…"
-            style={{ paddingLeft: 30, height: 34, border: '1.5px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', width: 200, color: '#374151' }}
+            style={{ paddingLeft: 30, height: 34, border: '1.5px solid #E5E7EB', borderRadius: 8, fontSize: '0.82rem', outline: 'none', width: 200, color: 'var(--m-text-secondary)' }}
           />
         </div>
         {/* Estado pago */}
@@ -162,9 +162,9 @@ export function PagosView({ onNavigate }: Props) {
           {FILTROS.map(f => (
             <button key={f.value} onClick={() => setFiltro(f.value)}
               style={{
-                padding: '5px 12px', borderRadius: 20, border: `1.5px solid ${filtro === f.value ? ORANGE : '#E5E7EB'}`,
-                backgroundColor: filtro === f.value ? ORANGE + '15' : '#fff',
-                color: filtro === f.value ? ORANGE : '#6B7280',
+                padding: '5px 12px', borderRadius: 20, border: `1.5px solid ${filtro === f.value ? ORANGE : 'var(--m-border)'}`,
+                backgroundColor: filtro === f.value ? ORANGE + '15' : 'var(--m-surface)',
+                color: filtro === f.value ? ORANGE : 'var(--m-text-muted)',
                 fontSize: '0.78rem', fontWeight: filtro === f.value ? 700 : 500, cursor: 'pointer',
               }}>
               {f.label}
@@ -180,11 +180,11 @@ export function PagosView({ onNavigate }: Props) {
         ) : pedidos.length === 0 ? (
           <EmptyState filtro={filtro} />
         ) : (
-          <div style={{ backgroundColor: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+          <div style={{ backgroundColor: 'var(--m-surface)', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
             {/* Header */}
-            <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr 160px 90px 110px 130px', gap: 0, backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr 160px 90px 110px 130px', gap: 0, backgroundColor: 'var(--m-surface-2)', borderBottom: '1px solid #E5E7EB' }}>
               {['# Pedido', 'Cliente', 'Método de pago', 'Monto', 'Fecha', 'Estado pago'].map(h => (
-                <div key={h} style={{ padding: '10px 14px', fontSize: '0.72rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</div>
+                <div key={h} style={{ padding: '10px 14px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--m-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</div>
               ))}
             </div>
 
@@ -216,9 +216,9 @@ export function PagosView({ onNavigate }: Props) {
 
                   {/* Cliente */}
                   <div style={{ padding: '12px 14px' }}>
-                    <p style={{ margin: 0, fontSize: '0.83rem', fontWeight: 600, color: '#111827' }}>{clienteNombre}</p>
+                    <p style={{ margin: 0, fontSize: '0.83rem', fontWeight: 600, color: 'var(--m-text)' }}>{clienteNombre}</p>
                     {p.cliente_persona?.email && (
-                      <p style={{ margin: 0, fontSize: '0.72rem', color: '#9CA3AF' }}>{p.cliente_persona.email}</p>
+                      <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{p.cliente_persona.email}</p>
                     )}
                   </div>
 
@@ -228,26 +228,26 @@ export function PagosView({ onNavigate }: Props) {
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span style={{ fontSize: '1rem' }}>{emoji}</span>
                         <div>
-                          <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600, color: '#374151' }}>{p.metodo_pago.nombre}</p>
-                          <p style={{ margin: 0, fontSize: '0.68rem', color: '#9CA3AF', textTransform: 'capitalize' }}>{p.metodo_pago.tipo}</p>
+                          <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600, color: 'var(--m-text-secondary)' }}>{p.metodo_pago.nombre}</p>
+                          <p style={{ margin: 0, fontSize: '0.68rem', color: 'var(--m-text-muted)', textTransform: 'capitalize' }}>{p.metodo_pago.tipo}</p>
                         </div>
                       </div>
                     ) : (
-                      <span style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>—</span>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>—</span>
                     )}
                   </div>
 
                   {/* Monto */}
                   <div style={{ padding: '12px 14px' }}>
-                    <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: '#111827' }}>{fmtMonto(p.total)}</p>
+                    <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: 'var(--m-text)' }}>{fmtMonto(p.total)}</p>
                     {p.descuento > 0 && (
-                      <p style={{ margin: 0, fontSize: '0.68rem', color: '#059669' }}>-{fmtMonto(p.descuento)} desc.</p>
+                      <p style={{ margin: 0, fontSize: '0.68rem', color: 'var(--m-success)' }}>-{fmtMonto(p.descuento)} desc.</p>
                     )}
                   </div>
 
                   {/* Fecha */}
                   <div style={{ padding: '12px 14px' }}>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#6B7280' }}>{fmtFecha(p.created_at)}</p>
+                    <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>{fmtFecha(p.created_at)}</p>
                   </div>
 
                   {/* Estado pago — dropdown */}
@@ -273,7 +273,7 @@ export function PagosView({ onNavigate }: Props) {
                     {isDropOpen && (
                       <div style={{
                         position: 'absolute', top: '100%', left: 14, zIndex: 100,
-                        backgroundColor: '#fff', border: '1px solid #E5E7EB', borderRadius: 10,
+                        backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: 10,
                         boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: 160, overflow: 'hidden',
                       }}>
                         {Object.entries(ESTADO_PAGO_CONFIG).map(([key, c]) => {
@@ -282,12 +282,12 @@ export function PagosView({ onNavigate }: Props) {
                             <button key={key} onClick={() => cambiarEstadoPago(p, key)}
                               style={{
                                 width: '100%', display: 'flex', alignItems: 'center', gap: 8,
-                                padding: '9px 12px', border: 'none', background: key === p.estado_pago ? c.bg : '#fff',
+                                padding: '9px 12px', border: 'none', background: key === p.estado_pago ? c.bg : 'var(--m-surface)',
                                 cursor: 'pointer', fontSize: '0.8rem', fontWeight: key === p.estado_pago ? 700 : 500,
-                                color: key === p.estado_pago ? c.color : '#374151', textAlign: 'left',
+                                color: key === p.estado_pago ? c.color : 'var(--m-text-secondary)', textAlign: 'left',
                               }}
                               onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#F9FAFB'}
-                              onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = key === p.estado_pago ? c.bg : '#fff'}
+                              onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = key === p.estado_pago ? c.bg : 'var(--m-surface)'}
                             >
                               <Icon size={13} color={c.color} /> {c.label}
                               {key === p.estado_pago && <span style={{ marginLeft: 'auto', fontSize: '0.6rem' }}>✓</span>}
@@ -315,16 +315,16 @@ export function PagosView({ onNavigate }: Props) {
 
 function LoadingSpinner() {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: '#9CA3AF', gap: 8 }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: 'var(--m-text-muted)', gap: 8 }}>
       <RefreshCw size={18} style={{ animation: 'spin 1s linear infinite' }} /> Cargando transacciones…
     </div>
   );
 }
 function EmptyState({ filtro }: { filtro: string }) {
   return (
-    <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
+    <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--m-text-muted)' }}>
       <DollarSign size={44} style={{ marginBottom: 12, opacity: 0.25 }} />
-      <p style={{ fontSize: '1rem', fontWeight: 600, margin: 0, color: '#374151' }}>
+      <p style={{ fontSize: '1rem', fontWeight: 600, margin: 0, color: 'var(--m-text-secondary)' }}>
         {filtro ? `No hay transacciones "${FILTROS.find(f => f.value === filtro)?.label}"` : 'No hay transacciones aún'}
       </p>
       <p style={{ fontSize: '0.875rem', marginTop: 6 }}>Los pagos aparecerán aquí cuando se creen pedidos</p>

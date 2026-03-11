@@ -42,9 +42,9 @@ const MOCK_CAMPAIGNS: AdCampaign[] = [
 ];
 
 const STATUS_CONFIG: Record<CampaignStatus, { label: string; bg: string; color: string }> = {
-  active: { label: 'Activa',  bg: '#DCFCE7', color: '#15803D' },
-  paused: { label: 'Pausada', bg: '#FEF3C7', color: '#B45309' },
-  draft:  { label: 'Borrador', bg: '#F3F4F6', color: '#374151' },
+  active: { label: 'Activa',  bg: 'var(--m-success-bg)', color: 'var(--m-success)' },
+  paused: { label: 'Pausada', bg: 'var(--m-warning-bg)', color: 'var(--m-warning-text)' },
+  draft:  { label: 'Borrador', bg: 'var(--m-surface-2)', color: 'var(--m-text-secondary)' },
 };
 
 export function GoogleAdsView({ onNavigate }: Props) {
@@ -70,7 +70,7 @@ export function GoogleAdsView({ onNavigate }: Props) {
       />
 
       {/* Sticky tabs */}
-      <div style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
+      <div style={{ backgroundColor: 'var(--m-surface)', borderBottom: '1px solid #E5E7EB', flexShrink: 0 }}>
         <div style={{ display: 'flex', padding: '0 28px' }}>
           {[
             { id: 'campanas' as const, label: 'Campañas' },
@@ -78,31 +78,31 @@ export function GoogleAdsView({ onNavigate }: Props) {
             { id: 'audiencias' as const, label: 'Audiencias' },
           ].map(t => (
             <button key={t.id} onClick={() => setActiveTab(t.id)}
-              style={{ padding: '14px 18px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: activeTab === t.id ? BLUE : '#6B7280', fontWeight: activeTab === t.id ? '700' : '500', fontSize: '0.875rem', borderBottom: activeTab === t.id ? `2px solid ${BLUE}` : '2px solid transparent' }}>
+              style={{ padding: '14px 18px', border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: activeTab === t.id ? BLUE : 'var(--m-text-muted)', fontWeight: activeTab === t.id ? '700' : '500', fontSize: '0.875rem', borderBottom: activeTab === t.id ? `2px solid ${BLUE}` : '2px solid transparent' }}>
               {t.label}
             </button>
           ))}
         </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)' }}>
         <div style={{ padding: '24px 28px', maxWidth: '1200px' }}>
 
           {/* Stats */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
             {[
-              { label: 'Gastado', value: `$${totalSpent.toFixed(2)}`, sub: `vs $0.00 mes anterior`, Icon: DollarSign, color: '#111827' },
-              { label: 'Impresiones', value: totalImpressions.toLocaleString(), sub: `+FCR vs mes anterior`, Icon: Eye, color: '#10B981' },
-              { label: 'Clics', value: totalClicks.toLocaleString(), sub: `CTR: ${avgCTR}%`, Icon: MousePointer, color: '#EF4444' },
-              { label: 'ROAS', value: `${roas}x`, sub: 'Excelente rendimiento', Icon: BarChart2, color: '#7C3AED' },
+              { label: 'Gastado', value: `$${totalSpent.toFixed(2)}`, sub: `vs $0.00 mes anterior`, Icon: DollarSign, color: 'var(--m-text)' },
+              { label: 'Impresiones', value: totalImpressions.toLocaleString(), sub: `+FCR vs mes anterior`, Icon: Eye, color: 'var(--m-success)' },
+              { label: 'Clics', value: totalClicks.toLocaleString(), sub: `CTR: ${avgCTR}%`, Icon: MousePointer, color: 'var(--m-danger)' },
+              { label: 'ROAS', value: `${roas}x`, sub: 'Excelente rendimiento', Icon: BarChart2, color: 'var(--m-purple)' },
             ].map((s, i) => (
-              <div key={i} style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '18px 20px' }}>
+              <div key={i} style={{ backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '18px 20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                  <p style={{ margin: 0, fontSize: '0.78rem', color: '#6B7280' }}>{s.label}</p>
+                  <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--m-text-muted)' }}>{s.label}</p>
                   <s.Icon size={16} color={s.color} />
                 </div>
                 <p style={{ margin: '0 0 4px', fontSize: '1.5rem', fontWeight: '800', color: s.color }}>{s.value}</p>
-                <p style={{ margin: 0, fontSize: '0.72rem', color: '#9CA3AF' }}>{s.sub}</p>
+                <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--m-text-muted)' }}>{s.sub}</p>
               </div>
             ))}
           </div>
@@ -110,13 +110,13 @@ export function GoogleAdsView({ onNavigate }: Props) {
           {activeTab === 'campanas' && (
             <>
               {/* Chart */}
-              <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
-                <h3 style={{ margin: '0 0 20px', fontWeight: '700', color: '#111827', fontSize: '0.95rem' }}>Rendimiento Últimos 7 Días</h3>
+              <div style={{ backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
+                <h3 style={{ margin: '0 0 20px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.95rem' }}>Rendimiento Últimos 7 Días</h3>
                 <ResponsiveContainer width="100%" height={220}>
                   <LineChart data={CHART_DATA} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-                    <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#9CA3AF' }} />
-                    <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} />
+                    <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'var(--m-text-muted)' }} />
+                    <YAxis tick={{ fontSize: 11, fill: 'var(--m-text-muted)' }} />
                     <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '0.8rem' }} />
                     <Legend wrapperStyle={{ fontSize: '0.78rem' }} />
                     <Line type="monotone" dataKey="impresiones" stroke={BLUE} strokeWidth={2} dot={false} name="Impresiones" />
@@ -127,19 +127,19 @@ export function GoogleAdsView({ onNavigate }: Props) {
               </div>
 
               {/* Campaigns table */}
-              <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden', marginBottom: '24px' }}>
+              <div style={{ backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden', marginBottom: '24px' }}>
                 <div style={{ padding: '16px 20px', borderBottom: '1px solid #E5E7EB', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: '#111827' }}>Campañas Activas</h3>
-                  <button style={{ padding: '9px 18px', backgroundColor: BLUE, color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '700', color: 'var(--m-text)' }}>Campañas Activas</h3>
+                  <button style={{ padding: '9px 18px', backgroundColor: BLUE, color: 'var(--m-surface)', border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Plus size={15} /> Crear Campaña
                   </button>
                 </div>
                 {MOCK_CAMPAIGNS.filter(c => c.status !== 'draft').length > 0 ? (
                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                      <tr style={{ backgroundColor: '#F9FAFB' }}>
+                      <tr style={{ backgroundColor: 'var(--m-surface-2)' }}>
                         {['Nombre', 'Estado', 'Tipo', 'Presupuesto', 'Gastado', 'Impresiones', 'Clics', 'CTR', 'Conversiones'].map(h => (
-                          <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontSize: '0.72rem', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
+                          <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -147,26 +147,26 @@ export function GoogleAdsView({ onNavigate }: Props) {
                       {MOCK_CAMPAIGNS.map((c, i) => {
                         const st = STATUS_CONFIG[c.status];
                         return (
-                          <tr key={c.id} style={{ borderTop: '1px solid #F3F4F6', backgroundColor: i % 2 === 0 ? '#FFF' : '#FAFAFA' }}>
-                            <td style={{ padding: '12px 14px', fontWeight: '600', color: '#111827', fontSize: '0.875rem' }}>{c.name}</td>
+                          <tr key={c.id} style={{ borderTop: '1px solid #F3F4F6', backgroundColor: i % 2 === 0 ? '#FFF' : 'var(--m-surface-2)' }}>
+                            <td style={{ padding: '12px 14px', fontWeight: '600', color: 'var(--m-text)', fontSize: '0.875rem' }}>{c.name}</td>
                             <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 10px', borderRadius: '20px', backgroundColor: st.bg, color: st.color, fontSize: '0.72rem', fontWeight: '700' }}>{st.label}</span></td>
-                            <td style={{ padding: '12px 14px', color: '#6B7280', fontSize: '0.8rem' }}>{c.type}</td>
-                            <td style={{ padding: '12px 14px', color: '#374151', fontSize: '0.8rem' }}>${c.budget}/día</td>
-                            <td style={{ padding: '12px 14px', color: '#374151', fontSize: '0.8rem' }}>${c.spent.toFixed(2)}</td>
-                            <td style={{ padding: '12px 14px', color: '#374151', fontSize: '0.8rem' }}>{c.impressions.toLocaleString()}</td>
-                            <td style={{ padding: '12px 14px', color: '#374151', fontSize: '0.8rem' }}>{c.clicks}</td>
-                            <td style={{ padding: '12px 14px', color: '#374151', fontSize: '0.8rem' }}>{c.ctr}%</td>
-                            <td style={{ padding: '12px 14px', color: '#374151', fontSize: '0.8rem' }}>{c.conversions}</td>
+                            <td style={{ padding: '12px 14px', color: 'var(--m-text-muted)', fontSize: '0.8rem' }}>{c.type}</td>
+                            <td style={{ padding: '12px 14px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>${c.budget}/día</td>
+                            <td style={{ padding: '12px 14px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>${c.spent.toFixed(2)}</td>
+                            <td style={{ padding: '12px 14px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>{c.impressions.toLocaleString()}</td>
+                            <td style={{ padding: '12px 14px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>{c.clicks}</td>
+                            <td style={{ padding: '12px 14px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>{c.ctr}%</td>
+                            <td style={{ padding: '12px 14px', color: 'var(--m-text-secondary)', fontSize: '0.8rem' }}>{c.conversions}</td>
                           </tr>
                         );
                       })}
                     </tbody>
                   </table>
                 ) : (
-                  <div style={{ padding: '50px', textAlign: 'center', color: '#9CA3AF' }}>
+                  <div style={{ padding: '50px', textAlign: 'center', color: 'var(--m-text-muted)' }}>
                     <TrendingUp size={36} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
                     <p style={{ margin: '0 0 14px', fontWeight: '600' }}>No hay campañas</p>
-                    <button style={{ padding: '10px 22px', backgroundColor: BLUE, color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.875rem' }}>
+                    <button style={{ padding: '10px 22px', backgroundColor: BLUE, color: 'var(--m-surface)', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.875rem' }}>
                       Crear Campaña
                     </button>
                   </div>
@@ -176,13 +176,13 @@ export function GoogleAdsView({ onNavigate }: Props) {
           )}
 
           {activeTab === 'analiticas' && (
-            <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '24px' }}>
-              <h3 style={{ margin: '0 0 20px', fontWeight: '700', color: '#111827', fontSize: '0.95rem' }}>Rendimiento 30 días</h3>
+            <div style={{ backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '24px' }}>
+              <h3 style={{ margin: '0 0 20px', fontWeight: '700', color: 'var(--m-text)', fontSize: '0.95rem' }}>Rendimiento 30 días</h3>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={[...CHART_DATA, ...CHART_DATA.map(d => ({ ...d, date: d.date.replace('Feb', 'Feb+'), impresiones: d.impresiones * 1.2, clics: d.clics * 1.15 }))]} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#9CA3AF' }} />
-                  <YAxis tick={{ fontSize: 10, fill: '#9CA3AF' }} />
+                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--m-text-muted)' }} />
+                  <YAxis tick={{ fontSize: 10, fill: 'var(--m-text-muted)' }} />
                   <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E5E7EB', fontSize: '0.8rem' }} />
                   <Line type="monotone" dataKey="impresiones" stroke={BLUE} strokeWidth={2} dot={false} name="Impresiones" />
                   <Line type="monotone" dataKey="clics" stroke="#10B981" strokeWidth={2} dot={false} name="Clics" />
@@ -194,10 +194,10 @@ export function GoogleAdsView({ onNavigate }: Props) {
           {activeTab === 'audiencias' && (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {['Visitantes del sitio (30 días)', 'Compradores anteriores', 'Interesados en electrónica', 'Lookalike - VIP'].map((aud, i) => (
-                <div key={i} style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={i} style={{ backgroundColor: 'var(--m-surface)', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <p style={{ margin: 0, fontWeight: '600', color: '#111827', fontSize: '0.875rem' }}>{aud}</p>
-                    <p style={{ margin: '4px 0 0', color: '#6B7280', fontSize: '0.78rem' }}>Lista de remarketing</p>
+                    <p style={{ margin: 0, fontWeight: '600', color: 'var(--m-text)', fontSize: '0.875rem' }}>{aud}</p>
+                    <p style={{ margin: '4px 0 0', color: 'var(--m-text-muted)', fontSize: '0.78rem' }}>Lista de remarketing</p>
                   </div>
                   <button style={{ padding: '7px 14px', border: `1px solid ${BLUE}`, borderRadius: '7px', backgroundColor: 'transparent', color: BLUE, fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer' }}>
                     Usar en campaña
@@ -213,10 +213,10 @@ export function GoogleAdsView({ onNavigate }: Props) {
               <TrendingUp size={18} color="#FFF" />
             </div>
             <div style={{ flex: 1 }}>
-              <p style={{ margin: 0, fontWeight: '700', color: '#111827', fontSize: '0.9rem' }}>Conecta tu cuenta de Google Ads</p>
-              <p style={{ margin: '2px 0 0', color: '#6B7280', fontSize: '0.78rem' }}>Para ver y gestionar tus campañas reales, conecta tu cuenta de Google Ads usando la API oficial.</p>
+              <p style={{ margin: 0, fontWeight: '700', color: 'var(--m-text)', fontSize: '0.9rem' }}>Conecta tu cuenta de Google Ads</p>
+              <p style={{ margin: '2px 0 0', color: 'var(--m-text-muted)', fontSize: '0.78rem' }}>Para ver y gestionar tus campañas reales, conecta tu cuenta de Google Ads usando la API oficial.</p>
             </div>
-            <button style={{ padding: '10px 18px', backgroundColor: BLUE, color: '#FFF', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+            <button style={{ padding: '10px 18px', backgroundColor: BLUE, color: 'var(--m-surface)', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
               Ir a Google Ads <ExternalLink size={13} />
             </button>
           </div>

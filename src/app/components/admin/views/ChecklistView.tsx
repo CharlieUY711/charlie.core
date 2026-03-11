@@ -54,10 +54,10 @@ function fmtRelative(iso: string) {
 }
 
 const GROUP_COLORS: Record<string, string> = {
-  'sistema': '#475569', 'ecommerce': '#FF6835', 'logistica': '#059669',
-  'marketing': '#EC4899', 'rrss': '#F43F5E', 'herramientas': '#0D9488',
-  'gestion': '#2563EB', 'integraciones': '#0891B2', 'auth': '#7C3AED',
-  'construccion': '#F59E0B', 'dashboard': '#6366F1',
+  'sistema': 'var(--m-text-muted)', 'ecommerce': 'var(--m-primary)', 'logistica': 'var(--m-success)',
+  'marketing': '#EC4899', 'rrss': 'var(--m-danger)', 'herramientas': 'var(--m-success)',
+  'gestion': 'var(--m-info)', 'integraciones': 'var(--m-cyan)', 'auth': 'var(--m-purple)',
+  'construccion': 'var(--m-warning)', 'dashboard': 'var(--m-purple)',
 };
 const ROADMAP_COLOR = '#94A3B8';
 
@@ -109,7 +109,7 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
               onClick={() => toggleGroup(group)}
               style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '12px 16px', backgroundColor: '#fff',
+                padding: '12px 16px', backgroundColor: 'var(--m-surface)',
                 borderRadius: isOpen ? '12px 12px 0 0' : '12px',
                 border: '1px solid #E5E7EB', borderLeft: `4px solid ${groupColor}`,
                 cursor: 'pointer', userSelect: 'none',
@@ -118,26 +118,26 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'}
             >
               {isOpen ? <ChevronDown size={15} color="#9CA3AF" /> : <ChevronRight size={15} color="#9CA3AF" />}
-              <span style={{ fontWeight: 700, fontSize: '14px', color: '#111', flex: 1 }}>{group}</span>
+              <span style={{ fontWeight: 700, fontSize: '14px', color: 'var(--m-text)', flex: 1 }}>{group}</span>
 
               {newest && (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginRight: '10px' }}>
-                  <span style={{ fontSize: '10px', color: '#10B981', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  <span style={{ fontSize: '10px', color: 'var(--m-success)', display: 'flex', alignItems: 'center', gap: '3px' }}>
                     <Clock size={9} /> {fmtRelative(newest)}
                   </span>
                   {oldest && oldest !== newest && (
-                    <span style={{ fontSize: '10px', color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    <span style={{ fontSize: '10px', color: 'var(--m-text-muted)', display: 'flex', alignItems: 'center', gap: '3px' }}>
                       <Clock size={9} /> {fmtRelative(oldest)}
                     </span>
                   )}
                 </div>
               )}
 
-              <span style={{ fontSize: '12px', color: '#9CA3AF', marginRight: '10px' }}>
+              <span style={{ fontSize: '12px', color: 'var(--m-text-muted)', marginRight: '10px' }}>
                 {groupEntries.length} módulos{!isRoadmap && ` · ${groupScore}/${groupMax}`}
               </span>
 
-              <div style={{ width: '80px', height: '6px', backgroundColor: '#F3F4F6', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ width: '80px', height: '6px', backgroundColor: 'var(--m-surface-2)', borderRadius: '99px', overflow: 'hidden' }}>
                 <div style={{ height: '100%', borderRadius: '99px', width: `${groupPct}%`, backgroundColor: groupColor, transition: 'width 0.3s' }} />
               </div>
               <span style={{ fontSize: '11px', fontWeight: 700, color: groupColor, minWidth: '36px', textAlign: 'right' }}>
@@ -154,7 +154,7 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                     return (
                       <div key={entry.section} style={{
                         display: 'flex', alignItems: 'center', gap: '12px',
-                        padding: '9px 16px 9px 36px', backgroundColor: '#F8FAFC',
+                        padding: '9px 16px 9px 36px', backgroundColor: 'var(--m-surface-2)',
                         borderBottom: isLast ? 'none' : '1px solid #EEF2F7',
                       }}>
                         <div onClick={() => onToggleImport?.(entry.section)}
@@ -162,7 +162,7 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                           style={{ cursor: 'pointer', color: ROADMAP_COLOR, flexShrink: 0 }}>
                           <Square size={14} />
                         </div>
-                        <span style={{ fontSize: '13px', color: '#94A3B8', flex: 1 }}>{entry.nombre}</span>
+                        <span style={{ fontSize: '13px', color: 'var(--m-text-muted)', flex: 1 }}>{entry.nombre}</span>
                       </div>
                     );
                   }
@@ -174,13 +174,13 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                   return (
                     <div key={entry.section} style={{
                       display: 'flex', alignItems: 'center', gap: '12px',
-                      padding: '10px 16px 10px 36px', backgroundColor: '#fff',
+                      padding: '10px 16px 10px 36px', backgroundColor: 'var(--m-surface)',
                       borderBottom: isLast ? 'none' : '1px solid #F3F4F6',
                     }}>
                       <div style={{ minWidth: '180px' }}>
-                        <span style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>{entry.nombre}</span>
+                        <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--m-text-secondary)' }}>{entry.nombre}</span>
                         {updatedAt && (
-                          <div style={{ fontSize: '10px', color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '3px', marginTop: '2px' }}>
+                          <div style={{ fontSize: '10px', color: 'var(--m-text-muted)', display: 'flex', alignItems: 'center', gap: '3px', marginTop: '2px' }}>
                             <Clock size={9} />{fmtRelative(updatedAt)}
                           </div>
                         )}
@@ -191,7 +191,7 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                           const ok = criteria[c.id];
                           if (c.auto) return (
                             <div key={c.id} title={c.description} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                              <span style={{ fontSize: '9px', fontWeight: 700, color: '#9CA3AF' }}>{c.id}</span>
+                              <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--m-text-muted)' }}>{c.id}</span>
                               {ok ? <CheckCircle2 size={16} color="#10B981" /> : <XCircle size={16} color="#E5E7EB" />}
                             </div>
                           );
@@ -199,7 +199,7 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                             <div key={c.id} title={`${c.description} — clic`}
                               onClick={() => onToggleManual?.(entry.section, c.id)}
                               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', cursor: 'pointer' }}>
-                              <span style={{ fontSize: '9px', fontWeight: 700, color: '#9CA3AF' }}>{c.id}</span>
+                              <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--m-text-muted)' }}>{c.id}</span>
                               {ok ? <ToggleRight size={16} color="#FF6835" /> : <ToggleLeft size={16} color="#D1D5DB" />}
                             </div>
                           );
@@ -207,18 +207,18 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '80px' }}>
-                        <div style={{ flex: 1, height: '4px', backgroundColor: '#F3F4F6', borderRadius: '99px', overflow: 'hidden' }}>
+                        <div style={{ flex: 1, height: '4px', backgroundColor: 'var(--m-surface-2)', borderRadius: '99px', overflow: 'hidden' }}>
                           <div style={{
                             height: '100%', borderRadius: '99px', transition: 'width 0.3s',
                             width: `${(score / 8) * 100}%`,
-                            backgroundColor: score === 8 ? '#10B981' : score >= 5 ? '#3B82F6' : score >= 3 ? '#F59E0B' : '#E5E7EB',
+                            backgroundColor: score === 8 ? '#10B981' : score >= 5 ? '#3B82F6' : score >= 3 ? '#F59E0B' : 'var(--m-border)',
                           }} />
                         </div>
-                        <span style={{ fontSize: '10px', color: '#9CA3AF', minWidth: '20px' }}>{score}/8</span>
+                        <span style={{ fontSize: '10px', color: 'var(--m-text-muted)', minWidth: '20px' }}>{score}/8</span>
                           <button
                             onClick={() => onAuditar?.(entry)}
                             title="Auditar módulo"
-                            style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer', padding: '4px 8px', fontSize: '11px', color: '#9CA3AF', flexShrink: 0 }}
+                            style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer', padding: '4px 8px', fontSize: '11px', color: 'var(--m-text-muted)', flexShrink: 0 }}
                           >
                             Auditar
                           </button>
@@ -277,25 +277,25 @@ export function ChecklistView(_props: Props) {
   useModuleSubtitulo(`Checklist: ${checklistEntries.length} módulos · ${totalScore}/${maxScore} · ${pct}%  ·  Roadmap: ${roadmapEntries.length} pendientes`);
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#F8F9FA', padding: '32px' }}>
+    <div style={{ flex: 1, overflowY: 'auto', backgroundColor: 'var(--m-bg)', padding: '32px' }}>
 
       {/* ── Barra global ── */}
-      <div style={{ marginBottom: '24px', backgroundColor: '#fff', borderRadius: '12px', padding: '16px 20px', border: '1px solid #E5E7EB' }}>
+      <div style={{ marginBottom: '24px', backgroundColor: 'var(--m-surface)', borderRadius: '12px', padding: '16px 20px', border: '1px solid #E5E7EB' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#374151' }}>Progreso Checklist</span>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#374151' }}>{pct}%</span>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)' }}>Progreso Checklist</span>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--m-text-secondary)' }}>{pct}%</span>
         </div>
-        <div style={{ height: '8px', backgroundColor: '#F3F4F6', borderRadius: '99px', overflow: 'hidden' }}>
+        <div style={{ height: '8px', backgroundColor: 'var(--m-surface-2)', borderRadius: '99px', overflow: 'hidden' }}>
           <div style={{
             height: '100%', borderRadius: '99px', transition: 'width 0.4s', width: `${pct}%`,
-            background: pct === 100 ? '#10B981' : pct >= 60 ? '#3B82F6' : pct >= 30 ? '#F59E0B' : '#EF4444',
+            background: pct === 100 ? '#10B981' : pct >= 60 ? '#3B82F6' : pct >= 30 ? '#F59E0B' : 'var(--m-danger)',
           }} />
         </div>
       </div>
 
       {/* ── Criterios — 4 col × 2 filas ── */}
       <div style={{
-        marginBottom: '28px', backgroundColor: '#fff', borderRadius: '12px',
+        marginBottom: '28px', backgroundColor: 'var(--m-surface)', borderRadius: '12px',
         padding: '16px 20px', border: '1px solid #E5E7EB',
         display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px 24px',
       }}>
@@ -303,10 +303,10 @@ export function ChecklistView(_props: Props) {
           <div key={c.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
             <span style={{
               fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '5px', flexShrink: 0, marginTop: '1px',
-              backgroundColor: c.auto ? '#EFF6FF' : '#FFF7ED',
-              color: c.auto ? '#1D4ED8' : '#92400E',
+              backgroundColor: c.auto ? '#EFF6FF' : 'var(--m-warning-bg)',
+              color: c.auto ? '#1D4ED8' : 'var(--m-warning-text)',
             }}>{c.id}</span>
-            <span style={{ fontSize: '12px', color: '#6B7280', lineHeight: '1.4' }}>{c.description}</span>
+            <span style={{ fontSize: '12px', color: 'var(--m-text-muted)', lineHeight: '1.4' }}>{c.description}</span>
           </div>
         ))}
       </div>
@@ -315,10 +315,10 @@ export function ChecklistView(_props: Props) {
       <div style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
           <div style={{ width: '3px', height: '18px', borderRadius: '2px', backgroundColor: GROUP_COLORS['logistica'] }} />
-          <h2 style={{ fontSize: '14px', fontWeight: 800, color: '#111', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+          <h2 style={{ fontSize: '14px', fontWeight: 800, color: 'var(--m-text)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             Checklist
           </h2>
-          <span style={{ fontSize: '12px', color: '#9CA3AF' }}>{checklistEntries.length} módulos</span>
+          <span style={{ fontSize: '12px', color: 'var(--m-text-muted)' }}>{checklistEntries.length} módulos</span>
         </div>
         <GroupTree
           entries={checklistEntries}
@@ -334,11 +334,11 @@ export function ChecklistView(_props: Props) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
             <div style={{ width: '3px', height: '18px', borderRadius: '2px', backgroundColor: ROADMAP_COLOR }} />
-            <h2 style={{ fontSize: '14px', fontWeight: 800, color: '#94A3B8', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <h2 style={{ fontSize: '14px', fontWeight: 800, color: 'var(--m-text-muted)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Roadmap
             </h2>
-            <span style={{ fontSize: '12px', color: '#9CA3AF' }}>{roadmapEntries.length} pendientes de importar</span>
-            <span style={{ fontSize: '11px', color: '#CBD5E1', marginLeft: 'auto' }}>☐ clic para importar al Checklist</span>
+            <span style={{ fontSize: '12px', color: 'var(--m-text-muted)' }}>{roadmapEntries.length} pendientes de importar</span>
+            <span style={{ fontSize: '11px', color: 'var(--m-border)', marginLeft: 'auto' }}>☐ clic para importar al Checklist</span>
           </div>
           <GroupTree
             entries={roadmapEntries}

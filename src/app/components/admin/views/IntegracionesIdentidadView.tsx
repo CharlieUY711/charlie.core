@@ -13,10 +13,10 @@ interface Props { onNavigate: (section: MainSection) => void; }
 const ORANGE = '#FF6835';
 
 const STATUS_META: Record<string, { label: string; color: string; bg: string; Icon: any }> = {
-  activo: { label: 'Activo', color: '#10B981', bg: '#D1FAE5', Icon: CheckCircle2 },
-  inactivo: { label: 'Inactivo', color: '#9CA3AF', bg: '#F3F4F6', Icon: Clock },
-  error: { label: 'Error', color: '#EF4444', bg: '#FEE2E2', Icon: AlertCircle },
-  configurando: { label: 'Configurando', color: '#F59E0B', bg: '#FEF3C7', Icon: Zap },
+  activo: { label: 'Activo', color: 'var(--m-success)', bg: 'var(--m-success-bg)', Icon: CheckCircle2 },
+  inactivo: { label: 'Inactivo', color: 'var(--m-text-muted)', bg: 'var(--m-surface-2)', Icon: Clock },
+  error: { label: 'Error', color: 'var(--m-danger)', bg: 'var(--m-danger-bg)', Icon: AlertCircle },
+  configurando: { label: 'Configurando', color: 'var(--m-warning)', bg: 'var(--m-warning-bg)', Icon: Zap },
 };
 
 export function IntegracionesIdentidadView({ onNavigate }: Props) {
@@ -107,21 +107,21 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
         actions={[{ label: '← Integraciones', onClick: () => onNavigate('integraciones') }]}
       />
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: '#F8F9FA' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', backgroundColor: 'var(--m-bg)' }}>
         {/* Stats */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
           {[
-            { label: 'Integraciones', value: loading ? '...' : integraciones.length, color: '#111827' },
-            { label: 'Activas', value: loading ? '...' : activeCount, color: '#10B981' },
-            { label: 'Verificaciones', value: integracionStats ? integracionStats.verificaciones : '—', color: '#3B82F6' },
-            { label: 'Aprobadas', value: integracionStats ? integracionStats.aprobadas : '—', color: '#10B981' },
+            { label: 'Integraciones', value: loading ? '...' : integraciones.length, color: 'var(--m-text)' },
+            { label: 'Activas', value: loading ? '...' : activeCount, color: 'var(--m-success)' },
+            { label: 'Verificaciones', value: integracionStats ? integracionStats.verificaciones : '—', color: 'var(--m-info)' },
+            { label: 'Aprobadas', value: integracionStats ? integracionStats.aprobadas : '—', color: 'var(--m-success)' },
           ].map((s, i) => (
             <div key={i} style={{
-              flex: 1, backgroundColor: '#fff', borderRadius: 10, padding: '12px 16px',
+              flex: 1, backgroundColor: 'var(--m-surface)', borderRadius: 10, padding: '12px 16px',
               border: '1px solid #E5E7EB', textAlign: 'center',
             }}>
               <div style={{ fontSize: '1.5rem', fontWeight: '800', color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: 2 }}>{s.label}</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--m-text-muted)', marginTop: 2 }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -138,7 +138,7 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
 
             return (
               <div key={integracion.id} style={{
-                backgroundColor: '#fff', borderRadius: 14,
+                backgroundColor: 'var(--m-surface)', borderRadius: 14,
                 border: '1px solid #E5E7EB',
                 overflow: 'hidden',
               }}>
@@ -148,35 +148,35 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
                     <div style={{
                       width: 42, height: 42, borderRadius: 10,
-                      backgroundColor: '#F9FAFB',
+                      backgroundColor: 'var(--m-surface-2)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: '1.3rem', flexShrink: 0,
                     }}>
                       🛡️
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: '800', color: '#111827', fontSize: '0.95rem', marginBottom: 4 }}>
+                      <div style={{ fontWeight: '800', color: 'var(--m-text)', fontSize: '0.95rem', marginBottom: 4 }}>
                         {integracion.proveedor}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>{integracion.nombre}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--m-text-muted)' }}>{integracion.nombre}</div>
                     </div>
                   </div>
 
                   {/* Estadísticas */}
                   {integracionStats && (
-                    <div style={{ marginBottom: 10, padding: '10px', backgroundColor: '#F9FAFB', borderRadius: 8, border: '1px solid #E5E7EB' }}>
+                    <div style={{ marginBottom: 10, padding: '10px', backgroundColor: 'var(--m-surface-2)', borderRadius: 8, border: '1px solid #E5E7EB' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-around', gap: 8 }}>
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#3B82F6' }}>{integracionStats.verificaciones}</div>
-                          <div style={{ fontSize: '0.65rem', color: '#6B7280' }}>Total</div>
+                          <div style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--m-info)' }}>{integracionStats.verificaciones}</div>
+                          <div style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)' }}>Total</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#10B981' }}>{integracionStats.aprobadas}</div>
-                          <div style={{ fontSize: '0.65rem', color: '#6B7280' }}>Aprobadas</div>
+                          <div style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--m-success)' }}>{integracionStats.aprobadas}</div>
+                          <div style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)' }}>Aprobadas</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#EF4444' }}>{integracionStats.rechazadas}</div>
-                          <div style={{ fontSize: '0.65rem', color: '#6B7280' }}>Rechazadas</div>
+                          <div style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--m-danger)' }}>{integracionStats.rechazadas}</div>
+                          <div style={{ fontSize: '0.65rem', color: 'var(--m-text-muted)' }}>Rechazadas</div>
                         </div>
                       </div>
                     </div>
@@ -196,7 +196,7 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
                             if (integracionLogs.length === 0) loadLogs(integracion.id);
                           }
                         }}
-                        style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 7, border: 'none', backgroundColor: ORANGE, color: '#fff', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 7, border: 'none', backgroundColor: ORANGE, color: 'var(--m-surface)', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
                       >
                         <Settings2 size={11} /> {isExp ? 'Cerrar' : 'Configurar'}
                       </button>
@@ -205,14 +205,14 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
 
                   {/* Expanded config */}
                   {isExp && (
-                    <div style={{ marginTop: 14, padding: '14px', backgroundColor: '#F9FAFB', borderRadius: 10, border: '1px solid #E5E7EB' }}>
-                      <p style={{ margin: '0 0 10px', fontSize: '0.72rem', fontWeight: '700', color: '#374151' }}>
+                    <div style={{ marginTop: 14, padding: '14px', backgroundColor: 'var(--m-surface-2)', borderRadius: 10, border: '1px solid #E5E7EB' }}>
+                      <p style={{ margin: '0 0 10px', fontSize: '0.72rem', fontWeight: '700', color: 'var(--m-text-secondary)' }}>
                         Credenciales — {integracion.proveedor}
                       </p>
 
                       {['clientId', 'clientSecret', 'flowId'].map(key => (
                         <div key={key} style={{ marginBottom: 8 }}>
-                          <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#9CA3AF', display: 'block', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          <label style={{ fontSize: '0.68rem', fontWeight: '700', color: 'var(--m-text-muted)', display: 'block', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                             {key === 'clientId' ? 'Client ID' : key === 'clientSecret' ? 'Client Secret' : 'Flow ID'}
                           </label>
                           <input
@@ -223,7 +223,7 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
                               [integracion.id]: { ...(p[integracion.id] || {}), [key]: e.target.value },
                             }))}
                             placeholder={`${key === 'clientId' ? 'Client ID' : key === 'clientSecret' ? 'Client Secret' : 'Flow ID'}...`}
-                            style={{ width: '100%', padding: '7px 10px', border: '1.5px solid #E5E7EB', borderRadius: 7, fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box', backgroundColor: '#fff' }}
+                            style={{ width: '100%', padding: '7px 10px', border: '1.5px solid #E5E7EB', borderRadius: 7, fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box', backgroundColor: 'var(--m-surface)' }}
                             onFocus={e => (e.target.style.borderColor = ORANGE)}
                             onBlur={e => (e.target.style.borderColor = '#E5E7EB')}
                           />
@@ -233,14 +233,14 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
                       <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
                         <button
                           onClick={() => handleSave(integracion)}
-                          style={{ flex: 1, padding: '8px', backgroundColor: ORANGE, color: '#fff', border: 'none', borderRadius: 7, fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer' }}
+                          style={{ flex: 1, padding: '8px', backgroundColor: ORANGE, color: 'var(--m-surface)', border: 'none', borderRadius: 7, fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer' }}
                         >
                           Guardar
                         </button>
                         <button
                           onClick={() => handlePing(integracion)}
                           disabled={testingId === integracion.id}
-                          style={{ padding: '8px 12px', backgroundColor: testingId === integracion.id ? '#E5E7EB' : '#10B981', color: testingId === integracion.id ? '#9CA3AF' : '#fff', border: 'none', borderRadius: 7, fontSize: '0.78rem', fontWeight: '700', cursor: testingId === integracion.id ? 'not-allowed' : 'pointer' }}
+                          style={{ padding: '8px 12px', backgroundColor: testingId === integracion.id ? '#E5E7EB' : 'var(--m-success)', color: testingId === integracion.id ? '#9CA3AF' : 'var(--m-surface)', border: 'none', borderRadius: 7, fontSize: '0.78rem', fontWeight: '700', cursor: testingId === integracion.id ? 'not-allowed' : 'pointer' }}
                         >
                           {testingId === integracion.id ? 'Probando...' : 'Test conexión'}
                         </button>
@@ -248,14 +248,14 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
 
                       {/* Logs */}
                       {integracionLogs.length > 0 && (
-                        <div style={{ marginTop: 14, padding: '10px', backgroundColor: '#fff', borderRadius: 7, border: '1px solid #E5E7EB' }}>
-                          <p style={{ margin: '0 0 8px', fontSize: '0.7rem', fontWeight: '700', color: '#374151' }}>Últimos eventos</p>
+                        <div style={{ marginTop: 14, padding: '10px', backgroundColor: 'var(--m-surface)', borderRadius: 7, border: '1px solid #E5E7EB' }}>
+                          <p style={{ margin: '0 0 8px', fontSize: '0.7rem', fontWeight: '700', color: 'var(--m-text-secondary)' }}>Últimos eventos</p>
                           <div style={{ maxHeight: 120, overflowY: 'auto' }}>
                             {integracionLogs.map(log => (
-                              <div key={log.id} style={{ padding: '4px 0', fontSize: '0.68rem', color: '#6B7280', borderBottom: '1px solid #F3F4F6' }}>
+                              <div key={log.id} style={{ padding: '4px 0', fontSize: '0.68rem', color: 'var(--m-text-muted)', borderBottom: '1px solid #F3F4F6' }}>
                                 <span style={{ fontWeight: '600' }}>{new Date(log.created_at).toLocaleString()}</span>
                                 {' — '}
-                                <span style={{ color: log.nivel === 'error' ? '#EF4444' : log.nivel === 'warning' ? '#F59E0B' : '#6B7280' }}>
+                                <span style={{ color: log.nivel === 'error' ? '#EF4444' : log.nivel === 'warning' ? '#F59E0B' : 'var(--m-text-muted)' }}>
                                   {log.mensaje}
                                 </span>
                               </div>
@@ -272,7 +272,7 @@ export function IntegracionesIdentidadView({ onNavigate }: Props) {
         </div>
 
         {integraciones.length === 0 && !loading && (
-          <div style={{ textAlign: 'center', padding: '48px 0', color: '#9CA3AF' }}>
+          <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--m-text-muted)' }}>
             <p style={{ fontSize: '2rem', margin: '0 0 8px' }}>🛡️</p>
             <p style={{ fontWeight: '600' }}>No hay integraciones de identidad configuradas</p>
           </div>
