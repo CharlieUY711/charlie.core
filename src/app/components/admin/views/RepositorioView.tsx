@@ -1,5 +1,6 @@
 import { DrawerAuditoria } from './DrawerAuditoria';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useShell } from '../../../context/ShellContext';
 import {
   Search, CheckCircle2, XCircle, AlertCircle, Circle,
   Package, Code2, Database, Palette, Shield, Layers,
@@ -347,6 +348,17 @@ export function RepositorioView({ onNavigate }: Props) {
   const [estructuraFiltro, setEstructuraFiltro] = useState<string>('all');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [scoresDB, setScoresDB] = React.useState<Record<string,number>>({});
+  const { setSubtitulo } = useShell();
+
+  useEffect(() => {
+    const total    = MODULOS.length;
+    const charlie  = MODULOS.filter(m => m.estructura === 'charlie').length;
+    const avgScore = Math.round(MODULOS.reduce((s, m) => s + (scoresDB[m.id] ?? m.score), 0) / total * 10) / 10;
+    setSubtitulo(`${total} modulos · ${charlie} Charlie · score promedio ${avgScore}/8`);
+    return () => setSubtitulo(null);
+  }, [scoresDB]);
+  const [gruposColapsados, setGruposColapsados] = React.useState<Set<string>>(new Set());
+  const toggleGrupo = (g: string) => setGruposColapsados(p => { const n = new Set(p); n.has(g) ? n.delete(g) : n.add(g); return n; });
   const [moduloAuditado, setModuloAuditado] = React.useState<{section:string;nombre:string;criteriosIniciales?:any[]} | null>(null);
   const [sortBy, setSortBy] = useState<'nombre' | 'score' | 'grupo'>('grupo');
 
@@ -587,13 +599,28 @@ export function RepositorioView({ onNavigate }: Props) {
         {sortBy === 'grupo' && agrupadoPorGrupo ? (
           Object.entries(agrupadoPorGrupo).map(([grupo, mods]) => (
             <div key={grupo}>
-              <div style={S.grupoHeader}>
+              <div style={{ ...S.grupoHeader, cursor: 'pointer' }} onClick={() => toggleGrupo(grupo)}>
                 <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: GRUPO_COLORS[grupo] ?? '#9ca3af' }} />
                 <span style={{ ...S.grupoLabel, color: GRUPO_COLORS[grupo] ?? '#6B7280' }}>{grupo}</span>
                 <span style={{ fontSize: 11, color: '#9CA3AF' }}>{mods.length} módulos</span>
                 <div style={{ flex: 1, height: 1, backgroundColor: '#F3F4F6' }} />
+                {gruposColapsados.has(grupo) && (() => {
+                  const ok      = mods.filter(m => (scoresDB[m.id] ?? m.score) === 8).length;
+                  const parcial = mods.filter(m => { const s = scoresDB[m.id] ?? m.score; return s >= 4 && s < 8; }).length;
+                  const mal     = mods.filter(m => (scoresDB[m.id] ?? m.score) < 4).length;
+                  const avg     = Math.round(mods.reduce((a, m) => a + (scoresDB[m.id] ?? m.score), 0) / mods.length * 10) / 10;
+                  return (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 8 }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0' }}>{ok} ✓</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#FFF7ED', color: '#92400E', border: '1px solid #FED7AA' }}>{parcial} ●</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, backgroundColor: '#FEF2F2', color: '#991B1B', border: '1px solid #FECACA' }}>{mal} ✕</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: '#6B7280', marginLeft: 2 }}>Ø{avg}/8</span>
+                    </div>
+                  );
+                })()}
+                <span style={{ fontSize: 11, color: '#9CA3AF', marginLeft: 6 }}>{gruposColapsados.has(grupo) ? '▶' : '▼'}</span>
               </div>
-              {mods.map(renderModulo)}
+              {!gruposColapsados.has(grupo) && mods.map(renderModulo)}
             </div>
           ))
         ) : (
@@ -606,5 +633,6 @@ export function RepositorioView({ onNavigate }: Props) {
     </div>
   );
 }
+
 
 
