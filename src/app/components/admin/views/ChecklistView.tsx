@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useModules } from '../../../../shells/DashboardShell/app/hooks/useModules';
 import type { ModuloActivo } from '../../../../shells/DashboardShell/app/hooks/useModules';
+import { DrawerAuditoria } from './DrawerAuditoria';
 
 interface Props { onNavigate?: (s: string) => void; }
 
@@ -69,9 +70,9 @@ interface TreeProps {
   manual?:         Record<string, StoredModule>;
   onToggleManual?: (section: string, cid: string) => void;
   onToggleImport?: (section: string) => void;
+  onAuditar?:      (modulo: ModuloActivo) => void;
 }
-
-function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, onToggleImport }: TreeProps) {
+function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, onToggleImport, onAuditar }: TreeProps) {
   const [expanded, toggleGroup] = expandedState;
 
   const getCriteria = (e: ModuloActivo) => {
@@ -214,6 +215,13 @@ function GroupTree({ entries, expandedState, isRoadmap, manual, onToggleManual, 
                           }} />
                         </div>
                         <span style={{ fontSize: '10px', color: '#9CA3AF', minWidth: '20px' }}>{score}/8</span>
+                          <button
+                            onClick={() => onAuditar?.(entry)}
+                            title="Auditar módulo"
+                            style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer', padding: '4px 8px', fontSize: '11px', color: '#9CA3AF', flexShrink: 0 }}
+                          >
+                            Auditar
+                          </button>
                       </div>
                     </div>
                   );
@@ -235,6 +243,7 @@ export function ChecklistView(_props: Props) {
   const [imported,          setImported] = useState<Set<string>>(loadImported);
   const [expandedChecklist, setExpandedC] = useState<Set<string>>(new Set(['sistema', 'logistica']));
   const [expandedRoadmap,   setExpandedR] = useState<Set<string>>(new Set());
+  const [moduloAuditado,    setModuloAuditado] = useState<ModuloActivo | null>(null);
 
   useEffect(() => { saveManual(manual);     }, [manual]);
   useEffect(() => { saveImported(imported); }, [imported]);
@@ -339,6 +348,7 @@ export function ChecklistView(_props: Props) {
           />
         </div>
       )}
+        <DrawerAuditoria modulo={moduloAuditado} onClose={() => setModuloAuditado(null)} />
 
     </div>
   );

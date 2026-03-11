@@ -1,3 +1,4 @@
+import { DrawerAuditoria } from './DrawerAuditoria';
 import React, { useState, useMemo } from 'react';
 import {
   Search, CheckCircle2, XCircle, AlertCircle, Circle,
@@ -345,6 +346,8 @@ export function RepositorioView({ onNavigate }: Props) {
   const [grupoFiltro, setGrupoFiltro] = useState<string>('all');
   const [estructuraFiltro, setEstructuraFiltro] = useState<string>('all');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [scoresDB, setScoresDB] = React.useState<Record<string,number>>({});
+  const [moduloAuditado, setModuloAuditado] = React.useState<{section:string;nombre:string;criteriosIniciales?:any[]} | null>(null);
   const [sortBy, setSortBy] = useState<'nombre' | 'score' | 'grupo'>('grupo');
 
   const grupos = useMemo(() => Array.from(new Set(MODULOS.map(m => m.grupo))).sort(), []);
@@ -436,15 +439,16 @@ export function RepositorioView({ onNavigate }: Props) {
 
   const renderModulo = (m: ModuloRepo) => {
     const isOpen = expanded.has(m.id);
+    const scoreReal = scoresDB[m.id] ?? m.score;
     const eb = getEstructuraBadge(m.estructura);
-    const sc = getScoreColor(m.score);
+    const sc = getScoreColor(scoreReal);
     const grupoColor = GRUPO_COLORS[m.grupo] ?? '#9ca3af';
 
     return (
       <div key={m.id} style={S.moduloWrap}>
         <div style={S.moduloRow} onClick={() => toggleExpand(m.id)}>
           {/* Score */}
-          <div style={{ ...S.scoreBadge, backgroundColor: sc }}>{m.score}</div>
+          <div style={{ ...S.scoreBadge, backgroundColor: sc }}>{scoreReal}</div>
 
           {/* Punto de color grupo */}
           <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: grupoColor, flexShrink: 0 }} />
@@ -465,6 +469,11 @@ export function RepositorioView({ onNavigate }: Props) {
             {eb.label}
           </div>
 
+          {/* Botón Auditar */}
+          <button
+            onClick={e => { e.stopPropagation(); setModuloAuditado({ section: m.id, nombre: m.nombre, criteriosIniciales: m.criterios.map(c => ({ id: c.id, label: c.label, status: c.status, detalle: c.detalle ?? '', auto: ['C1','C2','C3'].includes(c.id) })) }); }}
+            style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: 6, cursor: 'pointer', padding: '4px 10px', fontSize: 11, color: '#6B7280', flexShrink: 0 }}
+          >Auditar</button>
           {/* Chevron */}
           {isOpen
             ? <ChevronDown style={{ width: 14, height: 14, color: '#9CA3AF', flexShrink: 0 }} />
@@ -591,7 +600,11 @@ export function RepositorioView({ onNavigate }: Props) {
           filtrados.map(renderModulo)
         )}
 
+      <DrawerAuditoria modulo={moduloAuditado} onClose={() => setModuloAuditado(null)}
+        onGuardado={(id, score) => setScoresDB(p => ({ ...p, [id]: score }))} />
       </div>
     </div>
   );
 }
+
+
