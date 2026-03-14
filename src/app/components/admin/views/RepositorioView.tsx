@@ -359,6 +359,39 @@ function GrupoStats({ mods, scoresDB }: { mods: ModuloRepo[]; scoresDB: Record<s
   );
 }
 
+function EstadoSelector({ moduloId, scoreReal, estadoActual, onCambiar }: {
+  moduloId: string; scoreReal: number; estadoActual: "draft" | "ready" | "active";
+  onCambiar: (id: string, estado: "draft" | "ready" | "active") => void;
+}) {
+  const puedeReady = scoreReal >= 5;
+  const puedeActive = scoreReal >= 8;
+  const colorMap = {
+    draft:  { bg: "var(--m-surface-2)",  color: "var(--m-text-muted)",    border: "var(--m-border)" },
+    ready:  { bg: "var(--m-warning-bg)", color: "var(--m-warning-text)",  border: "var(--m-warning-border)" },
+    active: { bg: "var(--m-success-bg)", color: "var(--m-success-text)",  border: "var(--m-success-border)" },
+  };
+  const c = colorMap[estadoActual] ?? colorMap["draft"];
+  return (
+    <select
+      onClick={e => e.stopPropagation()}
+      value={estadoActual ?? "draft"}
+      onChange={e => {
+        e.stopPropagation();
+        const next = e.target.value as "draft" | "ready" | "active";
+        if (next === "ready" && !puedeReady) { alert(`Score ${scoreReal}/8 — necesita al menos 5/8 para Ready`); e.target.value = estadoActual; return; }
+        if (next === "active" && !puedeActive) { alert(`Score ${scoreReal}/8 — necesita 8/8 para Active`); e.target.value = estadoActual; return; }
+        onCambiar(moduloId, next);
+      }}
+      style={{ fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 4, border: "1px solid", cursor: "pointer", flexShrink: 0, backgroundColor: c.bg, color: c.color, borderColor: c.border }}
+    >
+      <option value="draft">Draft</option>
+      <option value="ready" disabled={!puedeReady}>Ready{!puedeReady ? ` (${scoreReal}/8)` : ""}</option>
+      <option value="active" disabled={!puedeActive}>Active{!puedeActive ? " (8/8 req)" : ""}</option>
+    </select>
+  );
+}
+
+
 export function RepositorioView({ onNavigate }: Props) {
   const [search, setSearch] = useState('');
   const [grupoFiltro, setGrupoFiltro] = useState<string>('all');
@@ -414,6 +447,33 @@ export function RepositorioView({ onNavigate }: Props) {
       })
       .catch(() => {});
   }, []);
+
+  // Estados activo/draft desde Supabase
+  const [estadosDB, setEstadosDB] = React.useState<Record<string, 'draft' | 'ready' | 'active'>>({});
+
+  useEffect(() => {
+    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
+    fetch('https://yomgqobfmgatavnbtvdz.supabase.co/rest/v1/modulos_estado?select=modulo_id,estado', {
+      headers: { apikey: anon, Authorization: 'Bearer ' + anon },
+    })
+      .then(r => r.json())
+      .then((rows: { modulo_id: string; estado: string }[]) => {
+        const map: Record<string, 'draft' | 'ready' | 'active'> = {};
+        for (const row of rows) map[row.modulo_id] = row.estado as any;
+        setEstadosDB(map);
+      })
+      .catch(() => {});
+  }, []);
+
+  const setEstado = async (moduloId: string, estado: "draft" | "ready" | "active") => {
+    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
+    await fetch('https://yomgqobfmgatavnbtvdz.supabase.co/rest/v1/modulos_estado', {
+      method: 'POST',
+      headers: { apikey: anon, Authorization: 'Bearer ' + anon, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify({ modulo_id: moduloId, estado, updated_at: new Date().toISOString() }),
+    });
+    setEstadosDB(prev => ({ ...prev, [moduloId]: estado }));
+  };
   const { setSubtitulo } = useShell();
 
   useEffect(() => {
@@ -573,6 +633,13 @@ export function RepositorioView({ onNavigate }: Props) {
             onClick={e => { e.stopPropagation(); setModuloAuditado({ section: m.id, nombre: m.nombre, criteriosIniciales: m.criterios.map(c => ({ id: c.id, label: c.label, status: c.status, detalle: c.detalle ?? '', auto: ['C1','C2','C3'].includes(c.id) })) }); }}
             style={{ background: 'none', border: '1px solid #E5E7EB', borderRadius: 6, cursor: 'pointer', padding: '4px 10px', fontSize: 11, color: 'var(--m-text-muted)', flexShrink: 0 }}
           >Auditar</button>
+          {/* Estado del modulo - controlado por score */}
+          <EstadoSelector
+            moduloId={m.id}
+            scoreReal={scoresDB[m.id] ?? m.score}
+            estadoActual={estadosDB[m.id] ?? "draft"}
+            onCambiar={setEstado}
+          />
           {/* Chevron */}
           {isOpen
             ? <ChevronDown style={{ width: 14, height: 14, color: 'var(--m-text-muted)', flexShrink: 0 }} />
