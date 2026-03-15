@@ -10,6 +10,8 @@ import '../tokens.css';
 import { useOrchestrator } from '@/shells/DashboardShell/app/providers/OrchestratorProvider';
 import { getAllModules, updateCriterio, updateModuleStatus } from '../../service/checklistRoadmapApi';
 import { auditModulo } from '../../service/auditEngine';
+import { RoadmapPanel } from './RoadmapPanel';
+import { IdeasBoard }   from './IdeasBoard';
 import type {
   RoadmapModule,
   FamiliaGroup,
@@ -49,7 +51,7 @@ const STATUS_LABEL: Record<ModuleStatus, string> = {
 };
 
 const STATUS_COLOR: Record<ModuleStatus, string> = {
-  'no-registrado':   'var(--m-state-no-registrado)',
+  'no-registrado':   'var(--m-color-pending)',
   'registrado':      'var(--m-state-registrado)',
   'bloqueado':       'var(--m-state-bloqueado)',
   'en-progreso':     'var(--m-state-en-progreso)',
@@ -58,25 +60,19 @@ const STATUS_COLOR: Record<ModuleStatus, string> = {
   'produccion':      'var(--m-state-produccion)',
 };
 
-const CRITERIO_COLOR: Record<CriterioEstado, string> = {
-  ok:      'var(--m-color-ok)',
-  warn:    'var(--m-color-warn)',
-  error:   'var(--m-color-error)',
-  pending: 'var(--m-color-pending)',
-};
+type TabId = 'checklist' | 'roadmap' | 'ideas';
 
-const CRITERIO_ICON: Record<CriterioEstado, string> = {
-  ok:      '✓',
-  warn:    '●',
-  error:   '✕',
-  pending: '○',
-};
+const TABS: { id: TabId; label: string }[] = [
+  { id: 'checklist', label: '⚙️  Checklist' },
+  { id: 'roadmap',   label: '🗺️  Roadmap'   },
+  { id: 'ideas',     label: '💡  Ideas'     },
+];
 
 // =============================================================================
 // HELPERS
 // =============================================================================
 
-function scoreModulo(criterios: Record<CriterioId, CriterioEstado>): number {
+function scoreModulo(criterios: RoadmapModule['criterios']): number {
   if (!criterios) return 0;
   return Object.values(criterios).filter(v => v === 'ok').length;
 }
@@ -84,60 +80,34 @@ function scoreModulo(criterios: Record<CriterioId, CriterioEstado>): number {
 function agruparPorFamilia(modulos: RoadmapModule[]): FamiliaGroup[] {
   const map = new Map<string, RoadmapModule[]>();
   for (const m of modulos) {
-    if (!map.has(m.familia)) map.set(m.familia, []);
-    map.get(m.familia)!.push(m);
+    const key = m.familia ?? 'Sin familia';
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(m);
   }
-  return Array.from(map.entries())
-    .map(([nombre, mods]) => ({
-      nombre,
-      modulos: mods.sort((a, b) => a.prioridad - b.prioridad),
-      porcentajeCumplimiento: Math.round(
-        mods.filter(m => m.status === 'cumple-estandar' || m.status === 'produccion').length
-        / mods.length * 100
-      ),
-    }))
-    .sort((a, b) => b.porcentajeCumplimiento - a.porcentajeCumplimiento);
+  return Array.from(map.entries()).map(([nombre, mods]) => ({
+    nombre,
+    modulos: mods,
+    porcentajeCumplimiento: mods.length
+      ? Math.round(mods.filter(m => m.status === 'cumple-estandar' || m.status === 'produccion').length / mods.length * 100)
+      : 0,
+  }));
 }
 
 // =============================================================================
 // SUB-COMPONENTES
 // =============================================================================
 
-// ─── CriterioTag ─────────────────────────────────────────────────────────────
-function CriterioTag({ id, estado }: { id: CriterioId; estado: CriterioEstado }) {
-  return (
-    <span style={{
-      display:         'inline-flex',
-      alignItems:      'center',
-      gap:             'var(--m-space-1)',
-      fontSize:        10,
-      fontWeight:      700,
-      padding:         '2px 6px',
-      borderRadius:    'var(--m-radius-sm)',
-      backgroundColor: `${CRITERIO_COLOR[estado]}22`,
-      color:           CRITERIO_COLOR[estado],
-      border:          `1px solid ${CRITERIO_COLOR[estado]}44`,
-      fontFamily:      'var(--m-font-mono)',
-    }}>
-      {id} {CRITERIO_ICON[estado]}
-    </span>
-  );
-}
-
-// ─── ScoreBadge ──────────────────────────────────────────────────────────────
 function ScoreBadge({ score }: { score: number }) {
-  const color = score === 8
+  const color = score >= 8
     ? 'var(--m-color-ok)'
-    : score >= 5
+    : score >= 4
     ? 'var(--m-color-warn)'
     : 'var(--m-color-error)';
-
   return (
     <div style={{
       width:           32,
       height:          32,
       borderRadius:    '50%',
-      backgroundColor: `${color}22`,
       border:          `2px solid ${color}`,
       display:         'flex',
       alignItems:      'center',
@@ -146,82 +116,98 @@ function ScoreBadge({ score }: { score: number }) {
       fontWeight:      800,
       color,
       flexShrink:      0,
-      fontFamily:      'var(--m-font-mono)',
     }}>
       {score}
     </div>
   );
 }
 
-// ─── StatusPill ──────────────────────────────────────────────────────────────
 function StatusPill({ status }: { status: ModuleStatus }) {
-  const color = STATUS_COLOR[status];
+  const color = STATUS_COLOR[status] ?? 'var(--m-color-pending)';
   return (
-    <span style={{
+    <div style={{
       fontSize:        10,
       fontWeight:      700,
       padding:         '2px 8px',
       borderRadius:    'var(--m-radius-sm)',
-      backgroundColor: `${color}22`,
+      backgroundColor: color + '22',
       color,
       border:          `1px solid ${color}44`,
       whiteSpace:      'nowrap' as const,
+      flexShrink:      0,
     }}>
       {STATUS_LABEL[status]}
+    </div>
+  );
+}
+
+function CriterioTag({ id, estado }: { id: CriterioId; estado: CriterioEstado | undefined }) {
+  const colorMap: Record<CriterioEstado, string> = {
+    ok:      'var(--m-color-ok)',
+    warn:    'var(--m-color-warn)',
+    error:   'var(--m-color-error)',
+    pending: 'var(--m-color-text-subtle)',
+  };
+  const symbolMap: Record<CriterioEstado, string> = {
+    ok: '✓', warn: '●', error: '✕', pending: '○',
+  };
+  const e = estado ?? 'pending';
+  const color = colorMap[e];
+  return (
+    <span style={{ fontSize: 10, fontWeight: 700, color }}>
+      {id} {symbolMap[e]}
     </span>
   );
 }
 
-// ─── ModuloRow ───────────────────────────────────────────────────────────────
+// =============================================================================
+// FILA DE MÓDULO
+// =============================================================================
+
 interface ModuloRowProps {
   modulo:     RoadmapModule;
-  isSelected: boolean;
-  isAuditando: boolean;
-  onSelect:   (id: string) => void;
-  onAudit:    (id: string) => void;
+  auditando:  boolean;
+  onAudit:    () => void;
+  onSelect:   () => void;
 }
 
-function ModuloRow({ modulo, isSelected, isAuditando, onSelect, onAudit }: ModuloRowProps) {
+function ModuloRow({ modulo, auditando, onAudit, onSelect }: ModuloRowProps) {
   const score = scoreModulo(modulo.criterios);
-  const criterioIds = ['C1','C2','C3','C4','C5','C6','C7','C8'] as CriterioId[];
-
   return (
     <div
-      onClick={() => onSelect(modulo.id)}
+      onClick={onSelect}
       style={{
         display:         'flex',
         alignItems:      'center',
         gap:             'var(--m-space-3)',
         padding:         'var(--m-space-3) var(--m-space-4)',
-        backgroundColor: isSelected ? 'var(--m-color-primary-soft)' : 'var(--m-color-surface)',
-        border:          `1px solid ${isSelected ? 'var(--m-color-primary)' : 'var(--m-color-border)'}`,
+        backgroundColor: 'var(--m-color-surface)',
+        border:          '1px solid var(--m-color-border)',
         borderRadius:    'var(--m-radius-md)',
-        cursor:          'pointer',
         marginBottom:    'var(--m-space-2)',
-        transition:      'background-color 0.15s ease',
+        cursor:          'pointer',
+        transition:      'box-shadow 0.15s',
       }}
+      onMouseEnter={e => e.currentTarget.style.boxShadow = 'var(--m-shadow-sm)'}
+      onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
     >
       <ScoreBadge score={score} />
 
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
           fontSize:     13,
-          fontWeight:   600,
+          fontWeight:   700,
           color:        'var(--m-color-text)',
-          marginBottom: 'var(--m-space-1)',
+          marginBottom: 4,
           overflow:     'hidden',
           textOverflow: 'ellipsis',
           whiteSpace:   'nowrap' as const,
         }}>
           {modulo.nombre}
         </div>
-        <div style={{ display: 'flex', gap: 'var(--m-space-1)', flexWrap: 'wrap' as const }}>
-          {criterioIds.map(id => (
-            <CriterioTag
-              key={id}
-              id={id}
-              estado={modulo.criterios?.[id] ?? 'pending'}
-            />
+        <div style={{ display: 'flex', gap: 'var(--m-space-2)', flexWrap: 'wrap' as const }}>
+          {CRITERIOS_META.map(c => (
+            <CriterioTag key={c.id} id={c.id} estado={modulo.criterios?.[c.id]} />
           ))}
         </div>
       </div>
@@ -229,348 +215,56 @@ function ModuloRow({ modulo, isSelected, isAuditando, onSelect, onAudit }: Modul
       <StatusPill status={modulo.status} />
 
       <button
-        onClick={e => { e.stopPropagation(); onAudit(modulo.id); }}
-        disabled={isAuditando}
+        onClick={e => { e.stopPropagation(); onAudit(); }}
+        disabled={auditando}
         style={{
-          padding:         '4px 10px',
+          padding:         '5px 12px',
           borderRadius:    'var(--m-radius-sm)',
           border:          '1px solid var(--m-color-border)',
-          backgroundColor: 'transparent',
+          backgroundColor: 'var(--m-color-surface-2)',
           color:           'var(--m-color-text-muted)',
           fontSize:        11,
           fontWeight:      600,
-          cursor:          isAuditando ? 'not-allowed' : 'pointer',
-          opacity:         isAuditando ? 0.5 : 1,
+          cursor:          auditando ? 'wait' : 'pointer',
           flexShrink:      0,
+          opacity:         auditando ? 0.6 : 1,
         }}
       >
-        {isAuditando ? '...' : 'Auditar'}
+        {auditando ? '...' : 'Auditar'}
       </button>
     </div>
   );
 }
 
-// ─── ModuleDetail ────────────────────────────────────────────────────────────
-interface ModuleDetailProps {
-  modulo:    RoadmapModule;
-  onClose:   () => void;
-  onUpdate:  (updated: RoadmapModule) => void;
-}
-
-function ModuleDetail({ modulo, onClose, onUpdate }: ModuleDetailProps) {
-  const score = scoreModulo(modulo.criterios);
-  const criterioIds = ['C1','C2','C3','C4','C5','C6','C7','C8'] as CriterioId[];
-
-  const handleToggleCriterio = async (criterioId: CriterioId) => {
-    const ciclo: CriterioEstado[] = ['pending', 'ok', 'warn', 'error'];
-    const actual = modulo.criterios?.[criterioId] ?? 'pending';
-    const next = ciclo[(ciclo.indexOf(actual) + 1) % ciclo.length];
-    try {
-      const updated = await updateCriterio(modulo.id, criterioId, next);
-      onUpdate(updated);
-    } catch {
-      // fallback optimista
-      onUpdate({
-        ...modulo,
-        criterios: { ...modulo.criterios, [criterioId]: next },
-      });
-    }
-  };
-
-  return (
-    <>
-      {/* Overlay */}
-      <div
-        onClick={onClose}
-        style={{
-          position:        'fixed',
-          inset:           0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          zIndex:          100,
-          backdropFilter:  'blur(2px)',
-        }}
-      />
-
-      {/* Panel */}
-      <div style={{
-        position:        'fixed',
-        top:             0,
-        right:           0,
-        bottom:          0,
-        width:           480,
-        backgroundColor: 'var(--m-color-surface)',
-        zIndex:          101,
-        display:         'flex',
-        flexDirection:   'column' as const,
-        boxShadow:       'var(--m-shadow-lg)',
-        borderLeft:      '1px solid var(--m-color-border)',
-      }}>
-        {/* Header del drawer */}
-        <div style={{
-          padding:      'var(--m-space-4) var(--m-space-6)',
-          borderBottom: '1px solid var(--m-color-border)',
-          display:      'flex',
-          alignItems:   'center',
-          gap:          'var(--m-space-3)',
-        }}>
-          <ScoreBadge score={score} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--m-color-text)' }}>
-              {modulo.nombre}
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--m-color-text-muted)', fontFamily: 'var(--m-font-mono)' }}>
-              {modulo.id}
-            </div>
-          </div>
-          <StatusPill status={modulo.status} />
-          <button
-            onClick={onClose}
-            style={{
-              background:   'none',
-              border:       'none',
-              cursor:       'pointer',
-              color:        'var(--m-color-text-muted)',
-              fontSize:     18,
-              padding:      'var(--m-space-1)',
-              lineHeight:   1,
-            }}
-          >✕</button>
-        </div>
-
-        {/* Criterios */}
-        <div style={{ flex: 1, overflowY: 'auto' as const, padding: 'var(--m-space-6)' }}>
-          <div style={{
-            fontSize:      11,
-            fontWeight:    700,
-            color:         'var(--m-color-text-muted)',
-            textTransform: 'uppercase' as const,
-            letterSpacing: '0.08em',
-            marginBottom:  'var(--m-space-4)',
-          }}>
-            Criterios C1–C8
-          </div>
-
-          {criterioIds.map(id => {
-            const meta  = CRITERIOS_META.find(c => c.id === id)!;
-            const estado = modulo.criterios?.[id] ?? 'pending';
-            const color  = CRITERIO_COLOR[estado];
-
-            return (
-              <div
-                key={id}
-                style={{
-                  display:         'flex',
-                  alignItems:      'flex-start',
-                  gap:             'var(--m-space-3)',
-                  padding:         'var(--m-space-3)',
-                  borderRadius:    'var(--m-radius-md)',
-                  backgroundColor: `${color}11`,
-                  border:          `1px solid ${color}33`,
-                  marginBottom:    'var(--m-space-2)',
-                  cursor:          'pointer',
-                  transition:      'background-color 0.15s ease',
-                }}
-                onClick={() => handleToggleCriterio(id)}
-              >
-                <span style={{
-                  fontSize:   10,
-                  fontWeight: 800,
-                  color,
-                  fontFamily: 'var(--m-font-mono)',
-                  minWidth:   24,
-                  paddingTop: 2,
-                }}>
-                  {id}
-                </span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--m-color-text)', marginBottom: 2 }}>
-                    {meta.label}
-                    <span style={{
-                      marginLeft:      'var(--m-space-2)',
-                      fontSize:        9,
-                      fontWeight:      600,
-                      padding:         '1px 5px',
-                      borderRadius:    'var(--m-radius-sm)',
-                      backgroundColor: meta.deteccion === 'automatico'
-                        ? 'var(--m-color-ok-soft)'
-                        : 'var(--m-color-warn-soft)',
-                      color: meta.deteccion === 'automatico'
-                        ? 'var(--m-color-ok)'
-                        : 'var(--m-color-warn)',
-                    }}>
-                      {meta.deteccion}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 11, color: 'var(--m-color-text-muted)' }}>
-                    {meta.descripcion}
-                  </div>
-                </div>
-                <span style={{ fontSize: 14, color, fontWeight: 800, flexShrink: 0 }}>
-                  {CRITERIO_ICON[estado]}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Footer */}
-        <div style={{
-          padding:    'var(--m-space-4) var(--m-space-6)',
-          borderTop:  '1px solid var(--m-color-border)',
-          fontSize:   11,
-          color:      'var(--m-color-text-muted)',
-        }}>
-          {modulo.auditedAt
-            ? `Última auditoría: ${new Date(modulo.auditedAt).toLocaleString('es-UY')}`
-            : 'Sin auditoría registrada'
-          }
-        </div>
-      </div>
-    </>
-  );
-}
-
 // =============================================================================
-// VISTA PRINCIPAL
+// VISTA CHECKLIST
 // =============================================================================
 
-export function ChecklistRoadmapView() {
-  const { isReady } = useOrchestrator();
+interface ChecklistViewProps {
+  modulos:       RoadmapModule[];
+  auditando:     string | null;
+  onAudit:       (id: string) => void;
+  onSelect:      (id: string) => void;
+}
 
-  const [modulos,     setModulos]     = useState<RoadmapModule[]>([]);
-  const [loading,     setLoading]     = useState(true);
-  const [error,       setError]       = useState<string | null>(null);
-  const [selectedId,  setSelectedId]  = useState<string | null>(null);
-  const [auditando,   setAuditando]   = useState<string | null>(null);
-  const [search,      setSearch]      = useState('');
+function ChecklistContent({ modulos, auditando, onAudit, onSelect }: ChecklistViewProps) {
+  const [search,       setSearch]       = useState('');
   const [filterStatus, setFilterStatus] = useState<ModuleStatus | 'todos'>('todos');
 
-  // ─── Carga de datos ───────────────────────────────────────────────────────
-  useEffect(() => {
-    if (!isReady) return;
-    setLoading(true);
-    getAllModules()
-      .then(data => { setModulos(data); setError(null); })
-      .catch(err  => setError(err.message ?? 'Error cargando módulos'))
-      .finally(()  => setLoading(false));
-  }, [isReady]);
-
-  // ─── Auditoría ────────────────────────────────────────────────────────────
-  const handleAudit = useCallback(async (moduleId: string) => {
-    setAuditando(moduleId);
-    try {
-      const result = await auditModulo(moduleId);
-      if (!result) return;
-      setModulos(prev => prev.map(m =>
-        m.id === moduleId
-          ? { ...m, criterios: Object.fromEntries(
-              Object.entries(result.criterios).map(([k, v]) => [k, v.estado])
-            ) as Record<CriterioId, CriterioEstado>, auditedAt: result.timestamp }
-          : m
-      ));
-    } finally {
-      setAuditando(null);
-    }
-  }, []);
-
-  // ─── Update desde detail ──────────────────────────────────────────────────
-  const handleUpdate = useCallback((updated: RoadmapModule) => {
-    setModulos(prev => prev.map(m => m.id === updated.id ? updated : m));
-  }, []);
-
-  // ─── Filtrado y agrupado ──────────────────────────────────────────────────
-  const filtrados = useMemo(() => {
-    return modulos.filter(m => {
-      const matchSearch = !search
-        || m.nombre.toLowerCase().includes(search.toLowerCase())
-        || m.id.toLowerCase().includes(search.toLowerCase());
-      const matchStatus = filterStatus === 'todos' || m.status === filterStatus;
-      return matchSearch && matchStatus;
-    });
-  }, [modulos, search, filterStatus]);
+  const filtrados = useMemo(() => modulos.filter(m => {
+    const matchSearch = !search
+      || m.nombre.toLowerCase().includes(search.toLowerCase())
+      || m.id.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = filterStatus === 'todos' || m.status === filterStatus;
+    return matchSearch && matchStatus;
+  }), [modulos, search, filterStatus]);
 
   const familias = useMemo(() => agruparPorFamilia(filtrados), [filtrados]);
 
-  const selectedModule = modulos.find(m => m.id === selectedId) ?? null;
-
-  // ─── Stats globales ───────────────────────────────────────────────────────
-  const totalOk        = modulos.filter(m => m.status === 'cumple-estandar' || m.status === 'produccion').length;
-  const totalBloqueados = modulos.filter(m => m.status === 'bloqueado').length;
-  const pctGlobal      = modulos.length ? Math.round(totalOk / modulos.length * 100) : 0;
-  const scorePromedio  = modulos.length
-    ? Math.round(modulos.reduce((acc, m) => acc + scoreModulo(m.criterios), 0) / modulos.length * 10) / 10
-    : 0;
-
-  // ─── Render ───────────────────────────────────────────────────────────────
-  if (loading) return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--m-color-text-muted)' }}>
-      Cargando módulos...
-    </div>
-  );
-
-  if (error) return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--m-color-error)' }}>
-      Error: {error}
-    </div>
-  );
-
   return (
-    <div style={{
-      display:       'flex',
-      flexDirection: 'column' as const,
-      height:        '100%',
-      backgroundColor: 'var(--m-color-bg)',
-      fontFamily:    'var(--m-font-sans)',
-    }}>
+    <div style={{ display: 'flex', flexDirection: 'column' as const, flex: 1, overflow: 'hidden' }}>
 
-      {/* ── Stats bar ── */}
-      <div style={{
-        display:    'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap:        'var(--m-space-3)',
-        padding:    'var(--m-space-4) var(--m-space-6)',
-        borderBottom: '1px solid var(--m-color-border)',
-      }}>
-        {[
-          { label: 'Módulos totales',   value: modulos.length,   color: 'var(--m-color-text)' },
-          { label: 'Cumplen estándar',  value: totalOk,          color: 'var(--m-color-ok)' },
-          { label: 'Bloqueados',        value: totalBloqueados,  color: 'var(--m-color-error)' },
-          { label: 'Score promedio',    value: `${scorePromedio}/8`, color: 'var(--m-color-primary)' },
-        ].map(stat => (
-          <div key={stat.label} style={{
-            backgroundColor: 'var(--m-color-surface)',
-            borderRadius:    'var(--m-radius-md)',
-            padding:         'var(--m-space-3) var(--m-space-4)',
-            border:          '1px solid var(--m-color-border)',
-          }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: stat.color, lineHeight: 1 }}>
-              {stat.value}
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--m-color-text-muted)', marginTop: 'var(--m-space-1)' }}>
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Progress global ── */}
-      <div style={{ padding: 'var(--m-space-3) var(--m-space-6)', borderBottom: '1px solid var(--m-color-border)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--m-space-1)' }}>
-          <span style={{ fontSize: 11, color: 'var(--m-color-text-muted)' }}>Cumplimiento global</span>
-          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-color-ok)' }}>{pctGlobal}%</span>
-        </div>
-        <div style={{ height: 4, backgroundColor: 'var(--m-color-surface-2)', borderRadius: 2 }}>
-          <div style={{
-            height:          '100%',
-            width:           `${pctGlobal}%`,
-            backgroundColor: 'var(--m-color-ok)',
-            borderRadius:    2,
-            transition:      'width 0.3s ease',
-          }} />
-        </div>
-      </div>
-
-      {/* ── Toolbar ── */}
+      {/* Toolbar */}
       <div style={{
         display:      'flex',
         alignItems:   'center',
@@ -616,7 +310,7 @@ export function ChecklistRoadmapView() {
         </span>
       </div>
 
-      {/* ── Lista por familia ── */}
+      {/* Lista por familia */}
       <div style={{ flex: 1, overflowY: 'auto' as const, padding: 'var(--m-space-4) var(--m-space-6)' }}>
         {familias.length === 0 ? (
           <div style={{ textAlign: 'center' as const, color: 'var(--m-color-text-muted)', padding: 'var(--m-space-12)' }}>
@@ -625,52 +319,209 @@ export function ChecklistRoadmapView() {
         ) : (
           familias.map(familia => (
             <div key={familia.nombre} style={{ marginBottom: 'var(--m-space-6)' }}>
-              {/* Header de familia */}
+              {/* Header familia */}
               <div style={{
                 display:       'flex',
                 alignItems:    'center',
-                gap:           'var(--m-space-3)',
-                marginBottom:  'var(--m-space-3)',
+                gap:           'var(--m-space-2)',
+                marginBottom:  'var(--m-space-2)',
+                paddingBottom: 'var(--m-space-2)',
+                borderBottom:  '1px solid var(--m-color-border)',
               }}>
-                <span style={{
-                  fontSize:      11,
-                  fontWeight:    700,
-                  color:         'var(--m-color-text-muted)',
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: '0.08em',
-                }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--m-color-text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>
                   {familia.nombre}
                 </span>
                 <span style={{ fontSize: 11, color: 'var(--m-color-text-subtle)' }}>
                   {familia.modulos.length} módulos · {familia.porcentajeCumplimiento}% estándar
                 </span>
-                <div style={{ flex: 1, height: 1, backgroundColor: 'var(--m-color-border)' }} />
               </div>
 
-              {/* Módulos de la familia */}
-              {familia.modulos.map(modulo => (
+              {familia.modulos.map(m => (
                 <ModuloRow
-                  key={modulo.id}
-                  modulo={modulo}
-                  isSelected={selectedId === modulo.id}
-                  isAuditando={auditando === modulo.id}
-                  onSelect={id => setSelectedId(id === selectedId ? null : id)}
-                  onAudit={handleAudit}
+                  key={m.id}
+                  modulo={m}
+                  auditando={auditando === m.id}
+                  onAudit={() => onAudit(m.id)}
+                  onSelect={() => onSelect(m.id)}
                 />
               ))}
             </div>
           ))
         )}
       </div>
+    </div>
+  );
+}
 
-      {/* ── Detail drawer ── */}
-      {selectedModule && (
-        <ModuleDetail
-          modulo={selectedModule}
-          onClose={() => setSelectedId(null)}
-          onUpdate={handleUpdate}
+// =============================================================================
+// VISTA PRINCIPAL
+// =============================================================================
+
+export function ChecklistRoadmapView() {
+  const { isReady } = useOrchestrator();
+
+  const [modulos,      setModulos]      = useState<RoadmapModule[]>([]);
+  const [loading,      setLoading]      = useState(true);
+  const [error,        setError]        = useState<string | null>(null);
+  const [selectedId,   setSelectedId]   = useState<string | null>(null);
+  const [auditando,    setAuditando]    = useState<string | null>(null);
+  const [activeTab,    setActiveTab]    = useState<TabId>('checklist');
+
+  // ── Carga ────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!isReady) return;
+    setLoading(true);
+    getAllModules()
+      .then(data => { setModulos(data); setError(null); })
+      .catch(err  => setError(err.message ?? 'Error cargando módulos'))
+      .finally(()  => setLoading(false));
+  }, [isReady]);
+
+  // ── Auditoría ─────────────────────────────────────────────────────────────
+  const handleAudit = useCallback(async (moduleId: string) => {
+    setAuditando(moduleId);
+    try {
+      const result = await auditModulo(moduleId);
+      if (!result) return;
+      setModulos(prev => prev.map(m =>
+        m.id === moduleId
+          ? {
+              ...m,
+              criterios: Object.fromEntries(
+                Object.entries(result.criterios).map(([k, v]) => [k, v.estado])
+              ) as Record<CriterioId, CriterioEstado>,
+              auditedAt: result.timestamp,
+            }
+          : m
+      ));
+    } finally {
+      setAuditando(null);
+    }
+  }, []);
+
+  // ── Stats ────────────────────────────────────────────────────────────────
+  const totalOk         = modulos.filter(m => m.status === 'cumple-estandar' || m.status === 'produccion').length;
+  const totalBloqueados = modulos.filter(m => m.status === 'bloqueado').length;
+  const pctGlobal       = modulos.length ? Math.round(totalOk / modulos.length * 100) : 0;
+  const scorePromedio   = modulos.length
+    ? Math.round(modulos.reduce((acc, m) => acc + scoreModulo(m.criterios), 0) / modulos.length * 10) / 10
+    : 0;
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  if (loading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--m-color-text-muted)' }}>
+      Cargando módulos...
+    </div>
+  );
+
+  if (error) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--m-color-error)' }}>
+      Error: {error}
+    </div>
+  );
+
+  return (
+    <div style={{
+      display:         'flex',
+      flexDirection:   'column' as const,
+      height:          '100%',
+      backgroundColor: 'var(--m-color-bg)',
+      fontFamily:      'var(--m-font-sans)',
+    }}>
+
+      {/* ── Stats bar ── */}
+      <div style={{
+        display:             'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap:                 'var(--m-space-3)',
+        padding:             'var(--m-space-4) var(--m-space-6)',
+        borderBottom:        '1px solid var(--m-color-border)',
+      }}>
+        {[
+          { label: 'Módulos totales',  value: modulos.length,       color: 'var(--m-color-text)' },
+          { label: 'Cumplen estándar', value: totalOk,              color: 'var(--m-color-ok)' },
+          { label: 'Bloqueados',       value: totalBloqueados,      color: 'var(--m-color-error)' },
+          { label: 'Score promedio',   value: `${scorePromedio}/8`, color: 'var(--m-color-primary)' },
+        ].map(stat => (
+          <div key={stat.label} style={{
+            backgroundColor: 'var(--m-color-surface)',
+            borderRadius:    'var(--m-radius-md)',
+            padding:         'var(--m-space-3) var(--m-space-4)',
+            border:          '1px solid var(--m-color-border)',
+          }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: stat.color, lineHeight: 1 }}>
+              {stat.value}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--m-color-text-muted)', marginTop: 'var(--m-space-1)' }}>
+              {stat.label}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Progress global ── */}
+      <div style={{ padding: 'var(--m-space-3) var(--m-space-6)', borderBottom: '1px solid var(--m-color-border)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--m-space-1)' }}>
+          <span style={{ fontSize: 11, color: 'var(--m-color-text-muted)' }}>Cumplimiento global</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--m-color-ok)' }}>{pctGlobal}%</span>
+        </div>
+        <div style={{ height: 4, backgroundColor: 'var(--m-color-surface-2)', borderRadius: 2 }}>
+          <div style={{
+            height:          '100%',
+            width:           `${pctGlobal}%`,
+            backgroundColor: 'var(--m-color-ok)',
+            borderRadius:    2,
+            transition:      'width 0.3s ease',
+          }} />
+        </div>
+      </div>
+
+      {/* ── Tabs ── */}
+      <div style={{
+        display:      'flex',
+        borderBottom: '1px solid var(--m-color-border)',
+        padding:      '0 var(--m-space-6)',
+      }}>
+        {TABS.map(tab => {
+          const activo = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{
+                padding:         'var(--m-space-3) var(--m-space-4)',
+                border:          'none',
+                borderBottom:    activo ? '2px solid var(--m-color-primary)' : '2px solid transparent',
+                backgroundColor: 'transparent',
+                color:           activo ? 'var(--m-color-primary)' : 'var(--m-color-text-muted)',
+                fontSize:        13,
+                fontWeight:      activo ? 700 : 400,
+                cursor:          'pointer',
+                transition:      'all 0.15s',
+              }}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Contenido por tab ── */}
+      {activeTab === 'checklist' && (
+        <ChecklistContent
+          modulos={modulos}
+          auditando={auditando}
+          onAudit={handleAudit}
+          onSelect={setSelectedId}
         />
       )}
+
+      {activeTab === 'roadmap' && <RoadmapPanel />}
+
+      {activeTab === 'ideas' && (
+        <IdeasBoard onNavigate={s => setActiveTab(s as TabId)} />
+      )}
+
     </div>
   );
 }
