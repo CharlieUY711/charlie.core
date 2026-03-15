@@ -4,7 +4,7 @@ export const moduleConfig = {
   id:     'vistas-shells',
   nombre: 'Vistas y Shells',
   familia: 'core',
-  version: '0.1.0',
+  version: '1.0.0',
   criterios: [
     { id: 'C1', label: 'Tiene vista (UI)',           estado: 'pending' },
     { id: 'C2', label: 'Tiene backend (DB)',          estado: 'pending' },
