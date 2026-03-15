@@ -8,48 +8,43 @@
  *   3. VITE_DEFAULT_TENANT        (desarrollo local)
  */
 
-const CHARLIE_URL = 'https://yomgqobfmgatavnbtvdz.supabase.co';
-const CHARLIE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
+import { supabaseUrl, publicAnonKey } from '@/utils/supabase/info';
 
-export interface Conjunto {
-  tabla:  string;
-  filtro: Record<string, any>;
-  mapeo:  Record<string, string>;
-}
+const CHARLIE_URL = supabaseUrl;
+const CHARLIE_KEY = publicAnonKey;
 
-// ─── Info Block ───────────────────────────────────────────────────────────────
 // tipo 'modulo_activo' — muestra el nombre de la sección activa (sin texto extra)
 // tipo 'promo'         — título + texto para anunciar algo próximo
 // tipo 'mensaje'       — mensaje directo al usuario (puede cambiar a menudo)
 // tipo 'oculto'        — la zona 4 no renderiza
-
 export type InfoBlockTipo = 'modulo_activo' | 'promo' | 'mensaje' | 'oculto';
 
 export interface SidebarInfoBlock {
   tipo:    InfoBlockTipo;
-  titulo?: string;   // para 'promo' y 'mensaje'
-  texto?:  string;   // para 'promo' y 'mensaje'
+  titulo?: string;
+  texto?:  string;
 }
 
 // ─── CTA ─────────────────────────────────────────────────────────────────────
-// null  → zona 5 no renderiza
-// label → texto del botón
-// url   → abre en nueva pestaña
-
 export interface SidebarCta {
   label: string;
   url?:  string;
 }
 
 // ─── Sidebar ─────────────────────────────────────────────────────────────────
-
 export interface SidebarConfig {
   infoBlock?: SidebarInfoBlock | null;
   cta?:       SidebarCta       | null;
 }
 
-// ─── RemoteConfig ─────────────────────────────────────────────────────────────
+// ─── Conjunto ────────────────────────────────────────────────────────────────
+export interface Conjunto {
+  tabla:   string;
+  filtro?: Record<string, unknown>;
+  campos?: Record<string, string>;
+}
 
+// ─── RemoteConfig ─────────────────────────────────────────────────────────────
 export interface RemoteConfig {
   tenantId:      string;
   tenantNombre:  string;
@@ -59,10 +54,10 @@ export interface RemoteConfig {
     primary:    string;
     secondary?: string;
     nombre?:    string;
-    sistema?:   string;   // ← nuevo: nombre del sistema (ej: "Charlie Platform")
+    sistema?:   string;
     logo?:      string;
   };
-  sidebar:  SidebarConfig;   // ← nuevo: config completa del sidebar
+  sidebar:  SidebarConfig;
   modulos:  string[];
   backend: {
     tipo:        string;
@@ -75,7 +70,6 @@ export interface RemoteConfig {
 }
 
 // ─── Fetcher ──────────────────────────────────────────────────────────────────
-
 async function charlieFetch(path: string) {
   const res = await fetch(`${CHARLIE_URL}/rest/v1/${path}`, {
     headers: {
@@ -101,11 +95,9 @@ function detectTenantIdentifier(): string | null {
 }
 
 // ─── Loader ───────────────────────────────────────────────────────────────────
-
 export async function loadRemoteConfig(): Promise<RemoteConfig | null> {
   try {
     const identifier = detectTenantIdentifier();
-
     if (!identifier) {
       console.warn('[ConfigLoader] No se detectó tenant.');
       return null;
@@ -127,7 +119,6 @@ export async function loadRemoteConfig(): Promise<RemoteConfig | null> {
     }
 
     const cfg = rows[0];
-
     return {
       tenantId:      cfg.tenant_id,
       tenantNombre:  cfg.nombre,
@@ -137,14 +128,14 @@ export async function loadRemoteConfig(): Promise<RemoteConfig | null> {
         primary:   cfg.theme?.primary   || '#FF6B35',
         secondary: cfg.theme?.secondary,
         nombre:    cfg.theme?.nombre,
-        sistema:   cfg.theme?.sistema,       // ← nuevo campo en tenant_config.theme
+        sistema:   cfg.theme?.sistema,
         logo:      cfg.theme?.logo,
       },
       sidebar: {
         infoBlock: cfg.sidebar?.infoBlock ?? { tipo: 'modulo_activo' },
         cta:       cfg.sidebar?.cta       ?? null,
       },
-      modulos: cfg.modulos || [],
+      modulos:  cfg.modulos  || [],
       backend: {
         tipo:        cfg.backend?.tipo     || 'supabase',
         url:         cfg.backend?.url      || '',
@@ -154,7 +145,6 @@ export async function loadRemoteConfig(): Promise<RemoteConfig | null> {
       },
       conjuntos: cfg.conjuntos || {},
     };
-
   } catch (error) {
     console.error('[ConfigLoader] Error:', error);
     return null;

@@ -4,7 +4,7 @@
  * Creado una sola vez por URL — cacheado en memoria.
  *
  * Principio Data Zero:
- *   Usa config.backend del tenant (yomgqobfmgatavnbtvdz para ODDY).
+ *   Usa config.backend del tenant (svuwgjreuvutbnxrtria para ODDY).
  *   NUNCA el Supabase de Charlie (qhnmxvexkizcsmivfuam).
  */
 

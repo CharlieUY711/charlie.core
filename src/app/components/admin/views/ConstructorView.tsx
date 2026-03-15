@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 // ─── Supabase Charlie ─────────────────────────────────────────────────────────
-// Apunta al proyecto Charlie principal (yomgqobfmgatavnbtvdz).
+// Apunta al proyecto Charlie principal (svuwgjreuvutbnxrtria).
 // Esta conexión maneja configuración de tenants — NUNCA datos de negocio del cliente.
 const charlieSupabase = createClient(
   `https://${projectId}.supabase.co`,

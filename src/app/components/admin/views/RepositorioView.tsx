@@ -432,8 +432,8 @@ export function RepositorioView({ onNavigate }: Props) {
 
   // Cargar scores reales desde Supabase al montar
   useEffect(() => {
-    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
-    fetch('https://yomgqobfmgatavnbtvdz.supabase.co/rest/v1/modulos_auditoria?select=modulo_id,status', {
+    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2dXdnanJldXZ1dGJueHJ0cmlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MzU3NzIsImV4cCI6MjA4OTExMTc3Mn0.qV7i20hR16Vn5P24va47QNIu7RECXrrg_88yFzlNvII
+    fetch('https://svuwgjreuvutbnxrtria.supabase.co/rest/v1/modulos_auditoria?select=modulo_id,status', {
       headers: { apikey: anon, Authorization: 'Bearer ' + anon },
     })
       .then(r => r.json())
@@ -452,8 +452,8 @@ export function RepositorioView({ onNavigate }: Props) {
   const [estadosDB, setEstadosDB] = React.useState<Record<string, 'draft' | 'ready' | 'active'>>({});
 
   useEffect(() => {
-    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
-    fetch('https://yomgqobfmgatavnbtvdz.supabase.co/rest/v1/modulos_estado?select=modulo_id,estado', {
+    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2dXdnanJldXZ1dGJueHJ0cmlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MzU3NzIsImV4cCI6MjA4OTExMTc3Mn0.qV7i20hR16Vn5P24va47QNIu7RECXrrg_88yFzlNvII
+    fetch('https://svuwgjreuvutbnxrtria.supabase.co/rest/v1/modulos_estado?select=modulo_id,estado', {
       headers: { apikey: anon, Authorization: 'Bearer ' + anon },
     })
       .then(r => r.json())
@@ -466,8 +466,8 @@ export function RepositorioView({ onNavigate }: Props) {
   }, []);
 
   const setEstado = async (moduloId: string, estado: "draft" | "ready" | "active") => {
-    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbWdxb2JmbWdhdGF2bmJ0dmR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MzAzMTksImV4cCI6MjA4NjAwNjMxOX0.yZ9Zb6Jz9BKZTkn7Ld8TzeLyHsb8YhBAoCvFLPBiqZk';
-    await fetch('https://yomgqobfmgatavnbtvdz.supabase.co/rest/v1/modulos_estado', {
+    const anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2dXdnanJldXZ1dGJueHJ0cmlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MzU3NzIsImV4cCI6MjA4OTExMTc3Mn0.qV7i20hR16Vn5P24va47QNIu7RECXrrg_88yFzlNvII
+    await fetch('https://svuwgjreuvutbnxrtria.supabase.co/rest/v1/modulos_estado', {
       method: 'POST',
       headers: { apikey: anon, Authorization: 'Bearer ' + anon, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
       body: JSON.stringify({ modulo_id: moduloId, estado, updated_at: new Date().toISOString() }),
