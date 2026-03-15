@@ -5,17 +5,17 @@
  * Panel de edición de props de un ShellEntry.
  * Usa DrawerShell como contenedor. Preview en tiempo real via ShellPreview.
  * Persiste ediciones via saveEdit() de vistasShellsApi.
+ * Al abrir carga los últimos edits guardados via getEdits().
  *
  * C5: Zero colores hardcodeados — solo var(--m-*)
  * C8: No contiene supabase.from() — delega en vistasShellsApi
  */
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Sliders } from 'lucide-react';
 import type { ShellEntry, PropDef } from '../../types';
-import { saveEdit } from '../../service/vistasShellsApi';
+import { saveEdit, getEdits } from '../../service/vistasShellsApi';
 import { ShellPreview } from './ShellPreview';
 
-// Importamos DrawerShell desde la capa de shells
 import { DrawerShell } from '../../../../app/components/shells/DrawerShell';
 import type { SheetDef, FieldDef } from '../../../../app/components/shells/DrawerShell.types';
 
@@ -30,7 +30,6 @@ interface EditorShellProps {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-/** Convierte PropDef[] en FieldDef[] para DrawerShell */
 function propsToFields(props: PropDef[]): FieldDef[] {
   return props.map(prop => {
     const base: FieldDef = {
@@ -39,27 +38,13 @@ function propsToFields(props: PropDef[]): FieldDef[] {
       hint:        prop.descripcion,
       placeholder: prop.valorDefault,
     };
-
     switch (prop.tipo) {
-      case 'color':
-        return { ...base, type: 'text', placeholder: prop.valorDefault };
-      case 'spacing':
-        return { ...base, type: 'text', placeholder: prop.valorDefault };
-      case 'radius':
-        return { ...base, type: 'text', placeholder: prop.valorDefault };
-      case 'font':
-        return { ...base, type: 'text', placeholder: prop.valorDefault };
-      case 'boolean':
-        return { ...base, type: 'toggle' };
-      case 'text':
-        return { ...base, type: 'text' };
-      default:
-        return { ...base, type: 'text' };
+      case 'boolean': return { ...base, type: 'toggle' };
+      default:        return { ...base, type: 'text' };
     }
   });
 }
 
-/** Construye initialData desde los valorDefault de las props */
 function buildInitialData(props: PropDef[]): Record<string, unknown> {
   return Object.fromEntries(props.map(p => [p.id, p.valorDefault]));
 }
@@ -73,7 +58,6 @@ function PreviewLive({
   shell:    ShellEntry;
   formData: Record<string, unknown>;
 }) {
-  // Construimos un ShellEntry con los valores editados aplicados
   const shellEditado: ShellEntry = useMemo(() => ({
     ...shell,
     props: shell.props.map(p => ({
@@ -95,19 +79,44 @@ function PreviewLive({
 // ── Componente principal ──────────────────────────────────────────────────────
 
 export function EditorShell({ shell, open, onClose, onSaved }: EditorShellProps) {
-  const [formData, setFormData] = useState<Record<string, unknown>>({});
+  const [formData,  setFormData]  = useState<Record<string, unknown>>({});
+  const [loading,   setLoading]   = useState(false);
 
-  // Cuando cambia el shell, reseteamos formData
-  React.useEffect(() => {
-    if (shell) setFormData(buildInitialData(shell.props));
-  }, [shell?.id]);
+  // ── Cargar edits previos al abrir ───────────────────────────────────────────
+
+  useEffect(() => {
+    if (!shell || !open) return;
+
+    const base = buildInitialData(shell.props);
+
+    // Intentar cargar edits guardados
+    const shellId = shell.shellId ?? shell.id;
+    setLoading(true);
+    getEdits(shellId)
+      .then(edits => {
+        // Aplicar edits sobre los valores default
+        // Si hay múltiples edits para la misma prop, el más reciente gana
+        const merged = { ...base };
+        // getEdits devuelve orden desc (más reciente primero)
+        // iteramos al revés para que el más reciente sobreescriba
+        const editsSorted = [...edits].reverse();
+        for (const edit of editsSorted) {
+          merged[edit.propId] = edit.valor;
+        }
+        setFormData(merged);
+      })
+      .catch(() => {
+        // Si falla, usamos los valores default
+        setFormData(base);
+      })
+      .finally(() => setLoading(false));
+  }, [shell?.id, open]);
 
   // ── Sheets para DrawerShell ─────────────────────────────────────────────────
 
   const sheets: SheetDef[] = useMemo(() => {
     if (!shell) return [];
 
-    // Sheet 1: Preview en tiempo real (campo custom)
     const previewSheet: SheetDef = {
       id:       'preview',
       title:    'Preview',
@@ -123,7 +132,6 @@ export function EditorShell({ shell, open, onClose, onSaved }: EditorShellProps)
       ],
     };
 
-    // Sheet 2: Edición de props agrupadas por tipo
     const tiposPresentes = [...new Set(shell.props.map(p => p.tipo))];
     const propSheets: SheetDef[] = tiposPresentes.map(tipo => ({
       id:       `props-${tipo}`,
@@ -140,16 +148,18 @@ export function EditorShell({ shell, open, onClose, onSaved }: EditorShellProps)
   const handleSave = useCallback(async (data: Record<string, unknown>) => {
     if (!shell) return;
 
-    // Guardamos solo las props que cambiaron respecto al valorDefault
+    const shellId = shell.shellId ?? shell.id;
+
+    // Guardar todas las props que tienen valor (no solo las que cambiaron)
     const edits = shell.props.filter(p => {
-      const nuevo = data[p.id] as string | undefined;
-      return nuevo && nuevo !== p.valorDefault;
+      const valor = data[p.id] as string | undefined;
+      return valor !== undefined && valor !== '';
     });
 
     await Promise.all(
       edits.map(p =>
         saveEdit({
-          shellId:  shell.id,
+          shellId,
           tenantId: 'charlie',
           propId:   p.id,
           valor:    data[p.id] as string,
@@ -157,7 +167,7 @@ export function EditorShell({ shell, open, onClose, onSaved }: EditorShellProps)
       )
     );
 
-    onSaved?.(shell.id);
+    onSaved?.(shellId);
   }, [shell, onSaved]);
 
   if (!shell) return null;
@@ -170,7 +180,8 @@ export function EditorShell({ shell, open, onClose, onSaved }: EditorShellProps)
       title={shell.nombre}
       icon={Sliders}
       sheets={sheets}
-      initialData={buildInitialData(shell.props)}
+      initialData={formData}
+      loading={loading}
       labels={{
         save:    'Guardar cambios',
         saving:  'Guardando...',

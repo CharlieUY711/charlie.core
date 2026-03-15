@@ -35,6 +35,8 @@ export interface ShellEntry {
   archivo:     string;           // path relativo al src/
   props:       PropDef[];
   variantes:   VarianteDef[];
+  shellId?:    string;
+  shellId?:     string;
   isReal:      boolean;
   createdAt?:  string;
   updatedAt?:  string;
