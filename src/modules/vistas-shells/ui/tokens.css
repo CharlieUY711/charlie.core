@@ -1,0 +1,75 @@
+/* tokens.css — C6: Fallbacks para CSS Custom Properties del módulo Vistas y Shells
+ * El Orquestador sobreescribe estos valores con los tokens del tenant en :root.
+ * Este archivo NUNCA hardcodea colores en selectores de componente. */
+:root {
+  /* ── Colores principales ── */
+  --m-color-primary:        #FF6835;
+  --m-color-primary-hover:  #e85c2d;
+  --m-color-primary-soft:   rgba(255, 104, 53, 0.10);
+
+  /* ── Semánticos de estado ── */
+  --m-color-ok:             #22c55e;
+  --m-color-ok-soft:        rgba(34, 197, 94, 0.10);
+  --m-color-warn:           #f59e0b;
+  --m-color-warn-soft:      rgba(245, 158, 11, 0.10);
+  --m-color-error:          #ef4444;
+  --m-color-error-soft:     rgba(239, 68, 68, 0.10);
+  --m-color-pending:        #6b7280;
+  --m-color-pending-soft:   rgba(107, 114, 128, 0.10);
+
+  /* ── Estados de ciclo de vida ── */
+  --m-state-registrado:     #a78bfa;
+  --m-state-en-progreso:    #fbbf24;
+  --m-state-ui-lista:       #60a5fa;
+  --m-state-cumple:         #4ade80;
+  --m-state-produccion:     #34d399;
+  --m-state-bloqueado:      #f87171;
+
+  /* ── Fondos y superficies ── */
+  --m-color-bg:             #0f172a;
+  --m-color-surface:        #1e293b;
+  --m-color-surface-hover:  #263044;
+  --m-color-surface-2:      #334155;
+  --m-color-border:         #334155;
+  --m-color-border-subtle:  #1e293b;
+
+  /* ── Texto ── */
+  --m-color-text:           #f1f5f9;
+  --m-color-text-muted:     #94a3b8;
+  --m-color-text-subtle:    #64748b;
+
+  /* ── Tipografía ── */
+  --m-font-sans:            'DM Sans', system-ui, sans-serif;
+  --m-font-mono:            'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── Espaciado ── */
+  --m-space-1:              4px;
+  --m-space-2:              8px;
+  --m-space-3:              12px;
+  --m-space-4:              16px;
+  --m-space-6:              24px;
+  --m-space-8:              32px;
+  --m-space-10:             40px;
+  --m-space-12:             48px;
+
+  /* ── Radios ── */
+  --m-radius-sm:            4px;
+  --m-radius-md:            8px;
+  --m-radius-lg:            12px;
+  --m-radius-xl:            16px;
+
+  /* ── Sombras ── */
+  --m-shadow-sm:            0 1px 3px rgba(0,0,0,0.4);
+  --m-shadow-md:            0 4px 16px rgba(0,0,0,0.5);
+  --m-shadow-lg:            0 8px 32px rgba(0,0,0,0.6);
+
+  /* ── Shell tokens ── */
+  --shell-primary:          #FF6835;
+  --shell-topbar-bg:        #FFFFFF;
+  --shell-actionbar-bg:     #F8F9FA;
+  --shell-bg:               #0F172A;
+  --shell-surface:          #1E293B;
+  --shell-text:             #F1F5F9;
+  --shell-text-muted:       #94A3B8;
+  --shell-border:           #334155;
+}
