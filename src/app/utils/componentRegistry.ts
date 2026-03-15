@@ -9,6 +9,8 @@ import React from 'react';
 
 export const COMPONENT_REGISTRY: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
 
+    // ── Tres Pilares (infraestructura Charlie) ────────────────────────────────
+  'ChecklistRoadmapView':       React.lazy(() => import('../../modules/checklist-roadmap/ui/views/ChecklistRoadmapView').then(m => ({ default: m.ChecklistRoadmapView }))),
   // ── Core ──────────────────────────────────────────────────────────────────
   'DashboardView':              React.lazy(() => import('../components/admin/views/DashboardView').then(m => ({ default: m.DashboardView }))),
   'SistemaView':                React.lazy(() => import('../components/admin/views/SistemaView').then(m => ({ default: m.SistemaView }))),
@@ -34,8 +36,6 @@ export const COMPONENT_REGISTRY: Record<string, React.LazyExoticComponent<React.
   'IntegracionesServiciosView': React.lazy(() => import('../components/admin/views/IntegracionesServiciosView').then(m => ({ default: m.IntegracionesServiciosView }))),
   'IntegracionesTiendasView':   React.lazy(() => import('../components/admin/views/IntegracionesTiendasView').then(m => ({ default: m.IntegracionesTiendasView }))),
   'RepositorioAPIsView':        React.lazy(() => import('../components/admin/views/RepositorioAPIsView').then(m => ({ default: m.RepositorioAPIsView }))),
-  'IdeasView':                  React.lazy(() => import('../components/admin/views/IdeasView').then(m => ({ default: m.IdeasView }))),
-  'IdeasBoardView':             React.lazy(() => import('../components/admin/views/IdeasBoardView').then(m => ({ default: m.IdeasBoardView }))),
   'AuthRegistroView':           React.lazy(() => import('../components/admin/views/AuthRegistroView').then(m => ({ default: m.AuthRegistroView }))),
   'AdminDashboardView':         React.lazy(() => import('../components/admin/views/AdminDashboardView').then(m => ({ default: m.AdminDashboardView }))),
   'RepositorioView':            React.lazy(() => import('../components/admin/views/RepositorioView').then(m => ({ default: m.RepositorioView }))),

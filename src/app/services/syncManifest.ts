@@ -1,57 +1,60 @@
-import { MODULE_MANIFEST } from '../utils/moduleManifest';
 import { supabase } from '../../utils/supabase/client';
 
-export async function syncManifestToRoadmap() {
+/**
+ * syncManifest.ts
+ * Sincroniza modulos_disponibles → roadmap_modules.
+ * Fuente de verdad: Supabase. Sin archivos estáticos.
+ */
+export async function syncManifestToRoadmap(): Promise<void> {
   try {
-    // Convertir cada entry a objeto para upsert
-    const modulesToSync = MODULE_MANIFEST.map(entry => ({
-      id: entry.section,
-      status: 'not-started' as const,
-      priority: 'medium' as const,
-      tiene_view: !!entry.component,
-      tiene_backend: entry.hasSupabase === true,
-    }));
-
-    // Obtener módulos existentes para preservar status y priority
-    const { data: existingModules, error: fetchError } = await supabase
-      .from('roadmap_modules')
-      .select('id, status, priority, tiene_backend')
-      .in('id', modulesToSync.map(m => m.id));
+    const { data: disponibles, error: fetchError } = await supabase
+      .from('modulos_disponibles')
+      .select('section, view, nombre, grupo, is_real, has_supabase, view_file')
+      .eq('activo', true);
 
     if (fetchError) {
-      console.error('[SyncManifest] Error obteniendo módulos existentes:', fetchError);
+      console.error('[SyncManifest] Error leyendo modulos_disponibles:', fetchError);
+      return;
+    }
+    if (!disponibles || disponibles.length === 0) {
+      console.warn('[SyncManifest] Sin modulos disponibles.');
       return;
     }
 
-    // Crear mapa de módulos existentes
-    const existingMap = new Map(
-      (existingModules || []).map(m => [m.id, { status: m.status, priority: m.priority, tiene_backend: m.tiene_backend }])
-    );
+    const ids = disponibles.map(m => m.section);
+    const { data: existentes } = await supabase
+      .from('roadmap_modules')
+      .select('id, status, prioridad')
+      .in('id', ids);
 
-    // Preparar datos para upsert, preservando status y priority si existen
-    // Solo actualiza updated_at si tiene_backend cambió
-    const upsertData = modulesToSync.map(module => {
-      const existing = existingMap.get(module.id);
-      const backendChanged = existing?.tiene_backend !== module.tiene_backend;
+    const existentesMap = new Map((existentes || []).map(m => [m.id, m]));
+
+    const upsertData = disponibles.map((m, i) => {
+      const existente = existentesMap.get(m.section);
       return {
-        ...module,
-        status: existing?.status || module.status,
-        priority: existing?.priority || module.priority,
-        ...(backendChanged ? { updated_at: new Date().toISOString() } : {}),
+        id:           m.section,
+        tenant_id:    'charlie',
+        nombre:       m.nombre,
+        familia:      m.grupo ?? 'core',
+        view_file:    m.view_file ?? m.view,
+        is_real:      m.is_real,
+        has_supabase: m.has_supabase,
+        status:       existente?.status   ?? 'registrado',
+        prioridad:    existente?.prioridad ?? (i + 1),
+        criterios:    {},
       };
     });
 
-    // Realizar upsert
     const { error: upsertError } = await supabase
       .from('roadmap_modules')
-      .upsert(upsertData, { onConflict: 'id' });
+      .upsert(upsertData, { onConflict: 'id,tenant_id' });
 
     if (upsertError) {
       console.error('[SyncManifest] Error en upsert:', upsertError);
       return;
     }
 
-    console.log(`[SyncManifest] ${modulesToSync.length} módulos sincronizados`);
+    console.log(`[SyncManifest] ${upsertData.length} modulos sincronizados.`);
   } catch (error) {
     console.error('[SyncManifest] Error inesperado:', error);
   }
