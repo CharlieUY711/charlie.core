@@ -12,6 +12,7 @@ import { getAllModules, updateCriterio, updateModuleStatus } from '../../service
 import { auditModulo } from '../../service/auditEngine';
 import { RoadmapPanel } from './RoadmapPanel';
 import { IdeasBoard }   from './IdeasBoard';
+import { ModuleView } from '@/app/components/shells/ModuleView';
 import type {
   RoadmapModule,
   FamiliaGroup,
@@ -422,11 +423,7 @@ export function ChecklistRoadmapView() {
 
   return (
     <div style={{
-      display:         'flex',
-      flexDirection:   'column' as const,
-      height:          '100%',
-      backgroundColor: 'var(--m-color-bg)',
-      fontFamily:      'var(--m-font-sans)',
+      display: 'flex', flexDirection: 'column' as const, height: '100%',
     }}>
 
       {/* ── Stats bar ── */}
