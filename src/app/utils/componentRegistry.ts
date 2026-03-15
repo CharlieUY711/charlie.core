@@ -11,6 +11,7 @@ export const COMPONENT_REGISTRY: Record<string, React.LazyExoticComponent<React.
 
     // ── Tres Pilares (infraestructura Charlie) ────────────────────────────────
   'ChecklistRoadmapView':       React.lazy(() => import('../../modules/checklist-roadmap/ui/views/ChecklistRoadmapView').then(m => ({ default: m.ChecklistRoadmapView }))),
+  'VistasShellsView':           React.lazy(() => import('../../modules/vistas-shells/ui/views/VistasShellsView').then(m => ({ default: m.VistasShellsView }))), 
   // ── Core ──────────────────────────────────────────────────────────────────
   'DashboardView':              React.lazy(() => import('../components/admin/views/DashboardView').then(m => ({ default: m.DashboardView }))),
   'SistemaView':                React.lazy(() => import('../components/admin/views/SistemaView').then(m => ({ default: m.SistemaView }))),
