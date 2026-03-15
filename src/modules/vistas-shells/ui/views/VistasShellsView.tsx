@@ -9,6 +9,7 @@
  * C8: No contiene supabase.from() — delega en vistasShellsApi
  */
 import React, { useState } from 'react';
+import '../tokens.css';
 import { ModuleView } from '../../../../app/components/shells/ModuleView';
 import { CatalogoView } from './CatalogoView';
 import { EditorShell }  from './EditorShell';
