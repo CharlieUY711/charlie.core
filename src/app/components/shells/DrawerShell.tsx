@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { X, ChevronRight, Check, Loader2 } from 'lucide-react';
 import type { DrawerShellProps, FieldDef, CustomFieldProps } from './DrawerShell.types';
 
@@ -23,8 +23,8 @@ function FieldRenderer({ field, value, onChange, onMultiChange, formData, error,
   const [isFocused, setIsFocused] = useState(false);
   const baseInput: React.CSSProperties = {
     width: '100%', padding: '10px 12px', borderRadius: '8px', fontSize: '13px',
-    outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit',
-    transition: 'all 0.15s', backgroundColor: '#fff',
+    outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', transition: 'all 0.15s',
+    backgroundColor: '#fff',
     border: `1px solid ${error ? '#ef4444' : isFocused ? primaryColor : '#e2e8f0'}`,
     boxShadow: error ? '0 0 0 3px rgba(239,68,68,0.1)' : isFocused ? `0 0 0 3px ${primaryColor}1A` : 'none',
   };
@@ -34,7 +34,7 @@ function FieldRenderer({ field, value, onChange, onMultiChange, formData, error,
     </label>
   ) : null;
   const Hint = () => field.hint ? <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#94a3b8' }}>{field.hint}</p> : null;
-  const Err = () => error ? <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#ef4444' }}>{error}</p> : null;
+  const Err  = () => error ? <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#ef4444' }}>{error}</p> : null;
 
   if (field.type === 'custom') {
     if (!field.renderComponent) return null;
@@ -87,7 +87,7 @@ function FieldRenderer({ field, value, onChange, onMultiChange, formData, error,
             const active = selected.includes(o.value);
             return (
               <button key={o.value} type="button"
-                onClick={() => onChange(active ? selected.filter(v => v !== o.value) : [...selected, o.value])}
+                onClick={() => onChange(active ? selected.filter((v: unknown) => v !== o.value) : [...selected, o.value])}
                 style={{ padding: '6px 12px', borderRadius: '20px', border: `1px solid ${active ? primaryColor : '#e2e8f0'}`, backgroundColor: active ? `${primaryColor}15` : '#fff', color: active ? primaryColor : '#475569', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s', outline: 'none' }}>
                 {o.label}
               </button>
@@ -112,15 +112,10 @@ function FieldRenderer({ field, value, onChange, onMultiChange, formData, error,
               reader.onloadend = () => { const r = reader.result as string; setPreview(r); onChange(r); };
               reader.readAsDataURL(file);
             }} />
-          {preview ? (
-            <div><img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', marginBottom: '8px' }} />
-              <p style={{ fontSize: '11px', color: '#94a3b8', margin: 0 }}>Click para cambiar</p></div>
-          ) : (
-            <div>
-              <p style={{ fontSize: '13px', color: '#475569', margin: '0 0 4px', fontWeight: 600 }}>Arrastra una imagen o click para seleccionar</p>
-              <p style={{ fontSize: '11px', color: '#94a3b8', margin: 0 }}>{field.hint || 'JPG, PNG hasta 10MB'}</p>
-            </div>
-          )}
+          {preview
+            ? <div><img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', marginBottom: '8px' }} /><p style={{ fontSize: '11px', color: '#94a3b8', margin: 0 }}>Click para cambiar</p></div>
+            : <div><p style={{ fontSize: '13px', color: '#475569', margin: '0 0 4px', fontWeight: 600 }}>Arrastra una imagen o click para seleccionar</p><p style={{ fontSize: '11px', color: '#94a3b8', margin: 0 }}>{field.hint || 'JPG, PNG hasta 10MB'}</p></div>
+          }
         </div><Err /></div>
     );
   }
@@ -133,12 +128,17 @@ function FieldRenderer({ field, value, onChange, onMultiChange, formData, error,
   );
 }
 
-export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, initialData = {}, loading = false, labels = {} }: DrawerShellProps) {
+export function DrawerShell({
+  open, onClose, onSave, onDiscard,
+  title, icon: Icon, sheets, initialData = {}, loading = false, labels = {},
+  previewSlot,
+  footerSlot,
+}: DrawerShellProps) {
   const L = { cancel: labels.cancel ?? 'Cancelar', prev: labels.prev ?? '← Ant.', next: labels.next ?? 'Sig. →', save: labels.save ?? 'Guardar', saving: labels.saving ?? 'Guardando...', pageOf: labels.pageOf ?? 'Página {current} de {total}' };
   const [currentSheet, setCurrentSheet] = useState(0);
-  const [formData, setFormData] = useState<Record<string, unknown>>(initialData);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [saving, setSaving] = useState(false);
+  const [formData,  setFormData]  = useState<Record<string, unknown>>(initialData);
+  const [errors,    setErrors]    = useState<Record<string, string>>({});
+  const [saving,    setSaving]    = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [primaryColor, setPrimaryColor] = useState('#FF6835');
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -148,12 +148,16 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
     if (open) { setCurrentSheet(0); setFormData(initialData); setErrors({}); setSaveError(null); }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
+  const handleDiscard = useCallback(() => { onDiscard?.(); onClose(); }, [onDiscard, onClose]);
+
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleDiscard(); };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+  }, [open, handleDiscard]);
+
   useEffect(() => {
     if (!open || !drawerRef.current) return;
     const focusable = drawerRef.current.querySelectorAll<HTMLElement>('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
@@ -182,8 +186,7 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
           newErrors[f.id] = `${f.label ?? f.id} es requerido`;
       }
     });
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors(newErrors); return Object.keys(newErrors).length === 0;
   }, [sheets, formData]);
 
   const goToSheet = useCallback((index: number) => {
@@ -202,32 +205,38 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
 
   if (!open) return null;
 
-  const sheet = sheets[currentSheet];
+  const sheet   = sheets[currentSheet];
   const isFirst = currentSheet === 0;
-  const isLast = currentSheet === sheets.length - 1;
+  const isLast  = currentSheet === sheets.length - 1;
   const pageLabel = L.pageOf.replace('{current}', String(currentSheet + 1)).replace('{total}', String(sheets.length));
-
   const byRow: Record<string, FieldDef[]> = {};
   const standalone: FieldDef[] = [];
   sheet.fields.forEach(f => { if (f.row) { (byRow[f.row] ??= []).push(f); } else { standalone.push(f); } });
-
   const btnBase: React.CSSProperties = { padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: '4px' };
 
   return (
     <>
-      <div onClick={onClose} style={{ position: 'fixed', inset: 0, right: '500px', backgroundColor: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(2px)', zIndex: 9998, animation: 'fadeIn 0.3s ease' }} />
+      <div onClick={handleDiscard} style={{ position: 'fixed', inset: 0, right: '500px', backgroundColor: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(2px)', zIndex: 9998, animation: 'fadeIn 0.3s ease' }} />
       <div ref={drawerRef} style={{ position: 'fixed', top: 0, right: 0, width: '500px', maxWidth: '100vw', height: '100vh', backgroundColor: '#fff', boxShadow: '-8px 0 40px rgba(0,0,0,0.18)', zIndex: 9999, display: 'flex', flexDirection: 'column' }}>
+
+        {/* Header */}
         <div style={{ padding: '18px 24px', borderBottom: '1px solid #e2e8f0', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
           {Icon && <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon size={20} color={primaryColor} /></div>}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#111827' }}>{title}</h2>
-              {isFirst && <span style={{ fontSize: '10px', fontWeight: 700, color: '#ef4444', backgroundColor: '#FEE2E2', padding: '2px 6px', borderRadius: '4px' }}>* Obligatorios en pág. 1</span>}
-            </div>
+            <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#111827' }}>{title}</h2>
             {sheet.subtitle && <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#6B7280' }}>{sheet.subtitle}</p>}
           </div>
-          <button onClick={onClose} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}><X size={16} color="#475569" /></button>
+          <button onClick={handleDiscard} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}><X size={16} color="#475569" /></button>
         </div>
+
+        {/* Preview slot — fijo, siempre visible entre header y stepper */}
+        {previewSlot && (
+          <div style={{ flexShrink: 0, borderBottom: '1px solid #e2e8f0' }}>
+            {previewSlot}
+          </div>
+        )}
+
+        {/* Stepper */}
         <div style={{ padding: '16px 24px', borderBottom: '1px solid #f1f5f9', flexShrink: 0, overflowX: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {sheets.map((s, i) => {
@@ -248,6 +257,8 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
             })}
           </div>
         </div>
+
+        {/* Fields */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           {Object.entries(byRow).map(([rowId, rowFields]) => (
             <div key={rowId} style={{ display: 'flex', gap: '16px' }}>
@@ -262,14 +273,18 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
             <FieldRenderer key={f.id} field={f} value={formData[f.id]} onChange={v => updateField(f.id, v)} onMultiChange={u => setFormData(prev => ({ ...prev, ...u }))} formData={formData} error={errors[f.id]} primaryColor={primaryColor} />
           ))}
         </div>
+
+        {/* Footer */}
         <div style={{ padding: '14px 24px', borderTop: '1px solid #e2e8f0', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: '#fff', position: 'relative' }}>
-          <button type="button" onClick={onClose} style={{ ...btnBase, border: '1px solid #e2e8f0', backgroundColor: '#fff', color: '#475569' }}
+          <button type="button" onClick={handleDiscard}
+            style={{ ...btnBase, border: '1px solid #e2e8f0', backgroundColor: '#fff', color: '#475569' }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#f8fafc'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#fff'; }}>
-            {L.cancel}
+            {onDiscard ? 'Descartar' : L.cancel}
           </button>
           {!isFirst && (
-            <button type="button" onClick={() => goToSheet(currentSheet - 1)} style={{ ...btnBase, border: '1px solid #e2e8f0', backgroundColor: '#fff', color: '#475569' }}
+            <button type="button" onClick={() => goToSheet(currentSheet - 1)}
+              style={{ ...btnBase, border: '1px solid #e2e8f0', backgroundColor: '#fff', color: '#475569' }}
               onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#f8fafc'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#fff'; }}>
               {L.prev}
@@ -277,7 +292,8 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
           )}
           <div style={{ flex: 1, textAlign: 'center', fontSize: '12px', color: '#94a3b8' }}>{pageLabel}</div>
           {!isLast && (
-            <button type="button" onClick={() => goToSheet(currentSheet + 1)} style={{ ...btnBase, border: '1px solid #e2e8f0', backgroundColor: '#fff', color: '#475569' }}
+            <button type="button" onClick={() => goToSheet(currentSheet + 1)}
+              style={{ ...btnBase, border: '1px solid #e2e8f0', backgroundColor: '#fff', color: '#475569' }}
               onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#f8fafc'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#fff'; }}>
               {L.next}
@@ -286,7 +302,7 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
           {isLast && (
             <button type="button" onClick={handleSave} disabled={saving || loading}
               style={{ ...btnBase, border: 'none', backgroundColor: saving || loading ? '#cbd5e1' : primaryColor, color: '#fff', fontWeight: 700, cursor: saving || loading ? 'not-allowed' : 'pointer', padding: '8px 20px' }}>
-              {saving || loading ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> {L.saving}</> : <>{L.save}</>}
+              {saving || loading ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />{L.saving}</> : <>{L.save}</>}
             </button>
           )}
           {saveError && (
@@ -295,6 +311,14 @@ export function DrawerShell({ open, onClose, onSave, title, icon: Icon, sheets, 
             </div>
           )}
         </div>
+
+        {/* footerSlot — contenido extra debajo del footer, dentro del panel */}
+        {footerSlot && (
+          <div style={{ flexShrink: 0, borderTop: '1px solid #e2e8f0' }}>
+            {footerSlot}
+          </div>
+        )}
+
       </div>
       <style>{`@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
     </>

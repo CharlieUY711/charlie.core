@@ -1,4 +1,4 @@
-﻿import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 export type FieldType =
@@ -52,10 +52,13 @@ export interface DrawerShellProps {
   open: boolean;
   onClose: () => void;
   onSave: (data: Record<string, unknown>) => Promise<void>;
+  onDiscard?: () => void;
   title: string;
   icon?: LucideIcon;
   sheets: SheetDef[];
   initialData?: Record<string, unknown>;
   loading?: boolean;
   labels?: DrawerShellLabels;
+  previewSlot?: ReactNode;
+  footerSlot?: ReactNode;
 }

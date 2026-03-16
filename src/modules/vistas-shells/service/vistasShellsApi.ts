@@ -14,7 +14,7 @@ const TENANT_ID = 'charlie';
 
 function rowToShellEntry(row: Record<string, unknown>): ShellEntry {
   return {
-    id:          row.id as string,
+    id:          (row.shell_id ?? row.id) as string,
     nombre:      row.nombre as string,
     tipo:        row.tipo as ShellEntry['tipo'],
     descripcion: row.descripcion as string,
@@ -44,7 +44,7 @@ function shellEntryToRow(entry: Omit<ShellEntry, 'id' | 'createdAt' | 'updatedAt
 
 function rowToShellEdit(row: Record<string, unknown>): ShellEdit {
   return {
-    id:        row.id as string,
+    id:          (row.shell_id ?? row.id) as string,
     shellId:   row.shell_id as string,
     tenantId:  row.tenant_id as string,
     propId:    row.prop_id as string,
@@ -141,3 +141,4 @@ export async function getEdits(
   if (error) throw new Error(`getEdits: ${error.message}`);
   return (data ?? []).map(rowToShellEdit);
 }
+
